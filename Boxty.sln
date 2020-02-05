@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boxty", "Boxty\Boxty.csproj", "{CF8631FA-29DD-4E28-8A14-CD1C447BDEC7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boxty.Models", "Boxty.Models\Boxty.Models.csproj", "{71A9421D-47BF-40FE-9F3A-6BFBEA156559}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boxty.Data", "Boxty.Data\Boxty.Data.csproj", "{EFF91B8A-1DAB-47F2-A3E1-ABCB35404A55}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CF8631FA-29DD-4E28-8A14-CD1C447BDEC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF8631FA-29DD-4E28-8A14-CD1C447BDEC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF8631FA-29DD-4E28-8A14-CD1C447BDEC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF8631FA-29DD-4E28-8A14-CD1C447BDEC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71A9421D-47BF-40FE-9F3A-6BFBEA156559}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71A9421D-47BF-40FE-9F3A-6BFBEA156559}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71A9421D-47BF-40FE-9F3A-6BFBEA156559}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71A9421D-47BF-40FE-9F3A-6BFBEA156559}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFF91B8A-1DAB-47F2-A3E1-ABCB35404A55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFF91B8A-1DAB-47F2-A3E1-ABCB35404A55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFF91B8A-1DAB-47F2-A3E1-ABCB35404A55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFF91B8A-1DAB-47F2-A3E1-ABCB35404A55}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BAAE120D-21D5-4BF4-8776-5FE2534E4431}
+	EndGlobalSection
+EndGlobal
