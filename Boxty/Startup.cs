@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Boxty.Extensions;
 
 namespace Boxty
 {
@@ -42,6 +43,7 @@ namespace Boxty
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            //app.UseSeedRolesMiddleware(); eventually, the class is located in Boxty.Extensions
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
