@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty\\Boxty.csproj": {}
+    "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty\\Boxty.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.Data\\Boxty.Data.csproj": {
+    "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.Data\\Boxty.Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.Data\\Boxty.Data.csproj",
+        "projectUniqueName": "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.Data\\Boxty.Data.csproj",
         "projectName": "Boxty.Data",
-        "projectPath": "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.Data\\Boxty.Data.csproj",
+        "projectPath": "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.Data\\Boxty.Data.csproj",
         "packagesPath": "C:\\Users\\Bozhidar\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.Data\\obj\\",
+        "outputPath": "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.Data\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -30,8 +30,8 @@
         "frameworks": {
           "netcoreapp3.1": {
             "projectReferences": {
-              "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.Models\\Boxty.Models.csproj": {
-                "projectPath": "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.Models\\Boxty.Models.csproj"
+              "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.Models\\Boxty.Models.csproj": {
+                "projectPath": "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.Models\\Boxty.Models.csproj"
               }
             }
           }
@@ -46,6 +46,10 @@
         "netcoreapp3.1": {
           "dependencies": {
             "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[3.1.1, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[3.1.1, )"
             }
@@ -65,18 +69,18 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.Models\\Boxty.Models.csproj": {
+    "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.Models\\Boxty.Models.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.Models\\Boxty.Models.csproj",
+        "projectUniqueName": "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.Models\\Boxty.Models.csproj",
         "projectName": "Boxty.Models",
-        "projectPath": "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.Models\\Boxty.Models.csproj",
+        "projectPath": "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.Models\\Boxty.Models.csproj",
         "packagesPath": "C:\\Users\\Bozhidar\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.Models\\obj\\",
+        "outputPath": "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.Models\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -105,6 +109,16 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "dependencies": {
+            "Microsoft.AspNetCore.Identity": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[3.1.1, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -120,18 +134,18 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty\\Boxty.csproj": {
+    "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty\\Boxty.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty\\Boxty.csproj",
+        "projectUniqueName": "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty\\Boxty.csproj",
         "projectName": "Boxty",
-        "projectPath": "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty\\Boxty.csproj",
+        "projectPath": "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty\\Boxty.csproj",
         "packagesPath": "C:\\Users\\Bozhidar\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty\\obj\\",
+        "outputPath": "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -150,8 +164,8 @@
         "frameworks": {
           "netcoreapp3.1": {
             "projectReferences": {
-              "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.Data\\Boxty.Data.csproj": {
-                "projectPath": "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.Data\\Boxty.Data.csproj"
+              "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.Data\\Boxty.Data.csproj": {
+                "projectPath": "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.Data\\Boxty.Data.csproj"
               }
             }
           }
@@ -171,17 +185,17 @@
             },
             "Microsoft.EntityFrameworkCore.Sqlite": {
               "target": "Package",
-              "version": "[3.1.0, )"
+              "version": "[3.1.1, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[3.1.0, )"
+              "version": "[3.1.1, )"
             },
             "Microsoft.Extensions.Logging.Debug": {
               "target": "Package",
-              "version": "[3.1.0, )"
+              "version": "[3.1.1, )"
             },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
@@ -206,7 +220,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
         }
       }
     }

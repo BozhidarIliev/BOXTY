@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boxty.Models", "Boxty.Model
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boxty.Data", "Boxty.Data\Boxty.Data.csproj", "{EFF91B8A-1DAB-47F2-A3E1-ABCB35404A55}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boxty.ViewModels", "Boxty.ViewModels\Boxty.ViewModels.csproj", "{D134E58C-4358-45C2-996B-2EE0E5E289D3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{EFF91B8A-1DAB-47F2-A3E1-ABCB35404A55}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFF91B8A-1DAB-47F2-A3E1-ABCB35404A55}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFF91B8A-1DAB-47F2-A3E1-ABCB35404A55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D134E58C-4358-45C2-996B-2EE0E5E289D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D134E58C-4358-45C2-996B-2EE0E5E289D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D134E58C-4358-45C2-996B-2EE0E5E289D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D134E58C-4358-45C2-996B-2EE0E5E289D3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
