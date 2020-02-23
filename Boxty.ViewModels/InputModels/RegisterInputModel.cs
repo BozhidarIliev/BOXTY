@@ -5,16 +5,12 @@ using System.Text;
 
 namespace Boxty.ViewModels.InputModels
 {
-    public class RegisterInputModel
-    {
+	public class RegisterInputModel
+	{
 		[Required]
 		[StringLength(ViewModelsConstants.UserModelNicknameMaxLength, MinimumLength = ViewModelsConstants.UserModelNicknameMinLength)]
 		[RegularExpression(ViewModelsConstants.RegexForValidationNicknameOrUsername, ErrorMessage = ViewModelsConstants.ErrorMessageInRegisterModel)]
-		public string Nickname { get; set; }
-
-		[Required]
-		[RegularExpression(ViewModelsConstants.RegexForValidationNicknameOrUsername, ErrorMessage = ViewModelsConstants.ErrorMessageInRegisterModel)]
-		public string Username { get; set; }
+		public string UserName { get; set; }
 
 		[Required]
 		[DataType(DataType.Password)]
@@ -29,5 +25,11 @@ namespace Boxty.ViewModels.InputModels
 		[Required]
 		[DataType(DataType.EmailAddress)]
 		public string Email { get; set; }
+
+		[Required]
+		public string FirstName { get; set; }
+
+		[Required]
+		public string LastName { get; set; }
 	}
 }

@@ -1,14 +1,11 @@
-﻿using Microsoft.AspNetCore.Builder;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Boxty.Extensions
+﻿namespace Boxty.Extensions
 {
+    using Microsoft.AspNetCore.Builder;
+
     public static class SeedRolesMiddlewareExtensions
     {
-        public static IApplicationBuilder UseSeedRolesMiddleware(this IApplicationBuilder builder)
+        public static IApplicationBuilder UseSeedRolesMiddleware(
+            this IApplicationBuilder builder)
         {
             return builder.UseMiddleware<SeedRolesMiddleware>();
         }

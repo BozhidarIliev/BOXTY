@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Boxty.Data;
+using Boxty.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Boxty.Data;
-using Boxty.Models;
 
 namespace Boxty.Controllers
 {
@@ -19,7 +19,7 @@ namespace Boxty.Controllers
             _context = context;
         }
 
-        // GET: OrderItem
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             return View(await _context.OrderItems.ToListAsync());
