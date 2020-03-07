@@ -1,0 +1,16 @@
+﻿@model IEnumerable<Boxty.ViewModels.OutputModels.OrderOutputModel>
+<div class="row checkoutForm">
+    <h2>Orders list</h2>
+    <h4>Here are the orders in your shopping cart.</h4>
+    <table class="table table-bordered table-striped">
+        <tbody>
+            @foreach (var line in Model)
+            {
+                 <tr>
+                     <td class="text-center">@line.ProductId</td>
+                     <td class="text-left">@line.SentTime</td>
+                 </tr>
+            }
+        </tbody>
+    </table>
+</div>

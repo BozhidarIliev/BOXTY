@@ -6,3 +6,11 @@ C:\Users\Bozhidar\source\repos\Boxty\Boxty.Models\obj\Debug\netcoreapp3.1\Boxty.
 C:\Users\Bozhidar\source\repos\Boxty\Boxty.Models\obj\Debug\netcoreapp3.1\Boxty.Models.AssemblyInfo.cs
 C:\Users\Bozhidar\source\repos\Boxty\Boxty.Models\obj\Debug\netcoreapp3.1\Boxty.Models.dll
 C:\Users\Bozhidar\source\repos\Boxty\Boxty.Models\obj\Debug\netcoreapp3.1\Boxty.Models.pdb
+C:\Users\Bozhidar\Desktop\BOXTY\Boxty.Models\bin\Debug\netcoreapp3.1\Boxty.Models.deps.json
+C:\Users\Bozhidar\Desktop\BOXTY\Boxty.Models\bin\Debug\netcoreapp3.1\Boxty.Models.dll
+C:\Users\Bozhidar\Desktop\BOXTY\Boxty.Models\bin\Debug\netcoreapp3.1\Boxty.Models.pdb
+C:\Users\Bozhidar\Desktop\BOXTY\Boxty.Models\obj\Debug\netcoreapp3.1\Boxty.Models.csprojAssemblyReference.cache
+C:\Users\Bozhidar\Desktop\BOXTY\Boxty.Models\obj\Debug\netcoreapp3.1\Boxty.Models.AssemblyInfoInputs.cache
+C:\Users\Bozhidar\Desktop\BOXTY\Boxty.Models\obj\Debug\netcoreapp3.1\Boxty.Models.AssemblyInfo.cs
+C:\Users\Bozhidar\Desktop\BOXTY\Boxty.Models\obj\Debug\netcoreapp3.1\Boxty.Models.dll
+C:\Users\Bozhidar\Desktop\BOXTY\Boxty.Models\obj\Debug\netcoreapp3.1\Boxty.Models.pdb

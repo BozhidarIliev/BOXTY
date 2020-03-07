@@ -368,11 +368,6 @@ C:\Users\Bozhidar\Desktop\BOXTY\Boxty\obj\Debug\netcoreapp3.1\Boxty.RazorCoreGen
 C:\Users\Bozhidar\Desktop\BOXTY\Boxty\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\_ViewStart.cshtml.g.cs
 C:\Users\Bozhidar\Desktop\BOXTY\Boxty\obj\Debug\netcoreapp3.1\Razor\Views\Home\Contacts.cshtml.g.cs
 C:\Users\Bozhidar\Desktop\BOXTY\Boxty\obj\Debug\netcoreapp3.1\Razor\Views\Home\Index.cshtml.g.cs
-C:\Users\Bozhidar\Desktop\BOXTY\Boxty\obj\Debug\netcoreapp3.1\Razor\Views\OrderItem\Create.cshtml.g.cs
-C:\Users\Bozhidar\Desktop\BOXTY\Boxty\obj\Debug\netcoreapp3.1\Razor\Views\OrderItem\Delete.cshtml.g.cs
-C:\Users\Bozhidar\Desktop\BOXTY\Boxty\obj\Debug\netcoreapp3.1\Razor\Views\OrderItem\Details.cshtml.g.cs
-C:\Users\Bozhidar\Desktop\BOXTY\Boxty\obj\Debug\netcoreapp3.1\Razor\Views\OrderItem\Edit.cshtml.g.cs
-C:\Users\Bozhidar\Desktop\BOXTY\Boxty\obj\Debug\netcoreapp3.1\Razor\Views\OrderItem\Index.cshtml.g.cs
 C:\Users\Bozhidar\Desktop\BOXTY\Boxty\obj\Debug\netcoreapp3.1\Razor\Views\Shared\Error.cshtml.g.cs
 C:\Users\Bozhidar\Desktop\BOXTY\Boxty\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Layout.cshtml.g.cs
 C:\Users\Bozhidar\Desktop\BOXTY\Boxty\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_LoginPartial.cshtml.g.cs
@@ -388,3 +383,13 @@ C:\Users\Bozhidar\Desktop\BOXTY\Boxty\obj\Debug\netcoreapp3.1\Boxty.Views.pdb
 C:\Users\Bozhidar\Desktop\BOXTY\Boxty\obj\Debug\netcoreapp3.1\Boxty.csproj.CopyComplete
 C:\Users\Bozhidar\Desktop\BOXTY\Boxty\obj\Debug\netcoreapp3.1\Boxty.dll
 C:\Users\Bozhidar\Desktop\BOXTY\Boxty\obj\Debug\netcoreapp3.1\Boxty.pdb
+C:\Users\Bozhidar\Desktop\BOXTY\Boxty\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.JsonPatch.dll
+C:\Users\Bozhidar\Desktop\BOXTY\Boxty\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
+C:\Users\Bozhidar\Desktop\BOXTY\Boxty\obj\Debug\netcoreapp3.1\Razor\Views\ShoppingCart\Index.cshtml.g.cs
+C:\Users\Bozhidar\Desktop\Boxty\Boxty\obj\Debug\netcoreapp3.1\Razor\Views\Product\Create.cshtml.g.cs
+C:\Users\Bozhidar\Desktop\Boxty\Boxty\obj\Debug\netcoreapp3.1\Razor\Views\Product\Delete.cshtml.g.cs
+C:\Users\Bozhidar\Desktop\Boxty\Boxty\obj\Debug\netcoreapp3.1\Razor\Views\Product\Details.cshtml.g.cs
+C:\Users\Bozhidar\Desktop\Boxty\Boxty\obj\Debug\netcoreapp3.1\Razor\Views\Product\Edit.cshtml.g.cs
+C:\Users\Bozhidar\Desktop\Boxty\Boxty\obj\Debug\netcoreapp3.1\Razor\Views\Product\Index.cshtml.g.cs
+C:\Users\Bozhidar\Desktop\Boxty\Boxty\obj\Debug\netcoreapp3.1\Razor\Views\Order\Index.cshtml.g.cs
+C:\Users\Bozhidar\Desktop\Boxty\Boxty\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Http.Features.dll

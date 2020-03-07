@@ -15,14 +15,19 @@ namespace Boxty.Data
         {
         }
 
-        public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<ShoppingCartItem> ShoppingCartItems{ get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
-            builder.ApplyConfiguration(new OrderItemsConfiguration());
+            builder.ApplyConfiguration(new ProductConfiguration());
             builder.ApplyConfiguration(new BoxtyUserConfiguration());
+            builder.ApplyConfiguration(new OrderConfiguration());
+            builder.ApplyConfiguration(new OrderDetailConfiguration());
         }
     }
 }

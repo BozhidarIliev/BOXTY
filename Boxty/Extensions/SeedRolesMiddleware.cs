@@ -61,9 +61,11 @@
 			};
 
 			var normalUser = new BoxtyUser
-			{
-				UserName = "user",
-				Email = "user@user.com"
+			{ 
+				UserName = "bojo",
+				Email = "user@user.com",
+				FirstName = "bojo",
+				LastName = "iliev"
 			};
 
 			string normalUserPass = "123";

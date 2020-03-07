@@ -27,7 +27,16 @@
                         @if (SignInManager.IsSignedIn(User))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="OrderItem" asp-action="Index">Menu</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Menu</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="ShoppingCart" asp-action="Index">ShoppingCart</a>
+                            </li>
+                        }
+                        @if (User.IsInRole(Boxty.Services.GlobalConstants.Admin))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="Index">Orders</a>
                             </li>
                         }
                     </ul>

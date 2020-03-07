@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200306195727_CartTest1.cs" />
+    <Compile Remove="Migrations\20200306195727_CartTest1.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.1" />
@@ -12,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Boxty.Models\Boxty.Models.csproj" />
+    <ProjectReference Include="..\Boxty.ViewModels\Boxty.ViewModels.csproj" />
   </ItemGroup>
 
 </Project>

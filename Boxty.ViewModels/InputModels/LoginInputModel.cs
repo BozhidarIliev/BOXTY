@@ -8,7 +8,7 @@ namespace Boxty.ViewModels.InputModels
     public class LoginInputModel
     {
         [Required]
-        [StringLength(ViewModelsConstants.UserModelNicknameMaxLength, MinimumLength = ViewModelsConstants.UserModelNicknameMinLength)]
+        [StringLength(ViewModelsConstants.UserModelUserNameMaxLength, MinimumLength = ViewModelsConstants.UserModelUserNameMinLength)]
         [RegularExpression(ViewModelsConstants.RegexForValidationNicknameOrUsername)]
         public string UserName { get; set; }
 

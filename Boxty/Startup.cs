@@ -11,6 +11,9 @@ using Boxty.Services;
 using AutoMapper;
 using Boxty.Extensions;
 using System;
+using Microsoft.AspNetCore.Http;
+using Boxty.Data.Repositories;
+using Boxty.Models.Repositories;
 
 namespace Boxty
 {
@@ -22,7 +25,7 @@ namespace Boxty
         }
 
         public IConfiguration Configuration { get; }
-
+        public IShoppingCartService CartService { get; }
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -51,11 +54,23 @@ namespace Boxty
                 .AddDefaultTokenProviders();
 
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IShoppingCartService, ShoppingCartService>();
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddTransient<IProductRepository, ProductRepository>();
+            services.AddTransient<IOrderRepository, OrderRepository>();
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<IShoppingCart, ShoppingCart>();
+            services.AddScoped(sp => ShoppingCart.GetCart(sp));
+            // object associated with a request 
+            // two different people asking for the shopping cart are going to get different instances
 
             services.AddAutoMapper(typeof(BoxtyProfile));
+            services.AddAutoMapper(typeof(OrderProfile));
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -76,6 +91,7 @@ namespace Boxty
             app.UseSeedRolesMiddleware();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseSession();
 
             app.UseRouting();
 

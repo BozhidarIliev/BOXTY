@@ -1,0 +1,24 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<BoxtyUser> SignInManager
+@inject UserManager<BoxtyUser> UserManager
+
+    <ul class="navbar-nav">
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Hello @string.Concat(User.Identity.Name.First().ToString().ToUpper(), User.Identity.Name.Substring(1))!</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-controller="Users" asp-action="Logout">Logout</a>
+            </li>
+        }
+        else
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-controller="Users" asp-action="Register">Register</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-controller="Users" asp-action="Login">Login</a>
+            </li>
+        }
+    </ul>
