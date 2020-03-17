@@ -3,14 +3,23 @@
     <h2>Orders list</h2>
     <h4>Here are the orders in your shopping cart.</h4>
     <table class="table table-bordered table-striped">
-        <tbody>
-            @foreach (var line in Model)
-            {
+         <thead>
+             <tr>
+                 <th>Product Id</th>
+                 <th>Product Name</th>
+                 <th class="text-right">Order placed at:</th>
+                 <th>Actions</th>
+             </tr>
+         </thead>
+         <tbody>
+             @foreach (var line in Model)
+             {
                  <tr>
-                     <td class="text-center">@line.ProductId</td>
-                     <td class="text-left">@line.SentTime</td>
+                     <td class="text-center">@line.Product.Id</td>
+                     <td class="text-left">@line.Product.Name</td>
+                     <td class="text-right">@line.Date</td>
                  </tr>
-            }
-        </tbody>
+             }
+         </tbody>
     </table>
 </div>

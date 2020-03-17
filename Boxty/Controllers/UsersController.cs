@@ -3,6 +3,7 @@
 	using System.Security.Claims;
 	using System.Threading.Tasks;
     using Boxty.Services;
+    using Boxty.ViewModels;
     using Boxty.ViewModels.InputModels;
     using Microsoft.AspNetCore.Authorization;
 	using Microsoft.AspNetCore.Mvc;
@@ -85,6 +86,24 @@
 			this.UserService.Logout();
 
 			return RedirectToAction("Index", "Home");
+		}
+
+		[HttpGet]
+		public IActionResult UpdateShippingInfo()
+		{
+			return View();
+		}
+
+		[HttpPost]
+		public IActionResult UpdateShippingInfo(UpdateUserViewModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				return Redirect("/ShoppingCart/UpdateShippingInfo");
+			}
+			this.UserService.UpdateShippingInfo(model);
+
+			return RedirectToAction("Checkout", "ShoppingCart"); // CheckoutComplete 
 		}
 
 		[HttpGet]

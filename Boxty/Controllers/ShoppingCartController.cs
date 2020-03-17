@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Boxty.Data;
 using Boxty.Data.Repositories;
 using Boxty.Models;
+using Boxty.Models.Repositories;
 using Boxty.Services;
 using Boxty.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -14,8 +15,11 @@ namespace Boxty.Controllers
     public class ShoppingCartController : Controller
     {
         private readonly IProductRepository productRepository;
-        private ShoppingCart shoppingCart;
-        private IShoppingCartService service;
+        private readonly ShoppingCart shoppingCart;
+        private readonly IShoppingCartService service;
+        private readonly IUserService userService;
+        private readonly IShoppingCartService shoppingCartService;
+        private readonly IOrderRepository orderRepository;
 
         // need to get ShoppingCartMethod
 
@@ -26,11 +30,14 @@ namespace Boxty.Controllers
         // GetCartItems
         // ClearCart
         // GetCartTotal
-        public ShoppingCartController(IShoppingCartService service, IProductRepository productRepository, ShoppingCart shoppingCart)
+        public ShoppingCartController(IShoppingCartService service, IProductRepository productRepository, ShoppingCart shoppingCart, IUserService userService, IShoppingCartService shoppingCartService, IOrderRepository orderRepository)
         {
             this.service = service;
             this.productRepository = productRepository;
             this.shoppingCart = shoppingCart;
+            this.userService = userService;
+            this.shoppingCartService = shoppingCartService;
+            this.orderRepository = orderRepository;
         }
 
         public IActionResult Index()
@@ -58,7 +65,7 @@ namespace Boxty.Controllers
             return RedirectToAction("Index");
         }
 
-        public RedirectToActionResult RemoveFromCart(int productId)
+        public IActionResult RemoveFromCart(int productId)
         {
             var product = productRepository.Products.FirstOrDefault(x => x.Id == productId);
 
@@ -67,6 +74,35 @@ namespace Boxty.Controllers
                 service.RemoveFromCart(shoppingCart.Id, product, 1);
             }
             return RedirectToAction("Index");
+        }
+
+        public IActionResult Checkout(Order order) 
+        {
+            if (userService.CheckCurrentUserBeforePurchase())
+            {
+                return RedirectToAction("Checkout", "Users");
+            }
+
+            var items = shoppingCartService.GetCartItems(shoppingCart.Id);
+            shoppingCart.Items = items;
+            if (shoppingCart.Items.Count == 0)
+            {
+                ModelState.AddModelError("", "Your card is empty, add some products first");
+            }
+
+            if (ModelState.IsValid)
+            {
+                orderRepository.CreateOrder(order);
+                shoppingCartService.ClearCart(shoppingCart.Id);
+            }
+            return RedirectToAction("CheckoutComplete");
+
+        }
+
+        public IActionResult CheckoutComplete()
+        {
+            ViewBag.CheckoutCompleteMessage = "Thanks for your order! :) ";
+            return View();
         }
     }
 }

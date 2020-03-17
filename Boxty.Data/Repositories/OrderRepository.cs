@@ -3,9 +3,12 @@ using Boxty.Data;
 using Boxty.Models;
 using Boxty.Models.Repositories;
 using Boxty.ViewModels.OutputModels;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Boxty.Data.Repositories
@@ -15,26 +18,35 @@ namespace Boxty.Data.Repositories
         private readonly BoxtyDbContext context;
         private readonly ShoppingCart shoppingCart;
         private readonly IMapper mapper;
+        private readonly IProductRepository productRepository;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public OrderRepository(BoxtyDbContext context, ShoppingCart shoppingCart, IMapper mapper)
+        public OrderRepository(BoxtyDbContext context, ShoppingCart shoppingCart, IMapper mapper, IProductRepository productRepository, IHttpContextAccessor httpContextAccessor)
         {
             this.context = context;
             this.shoppingCart = shoppingCart;
             this.mapper = mapper;
+            this.productRepository = productRepository;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         public IEnumerable<OrderOutputModel> AllOrders()
         {
             List<OrderOutputModel> orders = new List<OrderOutputModel>();
             
-            foreach (var order in context.OrderDetails)
+            foreach (var order in context.Orders)
             {
-                var model = new OrderOutputModel
+                foreach (var detail in context.OrderDetails.Where(x => x.OrderId == order.Id))
                 {
-                    ProductId = order.ProductId,
-                    SentTime = order.SentTime
-                };
-                orders.Add(model);
+                    var model = new OrderOutputModel
+                    {
+                        Date = detail.Date,
+                        Comment = detail.Comment,
+                        Product = productRepository.GetProductById(detail.ProductId)
+                    };
+
+                    orders.Add(model);
+                }
             }
             
             return orders;
@@ -42,14 +54,20 @@ namespace Boxty.Data.Repositories
 
         public void CreateOrder(Order order)
         {
-            order.SentTime = DateTime.Now;
+            order.Date = DateTime.Now;
+            order.SenderId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             context.Orders.Add(order);
             context.SaveChanges();
             CreateOrderDetail(order);
         }
 
-        private bool CreateOrderDetail(Order order)
+        public void AddOrderDetail(Order order)
+        {
+
+        }
+
+        private void CreateOrderDetail(Order order)
         {
             var shoppingCartItems = shoppingCart.Items;
 
@@ -57,16 +75,15 @@ namespace Boxty.Data.Repositories
             {
                 var orderDetail = new OrderDetail()
                 {
-                    Amount = shoppingCartItem.Amount,
-                    ProductId = shoppingCartItem.Product.Id,
                     OrderId = order.Id,
-                    Price = shoppingCartItem.Product.Price,
-                    SentTime = DateTime.Now
+                    ProductId = shoppingCartItem.Product.Id,
+                    Comment = shoppingCartItem.Comment,
+                    Date = DateTime.Now
                 };
 
                 context.OrderDetails.Add(orderDetail);
             }
-            return context.SaveChanges()>0;
+            context.SaveChanges();
         }
     }
 

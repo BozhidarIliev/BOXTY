@@ -4,21 +4,26 @@
     using Boxty.Data;
     using Boxty.Models;
     using Boxty.Services;
+    using Boxty.ViewModels;
     using Boxty.ViewModels.InputModels;
     using Boxty.ViewModels.OutputModels;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using System;
     using System.Linq;
+    using System.Security.Claims;
     using System.Text;
     using System.Threading.Tasks;
 
     public class UserService : BaseService, IUserService
     {
-        public UserService(SignInManager<BoxtyUser> signInManager, UserManager<BoxtyUser> userManager, BoxtyDbContext context, IMapper mapper)
+        private readonly IHttpContextAccessor httpContextAccessor;
+        public UserService(SignInManager<BoxtyUser> signInManager, UserManager<BoxtyUser> userManager, BoxtyDbContext context, IMapper mapper, IHttpContextAccessor httpContextAccessor)
             : base(userManager, context, mapper)
         {
             this.SignInManager = signInManager;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         protected SignInManager<BoxtyUser> SignInManager { get; }
@@ -62,7 +67,6 @@
             await this.SignInManager.SignOutAsync();
         }
 
-
         public UserOutputModel GetUser(string username)
 		{
 			var user = this.Context.Users
@@ -75,5 +79,26 @@
 
 			return result;
 		}
+
+        public void UpdateShippingInfo(UpdateUserViewModel model)
+        {
+            var user = Context.Users.First(x => x.Id == httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            user.Address = model.Address;
+            user.PhoneNumber = model.PhoneNumber;
+        }
+
+        public bool CheckCurrentUserBeforePurchase()
+        {
+            BoxtyUser user = Context.Users.First(x => x.Id == httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            
+            if (user.FirstName == null && user.LastName == null &&
+                user.PhoneNumber == null && user.Address == null)
+            {
+                return true;
+            }
+            else return false;
+        }
 	}
 }

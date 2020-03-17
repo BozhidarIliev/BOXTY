@@ -57,7 +57,7 @@ namespace Boxty.Services
 
         public int RemoveFromCart(string shoppingCartId, Product product, int amount)
         {
-            var shoppingCartItem = context.ShoppingCartItems.SingleOrDefault(
+            var shoppingCartItem = context.ShoppingCartItems.First(
                 s => s.Product.Id == product.Id && s.ShoppingCartId == shoppingCartId);
 
             var returnAmount = 0;

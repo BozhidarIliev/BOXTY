@@ -13,7 +13,7 @@ namespace Boxty.Data.Configurations
         {
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
-            builder.Property(x => x.SentTime).HasColumnType("DATETIME");
+            builder.Property(x => x.Date).HasColumnType("DATETIME");
         }
     }
 }

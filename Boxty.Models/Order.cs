@@ -7,14 +7,11 @@ namespace Boxty.Models
 {
     public class Order 
     {
-        public Order()
-        {
-
-        }
         [Key]
         public int Id { get; set; }
-        public DateTime SentTime { get; set; }
-
-        public ICollection<Product> Products { get; set; }
+        public string SenderId { get; set; }
+        public DateTime Date { get; set; }
+        public string Delivery { get; set; }
+        public string Status { get; set; }
     }
 }

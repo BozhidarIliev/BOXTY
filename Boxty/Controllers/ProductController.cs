@@ -65,7 +65,6 @@ namespace Boxty.Controllers
             return View(item);
         }
 
-        // GET: Item/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)

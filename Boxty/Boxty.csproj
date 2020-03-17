@@ -26,4 +26,11 @@
     <ProjectReference Include="..\Boxty.ViewModels\Boxty.ViewModels.csproj" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Content Update="Views\Users\UpdateShippingInfo.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

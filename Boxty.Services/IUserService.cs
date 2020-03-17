@@ -1,4 +1,6 @@
-﻿using Boxty.ViewModels.InputModels;
+﻿using Boxty.Models;
+using Boxty.ViewModels;
+using Boxty.ViewModels.InputModels;
 using Boxty.ViewModels.OutputModels;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -17,5 +19,8 @@ namespace Boxty.Services
 		void Logout();
 
 		UserOutputModel GetUser(string nickName);
+		void UpdateShippingInfo(UpdateUserViewModel model);
+
+		bool CheckCurrentUserBeforePurchase();
 	}
 }

@@ -393,3 +393,6 @@ C:\Users\Bozhidar\Desktop\Boxty\Boxty\obj\Debug\netcoreapp3.1\Razor\Views\Produc
 C:\Users\Bozhidar\Desktop\Boxty\Boxty\obj\Debug\netcoreapp3.1\Razor\Views\Product\Index.cshtml.g.cs
 C:\Users\Bozhidar\Desktop\Boxty\Boxty\obj\Debug\netcoreapp3.1\Razor\Views\Order\Index.cshtml.g.cs
 C:\Users\Bozhidar\Desktop\Boxty\Boxty\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Http.Features.dll
+C:\Users\Bozhidar\Desktop\Boxty\Boxty\obj\Debug\netcoreapp3.1\Razor\Views\ShoppingCart\CheckoutComplete.cshtml.g.cs
+C:\Users\Bozhidar\Desktop\Boxty\Boxty\bin\Debug\netcoreapp3.1\Views\Users\UpdateShippingInfo.cshtml
+C:\Users\Bozhidar\Desktop\Boxty\Boxty\obj\Debug\netcoreapp3.1\Razor\Views\Users\UpdateShippingInfo.cshtml.g.cs

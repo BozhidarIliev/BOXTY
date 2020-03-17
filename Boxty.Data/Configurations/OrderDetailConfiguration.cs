@@ -11,7 +11,7 @@ namespace Boxty.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<OrderDetail> builder)
         {
-            builder.Property(x => x.Price).HasColumnType("DECIMAL");
+            builder.HasKey(x => x.Id);
         }
     }
 }
