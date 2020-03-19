@@ -19,7 +19,7 @@ namespace Boxty.Services
 		void Logout();
 
 		UserOutputModel GetUser(string nickName);
-		void UpdateShippingInfo(UpdateUserViewModel model);
+		int UpdateShippingInfo(UpdateUserViewModel model);
 
 		bool CheckCurrentUserBeforePurchase();
 	}

@@ -99,9 +99,12 @@
 		{
 			if (!ModelState.IsValid)
 			{
-				return Redirect("/ShoppingCart/UpdateShippingInfo");
+				return Redirect("/Users/UpdateShippingInfo");
 			}
-			this.UserService.UpdateShippingInfo(model);
+			if (this.UserService.UpdateShippingInfo(model) != 1)
+			{
+				return RedirectToAction("UpdateShippingInfo", "Users");
+			}
 
 			return RedirectToAction("Checkout", "ShoppingCart"); // CheckoutComplete 
 		}

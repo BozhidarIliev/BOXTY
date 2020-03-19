@@ -20,10 +20,10 @@
 			UserManager<BoxtyUser> userManager
 			, RoleManager<IdentityRole> roleManager)
 		{
-			if (!roleManager.Roles.Any())
-			{
-				await SeedRoles(userManager, roleManager);
-			}
+			//if (!roleManager.Roles.Any())
+			//{
+			//	await SeedRoles(userManager, roleManager);
+			//}
 
 			// Call the next delegate/middleware in the pipeline
 			await _next(context);

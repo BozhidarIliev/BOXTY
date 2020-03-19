@@ -80,21 +80,23 @@
 			return result;
 		}
 
-        public void UpdateShippingInfo(UpdateUserViewModel model)
+        public int UpdateShippingInfo(UpdateUserViewModel model)
         {
             var user = Context.Users.First(x => x.Id == httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
             user.Address = model.Address;
             user.PhoneNumber = model.PhoneNumber;
+
+            return Context.SaveChanges();
         }
 
         public bool CheckCurrentUserBeforePurchase()
         {
             BoxtyUser user = Context.Users.First(x => x.Id == httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
             
-            if (user.FirstName == null && user.LastName == null &&
-                user.PhoneNumber == null && user.Address == null)
+            if (user.FirstName == null || user.LastName == null ||
+                user.PhoneNumber == null || user.Address == null)
             {
                 return true;
             }

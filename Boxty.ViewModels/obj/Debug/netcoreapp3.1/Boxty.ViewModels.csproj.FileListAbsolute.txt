@@ -20,3 +20,4 @@ C:\Users\Bozhidar\Desktop\BOXTY\Boxty.ViewModels\obj\Debug\netcoreapp3.1\Boxty.V
 C:\Users\Bozhidar\Desktop\BOXTY\Boxty.ViewModels\obj\Debug\netcoreapp3.1\Boxty.ViewModels.csproj.CopyComplete
 C:\Users\Bozhidar\Desktop\BOXTY\Boxty.ViewModels\obj\Debug\netcoreapp3.1\Boxty.ViewModels.dll
 C:\Users\Bozhidar\Desktop\BOXTY\Boxty.ViewModels\obj\Debug\netcoreapp3.1\Boxty.ViewModels.pdb
+C:\Users\Bozhidar\Desktop\Boxty\Boxty.ViewModels\obj\Debug\netcoreapp3.1\Boxty.ViewModels.csproj.CoreCompileInputs.cache

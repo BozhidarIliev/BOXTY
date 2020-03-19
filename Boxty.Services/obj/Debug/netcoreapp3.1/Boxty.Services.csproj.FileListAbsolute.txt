@@ -28,3 +28,4 @@ C:\Users\Bozhidar\Desktop\BOXTY\Boxty.Services\obj\Debug\netcoreapp3.1\Boxty.Ser
 C:\Users\Bozhidar\Desktop\BOXTY\Boxty.Services\obj\Debug\netcoreapp3.1\Boxty.Services.csproj.CopyComplete
 C:\Users\Bozhidar\Desktop\BOXTY\Boxty.Services\obj\Debug\netcoreapp3.1\Boxty.Services.dll
 C:\Users\Bozhidar\Desktop\BOXTY\Boxty.Services\obj\Debug\netcoreapp3.1\Boxty.Services.pdb
+C:\Users\Bozhidar\Desktop\Boxty\Boxty.Services\obj\Debug\netcoreapp3.1\Boxty.Services.csproj.CoreCompileInputs.cache

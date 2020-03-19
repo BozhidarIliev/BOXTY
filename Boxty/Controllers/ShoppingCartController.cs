@@ -80,7 +80,7 @@ namespace Boxty.Controllers
         {
             if (userService.CheckCurrentUserBeforePurchase())
             {
-                return RedirectToAction("Checkout", "Users");
+                return RedirectToAction("UpdateShippingInfo", "Users");
             }
 
             var items = shoppingCartService.GetCartItems(shoppingCart.Id);

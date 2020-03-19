@@ -14,3 +14,4 @@ C:\Users\Bozhidar\Desktop\BOXTY\Boxty.Models\obj\Debug\netcoreapp3.1\Boxty.Model
 C:\Users\Bozhidar\Desktop\BOXTY\Boxty.Models\obj\Debug\netcoreapp3.1\Boxty.Models.AssemblyInfo.cs
 C:\Users\Bozhidar\Desktop\BOXTY\Boxty.Models\obj\Debug\netcoreapp3.1\Boxty.Models.dll
 C:\Users\Bozhidar\Desktop\BOXTY\Boxty.Models\obj\Debug\netcoreapp3.1\Boxty.Models.pdb
+C:\Users\Bozhidar\Desktop\Boxty\Boxty.Models\obj\Debug\netcoreapp3.1\Boxty.Models.csproj.CoreCompileInputs.cache
