@@ -111,15 +111,15 @@
 
 		[HttpGet]
 		// [ResponseCache(Duration = 1200)]
-		public IActionResult Profile(string username, bool seeProfile = false)
+		public IActionResult Profile(string userName)
 		{
-			bool fullAccess = this.User.Identity.Name == username || this.User.IsInRole(GlobalConstants.Admin);
+			bool fullAccess = this.User.Identity.Name == userName || this.User.IsInRole(GlobalConstants.Admin);
 
-			var user = this.UserService.GetUser(username);
+			var user = this.UserService.GetUser(userName);
 
-			if (fullAccess && !seeProfile)
+			if (fullAccess)
 			{
-				return this.View("UserDetails", user);
+				return this.View("Profile", user);
 			}
 
 			return this.View(user);

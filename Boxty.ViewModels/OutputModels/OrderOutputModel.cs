@@ -7,7 +7,7 @@ namespace Boxty.ViewModels.OutputModels
 {
     public class OrderOutputModel
     {
-        public int Id { get; set; }
+        public int OrderId { get; set; }
         public DateTime Date { get; set; }
         public string Comment { get; set; }
         public Product Product{ get; set; }

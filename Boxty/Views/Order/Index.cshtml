@@ -6,6 +6,7 @@
          <thead>
              <tr>
                  <th>Product Id</th>
+                 <th>Order Id</th>
                  <th>Product Name</th>
                  <th class="text-right">Order placed at:</th>
                  <th>Actions</th>
@@ -14,11 +15,20 @@
          <tbody>
              @foreach (var line in Model)
              {
-                 <tr>
-                     <td class="text-center">@line.Product.Id</td>
-                     <td class="text-left">@line.Product.Name</td>
-                     <td class="text-right">@line.Date</td>
-                 </tr>
+             <tr>
+                 <td class="text-center">@line.Product.Id</td>
+                 <td class="text-center">@line.OrderId</td>
+                 <td class="text-left">@line.Product.Name</td>
+                 <td class="text-right">@line.Date</td>
+                 <td>
+                     <div class="btn-group ">
+                         <a class="btn btn-danger" asp-controller="ShoppingCart" asp-action="RemoveFromCart" asp-route-productId="@line.Product.Id">Delete</a>
+                     </div>
+                     <div class="btn-group ">
+                         <a class="btn btn-success" asp-controller="ShoppingCart" asp-action="RemoveFromCart" asp-route-productId="@line.Product.Id">Done</a>
+                     </div>
+                 </td>
+             </tr>
              }
          </tbody>
     </table>

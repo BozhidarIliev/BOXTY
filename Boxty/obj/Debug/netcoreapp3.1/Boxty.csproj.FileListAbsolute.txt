@@ -396,3 +396,8 @@ C:\Users\Bozhidar\Desktop\Boxty\Boxty\bin\Debug\netcoreapp3.1\Views\Users\Update
 C:\Users\Bozhidar\Desktop\Boxty\Boxty\obj\Debug\netcoreapp3.1\Razor\Views\Users\UpdateShippingInfo.cshtml.g.cs
 C:\Users\Bozhidar\Desktop\Boxty\Boxty\obj\Debug\netcoreapp3.1\Boxty.csproj.CoreCompileInputs.cache
 C:\Users\Bozhidar\Desktop\Boxty\Boxty\obj\Debug\netcoreapp3.1\Boxty.genruntimeconfig.cache
+C:\Users\Bozhidar\Desktop\Boxty\Boxty\obj\Debug\netcoreapp3.1\Razor\Views\Home\HttpError.cshtml.g.cs
+C:\Users\Bozhidar\Desktop\Boxty\Boxty\obj\Debug\netcoreapp3.1\Razor\Views\Admins\CreateRole.cshtml.g.cs
+C:\Users\Bozhidar\Desktop\Boxty\Boxty\obj\Debug\netcoreapp3.1\Razor\Views\Admins\EditRole.cshtml.g.cs
+C:\Users\Bozhidar\Desktop\Boxty\Boxty\obj\Debug\netcoreapp3.1\Razor\Views\Admins\RolesList.cshtml.g.cs
+C:\Users\Bozhidar\Desktop\Boxty\Boxty\obj\Debug\netcoreapp3.1\Razor\Views\Admins\UsersList.cshtml.g.cs

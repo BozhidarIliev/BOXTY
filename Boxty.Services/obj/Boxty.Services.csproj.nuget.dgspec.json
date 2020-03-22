@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.Services\\Boxty.Services.csproj": {}
+    "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.Services\\Boxty.Services.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.Data\\Boxty.Data.csproj": {
+    "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.Data\\Boxty.Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.Data\\Boxty.Data.csproj",
+        "projectUniqueName": "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.Data\\Boxty.Data.csproj",
         "projectName": "Boxty.Data",
-        "projectPath": "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.Data\\Boxty.Data.csproj",
+        "projectPath": "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.Data\\Boxty.Data.csproj",
         "packagesPath": "C:\\Users\\Bozhidar\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.Data\\obj\\",
+        "outputPath": "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.Data\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -30,11 +30,11 @@
         "frameworks": {
           "netcoreapp3.1": {
             "projectReferences": {
-              "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.Models\\Boxty.Models.csproj": {
-                "projectPath": "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.Models\\Boxty.Models.csproj"
+              "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.Models\\Boxty.Models.csproj": {
+                "projectPath": "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.Models\\Boxty.Models.csproj"
               },
-              "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.ViewModels\\Boxty.ViewModels.csproj": {
-                "projectPath": "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.ViewModels\\Boxty.ViewModels.csproj"
+              "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.ViewModels\\Boxty.ViewModels.csproj": {
+                "projectPath": "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.ViewModels\\Boxty.ViewModels.csproj"
               }
             }
           }
@@ -80,14 +80,14 @@
         }
       }
     },
-    "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.Models\\Boxty.Models.csproj": {
+    "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.Models\\Boxty.Models.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.Models\\Boxty.Models.csproj",
+        "projectUniqueName": "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.Models\\Boxty.Models.csproj",
         "projectName": "Boxty.Models",
-        "projectPath": "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.Models\\Boxty.Models.csproj",
+        "projectPath": "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.Models\\Boxty.Models.csproj",
         "packagesPath": "C:\\Users\\Bozhidar\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.Models\\obj\\",
+        "outputPath": "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.Models\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -153,14 +153,14 @@
         }
       }
     },
-    "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.Services\\Boxty.Services.csproj": {
+    "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.Services\\Boxty.Services.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.Services\\Boxty.Services.csproj",
+        "projectUniqueName": "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.Services\\Boxty.Services.csproj",
         "projectName": "Boxty.Services",
-        "projectPath": "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.Services\\Boxty.Services.csproj",
+        "projectPath": "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.Services\\Boxty.Services.csproj",
         "packagesPath": "C:\\Users\\Bozhidar\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.Services\\obj\\",
+        "outputPath": "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.Services\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -179,11 +179,11 @@
         "frameworks": {
           "netcoreapp3.1": {
             "projectReferences": {
-              "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.Data\\Boxty.Data.csproj": {
-                "projectPath": "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.Data\\Boxty.Data.csproj"
+              "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.Data\\Boxty.Data.csproj": {
+                "projectPath": "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.Data\\Boxty.Data.csproj"
               },
-              "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.ViewModels\\Boxty.ViewModels.csproj": {
-                "projectPath": "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.ViewModels\\Boxty.ViewModels.csproj"
+              "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.ViewModels\\Boxty.ViewModels.csproj": {
+                "projectPath": "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.ViewModels\\Boxty.ViewModels.csproj"
               }
             }
           }
@@ -229,14 +229,14 @@
         }
       }
     },
-    "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.ViewModels\\Boxty.ViewModels.csproj": {
+    "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.ViewModels\\Boxty.ViewModels.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.ViewModels\\Boxty.ViewModels.csproj",
+        "projectUniqueName": "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.ViewModels\\Boxty.ViewModels.csproj",
         "projectName": "Boxty.ViewModels",
-        "projectPath": "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.ViewModels\\Boxty.ViewModels.csproj",
+        "projectPath": "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.ViewModels\\Boxty.ViewModels.csproj",
         "packagesPath": "C:\\Users\\Bozhidar\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.ViewModels\\obj\\",
+        "outputPath": "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.ViewModels\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -255,8 +255,8 @@
         "frameworks": {
           "netcoreapp3.1": {
             "projectReferences": {
-              "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.Models\\Boxty.Models.csproj": {
-                "projectPath": "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.Models\\Boxty.Models.csproj"
+              "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.Models\\Boxty.Models.csproj": {
+                "projectPath": "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.Models\\Boxty.Models.csproj"
               }
             }
           }

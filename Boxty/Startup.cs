@@ -13,7 +13,8 @@ using Boxty.Extensions;
 using System;
 using Microsoft.AspNetCore.Http;
 using Boxty.Data.Repositories;
-using Boxty.Models.Repositories;
+using Boxty.Services.Interfaces;
+using Boxty.Services.Utilities;
 
 namespace Boxty
 {
@@ -53,11 +54,13 @@ namespace Boxty
                 .AddEntityFrameworkStores<BoxtyDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IShoppingCartService, ShoppingCartService>();
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IShoppingCartService, ShoppingCartService>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
-            services.AddTransient<IProductRepository, ProductRepository>();
-            services.AddTransient<IOrderRepository, OrderRepository>();
+            services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<IOrderService, OrderService>();
+            services.AddTransient<IAdminService, AdminService>();
+
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IShoppingCart, ShoppingCart>();
@@ -67,6 +70,7 @@ namespace Boxty
 
             services.AddAutoMapper(typeof(BoxtyProfile));
             services.AddAutoMapper(typeof(OrderProfile));
+            services.AddAutoMapper(typeof(UserProfile));
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -87,6 +91,8 @@ namespace Boxty
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            // app.UseStatusCodePagesWithReExecute("/Home/HttpError?statusCode={}"); HTTPERROR
 
             app.UseSeedRolesMiddleware();
             app.UseHttpsRedirection();

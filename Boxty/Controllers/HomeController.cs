@@ -28,6 +28,11 @@ namespace Boxty.Controllers
             return View();
         }
 
+        public IActionResult HttpError(string statusCode)
+        {
+            return this.View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

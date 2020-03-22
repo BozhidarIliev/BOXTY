@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Boxty.Data;
-using Boxty.Data.Repositories;
+﻿using System.Linq;
 using Boxty.Models;
-using Boxty.Models.Repositories;
 using Boxty.Services;
 using Boxty.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -14,12 +8,12 @@ namespace Boxty.Controllers
 {
     public class ShoppingCartController : Controller
     {
-        private readonly IProductRepository productRepository;
+        private readonly IProductService productRepository;
         private readonly ShoppingCart shoppingCart;
         private readonly IShoppingCartService service;
         private readonly IUserService userService;
         private readonly IShoppingCartService shoppingCartService;
-        private readonly IOrderRepository orderRepository;
+        private readonly IOrderService orderRepository;
 
         // need to get ShoppingCartMethod
 
@@ -30,7 +24,7 @@ namespace Boxty.Controllers
         // GetCartItems
         // ClearCart
         // GetCartTotal
-        public ShoppingCartController(IShoppingCartService service, IProductRepository productRepository, ShoppingCart shoppingCart, IUserService userService, IShoppingCartService shoppingCartService, IOrderRepository orderRepository)
+        public ShoppingCartController(IShoppingCartService service, IProductService productRepository, ShoppingCart shoppingCart, IUserService userService, IShoppingCartService shoppingCartService, IOrderService orderRepository)
         {
             this.service = service;
             this.productRepository = productRepository;

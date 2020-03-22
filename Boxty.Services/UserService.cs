@@ -67,12 +67,9 @@
             await this.SignInManager.SignOutAsync();
         }
 
-        public UserOutputModel GetUser(string username)
+        public UserOutputModel GetUser(string userName)
 		{
-			var user = this.Context.Users
-				.Include(x => x.FirstName)
-				.Include(x => x.LastName)
-				.FirstOrDefault(x => x.UserName == username);
+            var user = this.UserManager.FindByNameAsync(userName).Result;
 
 			var result = Mapper.Map<UserOutputModel>(user);
 			result.Role = this.UserManager.GetRolesAsync(user).Result.FirstOrDefault() ?? GlobalConstants.DefaultRole;
