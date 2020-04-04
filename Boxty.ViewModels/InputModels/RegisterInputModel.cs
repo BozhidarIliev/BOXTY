@@ -23,7 +23,7 @@ namespace Boxty.ViewModels.InputModels
 		public string ConfirmPassword { get; set; }
 
 		[Required]
-		[DataType(DataType.EmailAddress)]
+		[EmailAddress]
 		public string Email { get; set; }
 
 		[Required]

@@ -65,7 +65,7 @@ namespace Boxty.Services
             if (shoppingCartItem != null)
             {
                 if (shoppingCartItem.Amount > 1)
-                { 
+                {
                     shoppingCartItem.Amount--;
                     amount = shoppingCartItem.Amount;
                 }

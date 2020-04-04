@@ -8,6 +8,8 @@
     <title>@ViewData["Title"] - Boxty</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/css.css" />
+
 </head>
 <body>
     <header>
@@ -24,14 +26,11 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Contacts">Contacts</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Menu</a>
+                        </li>
                         @if (SignInManager.IsSignedIn(User))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Menu</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="ShoppingCart" asp-action="Index">ShoppingCart</a>
-                            </li>
                         }
                         @if (User.IsInRole(Boxty.Services.GlobalConstants.Admin))
                         {
@@ -39,10 +38,7 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="Index">Orders</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Admins" asp-action="RolesList">Roles</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Admins" asp-action="UsersList">Users</a>
+                                <a class="nav-link text-dark" asp-area="Waiter" asp-controller="Waiter" asp-action="Index">WaiterIndex</a>
                             </li>
                         }
                     </ul>

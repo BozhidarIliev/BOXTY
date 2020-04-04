@@ -1,7 +1,10 @@
 ﻿namespace Boxty.Extensions
 {
-	using System.Linq;
+	using System;
+	using System.Collections.Generic;
+    using System.Linq;
 	using System.Threading.Tasks;
+    using Boxty.Data;
     using Boxty.Models;
     using Boxty.Services;
     using Microsoft.AspNetCore.Http;
@@ -18,15 +21,49 @@
 
 		public async Task InvokeAsync(HttpContext context,
 			UserManager<BoxtyUser> userManager
-			, RoleManager<IdentityRole> roleManager)
+			, RoleManager<IdentityRole> roleManager,
+			BoxtyDbContext dbContext)
 		{
-			//if (!roleManager.Roles.Any())
-			//{
-			//	await SeedRoles(userManager, roleManager);
-			//}
+			if (!roleManager.Roles.Any())
+			{
+				await SeedRoles(userManager, roleManager);
+			}
+			if (!dbContext.Tables.Any())
+			{
+				await SeedTables(dbContext);
+			}
+			if (!dbContext.TableItems.Any())
+			{
+				await SeedTableItems(dbContext);
+			}
 
 			// Call the next delegate/middleware in the pipeline
 			await _next(context);
+		}
+
+		private async Task SeedTableItems(BoxtyDbContext dbContext)
+		{
+			await dbContext.TableItems.AddAsync(new TableItem
+			{
+				TableId = 1,
+				Amount = 1,
+				Product = dbContext.Products.First(x => x.Id == 1)
+			});
+			dbContext.SaveChanges();
+		}
+
+		private async Task SeedTables(BoxtyDbContext context)
+		{
+			List<Table> tables = new List<Table>();
+			for (int i = 1; i <= 20; i++)
+			{
+				tables.Add(new Table
+				{
+					Taken = "false"
+				});
+			}
+			await context.AddRangeAsync(tables);
+			context.SaveChanges();
 		}
 
 		private async Task SeedRoles(

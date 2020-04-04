@@ -1,0 +1,63 @@
+﻿@inject Microsoft.AspNetCore.Identity.UserManager<Boxty.Models.BoxtyUser> UserManager
+@inject Microsoft.AspNetCore.Identity.RoleManager<Microsoft.AspNetCore.Identity.IdentityRole> RoleManager
+@model IEnumerable<Boxty.ViewModels.OutputModels.UserOutputModel>
+
+@{
+    ViewBag.Title = "All Roles";
+    var roles = RoleManager.Roles;
+}
+<head>
+    <script src="~/js/site.js"></script>
+
+</head>
+
+<h1>All Users</h1>
+<div class="row mt-5 col-md-3">
+    <form id="myForm">
+        <div class="form-row align-items-center">
+            <div class="col-auto">
+                <select class="custom-select mr-sm-2" id="mySelect" onchange="myFunction()">
+                    <option selected>Select role...</option>
+                    @foreach (var role in roles)
+                    {
+                        <option value="@role.Name">@role.Name</option>
+                    }
+                    <option value="All">All</option>
+                </select>
+            </div>
+        </div>
+    </form>
+</div>
+<h2></h2>
+<p id="demo"></p>
+<input type="text" id="mySearch" onkeyup="SearchFunc()" placeholder="Search by name...">
+<table id="myMenu" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>UserName</th>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td class="text-center">@user.Id</td>
+                <td class="text-center">@user.UserName</td>
+                <td class="text-left">@string.Concat(user.FirstName, " ", user.LastName)</td>
+                <td class="text-center">@user.Role</td>
+                <td>
+                    <div class="btn-group ">
+                        <a class="btn btn-info" asp-controller="Users" asp-action="Profile" asp-route-userName="@user.UserName">Profile</a>
+                    </div>
+                    <div class="btn-group ">
+                        <a class="btn btn-success" asp-controller="ShoppingCart" asp-action="RemoveFromCart" asp-route-productId="@user..Id">Done</a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

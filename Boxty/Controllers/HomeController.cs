@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Boxty.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Boxty.Controllers
 {
@@ -28,9 +29,11 @@ namespace Boxty.Controllers
             return View();
         }
 
-        public IActionResult HttpError(string statusCode)
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult HttpError(int statusCode)
         {
-            return this.View();
+            return this.View(statusCode);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -12,6 +12,7 @@ namespace Boxty.Models
         public string SenderId { get; set; }
         public DateTime Date { get; set; }
         public string Delivery { get; set; }
+        public DateTime? IsDeliveredOn { get; set; }
         public string Status { get; set; }
     }
 }

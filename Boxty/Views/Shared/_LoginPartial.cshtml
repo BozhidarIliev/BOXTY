@@ -1,24 +1,68 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<BoxtyUser> SignInManager
 @inject UserManager<BoxtyUser> UserManager
+@inject Boxty.Services.IShoppingCartService cartService;
+@inject IServiceProvider serviceProvider;
 
-    <ul class="navbar-nav">
-        @if (SignInManager.IsSignedIn(User))
+@{
+    var cart = cartService.GetCart(serviceProvider);
+    var items = cartService.GetCartItems(cart.Id);
+    int itemsCount = 0;
+    foreach (var item in items)
+    {
+        itemsCount += item.Amount;
+    }
+    var countOfItemsInCart = 0;
+    if (itemsCount > 0)
+    {
+        countOfItemsInCart = itemsCount;
+    }
+}
+
+<div class="navbar-nav">
+@if (SignInManager.IsSignedIn(User))
+{
+    <a class="nav-link text-dark" asp-controller="Home" asp-action="Profile" asp-route-userId="@UserManager.GetUserId(User)">Hello @string.Concat(User.Identity.Name.First().ToString().ToUpper(), User.Identity.Name.Substring(1))!</a>
+    <a class="nav-link text-dark" asp-controller="Users" asp-action="Logout">Logout</a>
+   @if (User.IsInRole(Boxty.Services.GlobalConstants.Driver))
+    {
+        <div class="dropdown">
+            <button class="dropbtn">Driver Panel</button>
+            <div class="dropdown-content">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Driver" asp-action="Index">Index</a>
+                <a class="nav-link text-dark" asp-area="" asp-controller="Driver" asp-action="RolesList">Index2</a>
+            </div>
+        </div>
+    }
+    @if (User.IsInRole(Boxty.Services.GlobalConstants.Admin))
+    {
+        <div class="dropdown">
+            <button class="dropbtn">Admin Panel</button>
+            <div class="dropdown-content">
+                <a class="nav-link text-dark" asp-area="Administration" asp-controller="Admins" asp-action="UsersList">Users</a>
+                <a class="nav-link text-dark" asp-area="Administration" asp-controller="Admins" asp-action="RolesList">Roles</a>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <a class="nav-link text-dark" asp-controller="Users" asp-action="Register">Register</a>
+    <a class="nav-link text-dark" asp-controller="Users" asp-action="Login">Login</a>
+}
+</div>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <a href="/ShoppingCart">
+        <i class="fa" style="font-size:24px">&#xf07a;</i>
+        @if (countOfItemsInCart > 0)
         {
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Hello @string.Concat(User.Identity.Name.First().ToString().ToUpper(), User.Identity.Name.Substring(1))!</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-controller="Users" asp-action="Logout">Logout</a>
-            </li>
+            <span class='badge badge-warning' id='lblCartCount'> @countOfItemsInCart </span>
         }
-        else
-        {
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-controller="Users" asp-action="Register">Register</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-controller="Users" asp-action="Login">Login</a>
-            </li>
-        }
-    </ul>
+    </a>
+</body>

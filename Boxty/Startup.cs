@@ -12,7 +12,6 @@ using AutoMapper;
 using Boxty.Extensions;
 using System;
 using Microsoft.AspNetCore.Http;
-using Boxty.Data.Repositories;
 using Boxty.Services.Interfaces;
 using Boxty.Services.Utilities;
 
@@ -56,10 +55,11 @@ namespace Boxty
 
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IShoppingCartService, ShoppingCartService>();
-            services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<IAdminService, AdminService>();
+            services.AddTransient<ICategoryService, CategoryService>();
+            services.AddTransient<ITableService, TableService>();
 
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -69,7 +69,7 @@ namespace Boxty
             // two different people asking for the shopping cart are going to get different instances
 
             services.AddAutoMapper(typeof(BoxtyProfile));
-            services.AddAutoMapper(typeof(OrderProfile));
+            services.AddAutoMapper(typeof(OrderProfile));   
             services.AddAutoMapper(typeof(UserProfile));
 
             services.AddControllersWithViews();
@@ -91,8 +91,8 @@ namespace Boxty
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.UseStatusCodePagesWithRedirects("/Home/HttpError?statusCode={0}"); 
 
-            // app.UseStatusCodePagesWithReExecute("/Home/HttpError?statusCode={}"); HTTPERROR
 
             app.UseSeedRolesMiddleware();
             app.UseHttpsRedirection();
@@ -107,8 +107,13 @@ namespace Boxty
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+                    name: "areaRoute",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
                 endpoints.MapRazorPages();
             });
         }

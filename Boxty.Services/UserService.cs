@@ -19,6 +19,7 @@
     public class UserService : BaseService, IUserService
     {
         private readonly IHttpContextAccessor httpContextAccessor;
+
         public UserService(SignInManager<BoxtyUser> signInManager, UserManager<BoxtyUser> userManager, BoxtyDbContext context, IMapper mapper, IHttpContextAccessor httpContextAccessor)
             : base(userManager, context, mapper)
         {
@@ -28,6 +29,7 @@
 
         protected SignInManager<BoxtyUser> SignInManager { get; }
 
+        public BoxtyUser GetCurrentUser() { return this.Context.Users.FirstOrDefault(x => x.Id == httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value); }
         public SignInResult LogUser(LoginInputModel loginModel)
         {
             var user = this.Context.Users.FirstOrDefault(x => x.UserName == loginModel.UserName);
@@ -90,8 +92,8 @@
 
         public bool CheckCurrentUserBeforePurchase()
         {
-            BoxtyUser user = Context.Users.First(x => x.Id == httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            
+            BoxtyUser user = Context.Users.FirstOrDefault(x => x.Id == httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
             if (user.FirstName == null || user.LastName == null ||
                 user.PhoneNumber == null || user.Address == null)
             {

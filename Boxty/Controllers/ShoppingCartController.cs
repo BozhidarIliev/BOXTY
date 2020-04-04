@@ -2,18 +2,21 @@
 using Boxty.Models;
 using Boxty.Services;
 using Boxty.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Boxty.Controllers
 {
     public class ShoppingCartController : Controller
     {
-        private readonly IProductService productRepository;
+        private readonly IProductService productService;
         private readonly ShoppingCart shoppingCart;
         private readonly IShoppingCartService service;
         private readonly IUserService userService;
         private readonly IShoppingCartService shoppingCartService;
-        private readonly IOrderService orderRepository;
+        private readonly IOrderService orderService;
+        private readonly SignInManager<BoxtyUser> signInManager;
+        private bool isAuthenticated => User.Identity.IsAuthenticated;
 
         // need to get ShoppingCartMethod
 
@@ -24,14 +27,15 @@ namespace Boxty.Controllers
         // GetCartItems
         // ClearCart
         // GetCartTotal
-        public ShoppingCartController(IShoppingCartService service, IProductService productRepository, ShoppingCart shoppingCart, IUserService userService, IShoppingCartService shoppingCartService, IOrderService orderRepository)
+        public ShoppingCartController(IShoppingCartService service, IProductService productService, ShoppingCart shoppingCart, IUserService userService, IShoppingCartService shoppingCartService, IOrderService orderRepository, SignInManager<BoxtyUser> signInManager)
         {
             this.service = service;
-            this.productRepository = productRepository;
+            this.productService = productService;
             this.shoppingCart = shoppingCart;
             this.userService = userService;
             this.shoppingCartService = shoppingCartService;
-            this.orderRepository = orderRepository;
+            this.orderService = orderRepository;
+            this.signInManager = signInManager;
         }
 
         public IActionResult Index()
@@ -49,7 +53,7 @@ namespace Boxty.Controllers
 
         public IActionResult AddToCart(int productId)
         {
-            Product product = productRepository.GetProductById(productId);
+            Product product = productService.GetProductById(productId);
 
             if (product != null)
             {
@@ -61,7 +65,7 @@ namespace Boxty.Controllers
 
         public IActionResult RemoveFromCart(int productId)
         {
-            var product = productRepository.Products.FirstOrDefault(x => x.Id == productId);
+            var product = productService.Products.FirstOrDefault(x => x.Id == productId);
 
             if (product != null)
             {
@@ -72,6 +76,11 @@ namespace Boxty.Controllers
 
         public IActionResult Checkout(Order order) 
         {
+            if (!isAuthenticated)
+            {
+                return RedirectToAction("Login", "Users");
+            }
+
             if (userService.CheckCurrentUserBeforePurchase())
             {
                 return RedirectToAction("UpdateShippingInfo", "Users");
@@ -86,7 +95,7 @@ namespace Boxty.Controllers
 
             if (ModelState.IsValid)
             {
-                orderRepository.CreateOrder(order);
+                orderService.CreateOrder(order);
                 shoppingCartService.ClearCart(shoppingCart.Id);
             }
             return RedirectToAction("CheckoutComplete");

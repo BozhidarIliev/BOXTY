@@ -6,18 +6,18 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Boxty.Controllers
 {
-    [Authorize(Roles = "admin,manager,employee,waiter")]
+
     public class OrderController : Controller
     {
-        private readonly IOrderService orderRepository;
+        private readonly IOrderService orderService;
         private readonly IShoppingCartService shoppingCartService; 
         private readonly ShoppingCart shoppingCart;
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly IUserService userService;
 
-        public OrderController(IOrderService orderRepository,IShoppingCartService shoppingCartService, ShoppingCart shoppingCart, IHttpContextAccessor httpContextAccessor, IUserService userService)
+        public OrderController(IOrderService orderService,IShoppingCartService shoppingCartService, ShoppingCart shoppingCart, IHttpContextAccessor httpContextAccessor, IUserService userService)
         {
-            this.orderRepository = orderRepository;
+            this.orderService = orderService;
             this.shoppingCartService = shoppingCartService;
             this.shoppingCart = shoppingCart;
             this.httpContextAccessor = httpContextAccessor;
@@ -26,7 +26,7 @@ namespace Boxty.Controllers
 
         public IActionResult Index()
         {
-            return View(this.orderRepository.AllOrders());
+            return View(this.orderService.AllOrders());
         }
 
         public IActionResult CheckoutComplete()
@@ -34,8 +34,17 @@ namespace Boxty.Controllers
             ViewBag.CheckoutCompleteMessage = "Thank you for your order! :) ";
             return View();
         }
+    
+        [Authorize(Roles = GlobalConstants.Admin)]
+        [HttpPost]
+        public IActionResult MarkAsDone(int productId, int orderId)
+        {
+            orderService.MarkAsDone(productId, orderId);
+            return RedirectToAction("Index");
+        }
 
-        public IActionResult MarkAsDone(int productId)
+        [HttpPost]
+        public IActionResult RemoveFromOrders()
         {
             return null;
         }
