@@ -31,5 +31,15 @@
         public const string DeliveringStatus = "delivering";
 
         public const string RemovedStatus = "removed";
+
+        public const string Yes = "yes";
+
+        public const string No = "no";
+
+        public const string SentOnlineStatus = "order placed online";
+
+        public const string SentByWaiter = "order placed by waiter";
+
+        public const string Available = "available";
     }
 }

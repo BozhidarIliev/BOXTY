@@ -32,24 +32,37 @@
 			{
 				await SeedTables(dbContext);
 			}
-			if (!dbContext.TableItems.Any())
+			if (!dbContext.Products.Any())
 			{
-				await SeedTableItems(dbContext);
+				await SeedProducts(dbContext);
+			}
+			if (!dbContext.Categories.Any())
+			{
+				await SeedCategories(dbContext);
 			}
 
 			// Call the next delegate/middleware in the pipeline
+			dbContext.SaveChanges();
 			await _next(context);
 		}
-
-		private async Task SeedTableItems(BoxtyDbContext dbContext)
+		private async Task SeedCategories(BoxtyDbContext dbContext)
 		{
-			await dbContext.TableItems.AddAsync(new TableItem
+			Category[] items = new Category[]
 			{
-				TableId = 1,
-				Amount = 1,
-				Product = dbContext.Products.First(x => x.Id == 1)
-			});
-			dbContext.SaveChanges();
+				new Category() { Name = "Main Course" },
+				new Category() { Name = "Starter" }
+			};
+			await dbContext.Categories.AddRangeAsync(items);
+		}
+
+		private async Task SeedProducts(BoxtyDbContext dbContext)
+		{
+			Product[] items = new Product[]
+			{
+				new Product() { Name = "Chicken Boxty", Description = "Filet of Free-range Irish Chicken, Smoked Bacon & Leek Cream Sause, Boxty Pancake, House Salad", ImageUrl = "https://www.tasteofhome.com/wp-content/uploads/2017/10/Creamy-Chicken-Boxty_exps141524_THHC2238742B09_23_4b_RMS-1-696x696.jpg", Price = 20} ,
+				new Product() { Name = "Leek & Potato Soup", Description = "Classic Irish Recipie of Potato & Leek Soup, Soda Bread", ImageUrl = "https://www.lanascooking.com/wp-content/uploads/2013/03/Leek-and-Potato-soup-feature.jpg", Price = 15}
+			};
+			await dbContext.Products.AddRangeAsync(items);
 		}
 
 		private async Task SeedTables(BoxtyDbContext context)
@@ -59,10 +72,10 @@
 			{
 				tables.Add(new Table
 				{
-					Taken = "false"
+					Status = GlobalConstants.Available
 				});
 			}
-			await context.AddRangeAsync(tables);
+			await context.Tables.AddRangeAsync(tables);
 			context.SaveChanges();
 		}
 

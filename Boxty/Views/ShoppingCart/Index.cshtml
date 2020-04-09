@@ -1,57 +1,100 @@
-﻿@model Boxty.ViewModels.ShoppingCartViewModel
-
+﻿@inject Microsoft.AspNetCore.Identity.SignInManager<BoxtyUser> signInManager;
+@inject Boxty.Services.IUserService userService; 
     <div class="row checkoutForm">
-        @if (Model.ShoppingCart.Items.Count == 0)
-        {
-            <h2>Your shopping cart is empty</h2>
-        }
-        else
-        {
-            <h2>Your shopping cart</h2>
-            <h4>Here are the products in your shopping cart.</h4>
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>Selected amount</th>
-                        <th>Product</th>
-                        <th class="text-right">Price</th>
-                        <th class="text-right">Subtotal</th>
-                        <th class="text-right">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var line in Model.ShoppingCart.Items)
-                    {
-                    <tr>
-                        <td class="text-center">@line.Amount</td>
-                        <td class="text-left">@line.Product.Name</td>
-                        <td class="text-right">@line.Product.Price.ToString("c")</td>
-                        <td class="text-right">
-                            @((line.Amount * line.Product.Price).ToString("c"))
-                        </td>
-                        <td>
-                            <div class="btn-group ">
-                                <a class="btn btn-danger" asp-controller="ShoppingCart" asp-action="RemoveFromCart" asp-route-productId="@line.Product.Id">Remove</a>
-                            </div>
 
-                        </td>
-                    </tr>
-                    }
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="3" class="text-right">Total:</td>
-                        <td class="text-right">
-                            @Model.ShoppingCartTotal.ToString("c")
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
+        <h2>Your shopping cart</h2>
+        <h4>Here are the products in your shopping cart.</h4>
+        <table class="table table-bordered table-striped" id="shoppingCart">
+            <thead>
+                <tr>
+                    <th>Product Id</th>
+                    <th>Product</th>
+                    <th class="text-center">Amount</th>
+                    <th class="text-right">Price</th>
+                    <th class="text-right">Actions</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <td colspan="2" class="text-right">Total:</td>
+                    <td class="text-right" id="total">
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
 
-            <div class="text-right">
-                <div class="btn-group ">
-                    <a class="btn btn-success" asp-controller="ShoppingCart" asp-action="Checkout">Check out</a>
-                </div>
+        <div class="text-right">
+            <div class="btn-group ">
+                <a class="btn btn-success" asp-controller="ShoppingCart" asp-action="Checkout">Checkout</a>
             </div>
-        }
+        </div>
+
     </div>
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            initShoppingCart();
+
+        });
+
+        function deleteLine(productId) {
+            $.ajax({
+                type: "DELETE",
+                contentType: "application/json; charset=utf-8",
+                url: "/api/TableItem/DeleteSelectedItem?tableItemId=" + productId + "",
+                success: function (data) {
+                    initPosLine();
+                    toastr.success('Insert POS line success for item: ' + productName, 'Success');
+                },
+                failure: function (xhr, status, error) {
+                },
+                error: function (xhr, status, thrownError) {
+                    alert('Error ' + thrownError + " " + xhr.status);
+                }
+
+            })
+        }
+
+        function initShoppingCart() {
+            $.ajax({
+                type: "GET",
+                url: "/api/ShoppingCart",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    $("#DIV").html('');
+                    var DIV = '';
+                    $.each(data, function (i, item) {
+                        var rows = "<tr>" +
+                            "<td>" + item.id + "</td>" +
+                            "<td>" + item.name + "</td>" +
+                            '<td class="price">' + item.price + '</td>' +
+                            "</tr>";
+                        $('#shoppingCart').append(rows);
+                    });
+                },
+
+                failure: function (data) {
+                    alert(data.responseText);
+                },
+                error: function (data) {
+                    alert('Error ' + thrownError + " " + xhr.status);
+                }
+            });
+
+
+            updateCartTotal(); // TODO!
+        }
+
+        function updateCartTotal() {
+            var totalPrice = 0;
+            $("#shoppingCart").find(".price").each(function () {
+                totalPrice += parseFloat($(this).html());
+            });
+            $("#total").html(totalPrice)
+        }
+
+    </script>
+}

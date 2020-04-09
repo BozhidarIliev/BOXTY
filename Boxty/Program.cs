@@ -23,7 +23,6 @@ namespace Boxty
                 try
                 {
                     var context = services.GetRequiredService<BoxtyDbContext>();
-                    DbInitializer.Initialize(context);
                 }
                 catch (Exception ex)
                 {

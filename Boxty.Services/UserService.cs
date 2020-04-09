@@ -15,7 +15,6 @@
     using System.Security.Claims;
     using System.Text;
     using System.Threading.Tasks;
-
     public class UserService : BaseService, IUserService
     {
         private readonly IHttpContextAccessor httpContextAccessor;
@@ -29,7 +28,7 @@
 
         protected SignInManager<BoxtyUser> SignInManager { get; }
 
-        public BoxtyUser GetCurrentUser() { return this.Context.Users.FirstOrDefault(x => x.Id == httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value); }
+        public BoxtyUser GetCurrentUser() { return this.Context.Users.FirstOrDefault(x => x.Id == httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)); }
         public SignInResult LogUser(LoginInputModel loginModel)
         {
             var user = this.Context.Users.FirstOrDefault(x => x.UserName == loginModel.UserName);
@@ -92,10 +91,10 @@
 
         public bool CheckCurrentUserBeforePurchase()
         {
-            BoxtyUser user = Context.Users.FirstOrDefault(x => x.Id == httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            BoxtyUser boxtyUser = this.GetCurrentUser();
 
-            if (user.FirstName == null || user.LastName == null ||
-                user.PhoneNumber == null || user.Address == null)
+            if (boxtyUser.FirstName == null || boxtyUser.LastName == null ||
+                boxtyUser.PhoneNumber == null || boxtyUser.Address == null)
             {
                 return true;
             }

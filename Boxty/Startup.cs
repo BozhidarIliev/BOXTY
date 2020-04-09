@@ -13,7 +13,6 @@ using Boxty.Extensions;
 using System;
 using Microsoft.AspNetCore.Http;
 using Boxty.Services.Interfaces;
-using Boxty.Services.Utilities;
 
 namespace Boxty
 {
@@ -63,18 +62,19 @@ namespace Boxty
 
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddScoped<IShoppingCart, ShoppingCart>();
-            services.AddScoped(sp => ShoppingCart.GetCart(sp));
             // object associated with a request 
             // two different people asking for the shopping cart are going to get different instances
 
             services.AddAutoMapper(typeof(BoxtyProfile));
-            services.AddAutoMapper(typeof(OrderProfile));   
-            services.AddAutoMapper(typeof(UserProfile));
 
             services.AddControllersWithViews();
             services.AddRazorPages();
-            services.AddSession();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(1000);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -91,15 +91,15 @@ namespace Boxty
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            app.UseStatusCodePagesWithRedirects("/Home/HttpError?statusCode={0}"); 
+            //app.UseStatusCodePagesWithRedirects("/Home/HttpError?statusCode={0}"); 
 
 
             app.UseSeedRolesMiddleware();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseSession();
 
             app.UseRouting();
+            app.UseSession();
 
             app.UseAuthentication();
             app.UseAuthorization();

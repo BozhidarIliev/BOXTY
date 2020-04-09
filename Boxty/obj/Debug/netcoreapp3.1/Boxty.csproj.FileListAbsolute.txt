@@ -400,7 +400,7 @@ C:\Users\Bozhidar\Desktop\Boxty\Boxty\obj\Debug\netcoreapp3.1\Razor\Areas\Admini
 C:\Users\Bozhidar\Desktop\Boxty\Boxty\obj\Debug\netcoreapp3.1\Razor\Areas\Administration\Views\Admins\RolesList.cshtml.g.cs
 C:\Users\Bozhidar\Desktop\Boxty\Boxty\obj\Debug\netcoreapp3.1\Razor\Areas\Administration\Views\Admins\UsersList.cshtml.g.cs
 C:\Users\Bozhidar\Desktop\Boxty\Boxty\obj\Debug\netcoreapp3.1\Razor\Areas\Administration\Views\_ViewStart.cshtml.g.cs
-C:\Users\Bozhidar\Desktop\Boxty\Boxty\obj\Debug\netcoreapp3.1\Boxty.csproj.CoreCompileInputs.cache
-C:\Users\Bozhidar\Desktop\Boxty\Boxty\obj\Debug\netcoreapp3.1\Boxty.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\Bozhidar\Desktop\Boxty\Boxty\obj\Debug\netcoreapp3.1\Boxty.MvcApplicationPartsAssemblyInfo.cache
-C:\Users\Bozhidar\Desktop\Boxty\Boxty\obj\Debug\netcoreapp3.1\Razor\Views\Waiter\Index.cshtml.g.cs
+C:\Users\Bozhidar\Desktop\BOXTY\Boxty\obj\Debug\netcoreapp3.1\Razor\Areas\Waiter\Views\Waiter\Index.cshtml.g.cs
+C:\Users\Bozhidar\Desktop\BOXTY\Boxty\obj\Debug\netcoreapp3.1\Boxty.csproj.CoreCompileInputs.cache
+C:\Users\Bozhidar\Desktop\BOXTY\Boxty\obj\Debug\netcoreapp3.1\Boxty.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Bozhidar\Desktop\BOXTY\Boxty\obj\Debug\netcoreapp3.1\Boxty.MvcApplicationPartsAssemblyInfo.cache

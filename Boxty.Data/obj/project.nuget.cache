@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "BfFIwVxCdXL2zbarzDUXWmCJ1YrMoky+P6z7cVQA+0LCnASPMKY/Sumo5Gxa/tupemADhiKPZoaKnwen5xzTWQ==",
+  "dgSpecHash": "I4l+SRo9WXRcOHN3V4pZUMMymhbxHcV+/vytzIPomSJwpgim4pY/wmKmLtEr3PhNEyl5fnV83fCaQKdokMcsSA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.Data\\Boxty.Data.csproj",
+  "projectFilePath": "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.Data\\Boxty.Data.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Bozhidar\\.nuget\\packages\\automapper\\9.0.0\\automapper.9.0.0.nupkg.sha512",
     "C:\\Users\\Bozhidar\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\7.0.0\\automapper.extensions.microsoft.dependencyinjection.7.0.0.nupkg.sha512",

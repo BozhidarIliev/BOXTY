@@ -1,7 +1,12 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
 using Boxty.Models;
 using Boxty.Services;
 using Boxty.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,28 +15,17 @@ namespace Boxty.Controllers
     public class ShoppingCartController : Controller
     {
         private readonly IProductService productService;
-        private readonly ShoppingCart shoppingCart;
-        private readonly IShoppingCartService service;
+        private readonly IMapper mapper;
         private readonly IUserService userService;
         private readonly IShoppingCartService shoppingCartService;
         private readonly IOrderService orderService;
         private readonly SignInManager<BoxtyUser> signInManager;
         private bool isAuthenticated => User.Identity.IsAuthenticated;
 
-        // need to get ShoppingCartMethod
-
-        // service methods
-        // GetCart
-        // AddToCart
-        // RemoveFromCart
-        // GetCartItems
-        // ClearCart
-        // GetCartTotal
-        public ShoppingCartController(IShoppingCartService service, IProductService productService, ShoppingCart shoppingCart, IUserService userService, IShoppingCartService shoppingCartService, IOrderService orderRepository, SignInManager<BoxtyUser> signInManager)
+        public ShoppingCartController(IMapper mapper, IProductService productService, IUserService userService, IShoppingCartService shoppingCartService, IOrderService orderRepository, SignInManager<BoxtyUser> signInManager)
         {
-            this.service = service;
+            this.mapper = mapper;
             this.productService = productService;
-            this.shoppingCart = shoppingCart;
             this.userService = userService;
             this.shoppingCartService = shoppingCartService;
             this.orderService = orderRepository;
@@ -40,41 +34,24 @@ namespace Boxty.Controllers
 
         public IActionResult Index()
         {
-            var items = service.GetCartItems(shoppingCart.Id);
-            shoppingCart.Items = items;
-            
-            var model = new ShoppingCartViewModel
-            {
-                ShoppingCart = shoppingCart,
-                ShoppingCartTotal = service.GetCartTotal(shoppingCart.Id)
-            };
-            return View(model);
+            return View();
         }
 
         public IActionResult AddToCart(int productId)
         {
-            Product product = productService.GetProductById(productId);
-
-            if (product != null)
-            {
-                service.AddToCart(shoppingCart.Id, product, 1);
-            }
-
+            shoppingCartService.AddToCart(productId);
             return RedirectToAction("Index");
         }
 
-        public IActionResult RemoveFromCart(int productId)
+        public IActionResult Remove(int productId)
         {
-            var product = productService.Products.FirstOrDefault(x => x.Id == productId);
-
-            if (product != null)
-            {
-                service.RemoveFromCart(shoppingCart.Id, product, 1);
-            }
+            shoppingCartService.RemoveFromCart(productId);
             return RedirectToAction("Index");
         }
 
-        public IActionResult Checkout(Order order) 
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Checkout()
         {
             if (!isAuthenticated)
             {
@@ -86,26 +63,30 @@ namespace Boxty.Controllers
                 return RedirectToAction("UpdateShippingInfo", "Users");
             }
 
-            var items = shoppingCartService.GetCartItems(shoppingCart.Id);
-            shoppingCart.Items = items;
-            if (shoppingCart.Items.Count == 0)
+            var items = shoppingCartService.GetItemsFromCart().Result;
+            if (items.Count() == 0)
             {
                 ModelState.AddModelError("", "Your card is empty, add some products first");
             }
 
             if (ModelState.IsValid)
             {
-                orderService.CreateOrder(order);
-                shoppingCartService.ClearCart(shoppingCart.Id);
+                var result = mapper.Map<BaseOrder[]>(items);
+
+                var user = userService.GetCurrentUser();
+                Order order = new Order
+                {
+                    Status = GlobalConstants.SentOnlineStatus,
+                    SentOn = DateTime.Now,
+                    Sender = user.Id,
+                    Destination = user.Address
+                };
+                orderService.CreateOrder(order, result);
+                shoppingCartService.ClearCart();
             }
             return RedirectToAction("CheckoutComplete");
 
         }
 
-        public IActionResult CheckoutComplete()
-        {
-            ViewBag.CheckoutCompleteMessage = "Thanks for your order! :) ";
-            return View();
-        }
     }
 }

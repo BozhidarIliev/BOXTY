@@ -22,7 +22,6 @@ namespace Boxty.Controllers.Api
             this.context = context;
         }
 
-        // GET: api/SalesOrderLine/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Table>> GetTables(int tableId)
         {

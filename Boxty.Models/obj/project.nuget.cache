@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "BLxzI88ufFGQqUk8gZbQoYbXlrO58Jbsvaj7LZh1NPOXYf25zfZc1NuBsIfGV0BYTrnBn6PkB8EXCTF9bnwIFw==",
+  "dgSpecHash": "6V4hSWUQrgpbx25jDsQQj0C/7ypeFuYsBK6X9oEfvJbmmIIprlTAUK7XZc3ZJxylM6aX+zW3/kalkenVrvQK+w==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.Models\\Boxty.Models.csproj",
+  "projectFilePath": "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.Models\\Boxty.Models.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Bozhidar\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\3.1.1\\microsoft.aspnetcore.cryptography.internal.3.1.1.nupkg.sha512",
     "C:\\Users\\Bozhidar\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\3.1.1\\microsoft.aspnetcore.cryptography.keyderivation.3.1.1.nupkg.sha512",

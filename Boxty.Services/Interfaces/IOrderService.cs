@@ -7,7 +7,7 @@ namespace Boxty.Services
     public interface IOrderService
     {
         IEnumerable<OrderOutputModel> AllOrders();
-        void CreateOrder(Order order);
+        void CreateOrder(Order order, BaseOrder[] items);
         public void MarkAsDone(int productId, int orderId);
         public void RemoveFromOrders(int productId, int orderId);
     }

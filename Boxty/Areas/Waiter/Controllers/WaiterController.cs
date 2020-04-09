@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 namespace Boxty.Areas.Waiter.Controllers
 {
     [Authorize(Roles = "waiter, admin")]
+    [Area("Waiter")]
     public class WaiterController : Controller
     {
         public IActionResult Index()

@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Details";
+    var id = Model.Id;
 }
 
 <h1>Details</h1>
@@ -10,26 +11,48 @@
     <div class="col-md-4">
         <div class="card w-100">
             <img class="card-img-top" src="@Model.ImageUrl" alt="Card image cap" style="height:250px">
-            </div>
         </div>
-            <h4>@Html.DisplayFor(model => model.Name)</h4>
-            <hr />
-            <dl class="row">
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Price)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Price)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Description)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Description)
-                </dd>
-            </dl>
-        </div>
-        <div>
-            <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-            <a class="btn btn-success" id="cartButton "asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-productId="@Model.Id">Add to cart</a>
-        </div>
+    </div>
+
+    <h4>@Html.DisplayFor(model => model.Name)</h4>
+    <hr />
+    <dl class="row" id="item">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a class="btn btn-success" onclick="AddToCart(@Model.Id)">Add to cart</a>
+</div>
+
+@section Scripts
+{
+    <script>
+        function AddToCart(modelId) {
+        $.ajax({
+            type: "POST",
+            url: "/api/shoppingCart?productId=" + modelId,
+            success: function (data) {
+                toastr.success('Insert POS line success for item: ' + productName, 'Success');
+            },
+            failure: function (xhr, status, error) {
+            },
+            error: function (xhr, status, thrownError) {
+                alert('Error ' + thrownError + " " + xhr.status);
+            }
+
+        })
+    }
+    </script>
+}

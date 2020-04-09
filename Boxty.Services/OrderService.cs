@@ -14,18 +14,18 @@ namespace Boxty.Services
 {
     public class OrderService : IOrderService
     {
+        private readonly IUserService userService;
         private readonly BoxtyDbContext context;
-        private readonly ShoppingCart shoppingCart;
         private readonly IMapper mapper;
-        private readonly IProductService productRepository;
+        private readonly IProductService producService;
         private readonly IHttpContextAccessor httpContextAccessor;
 
-        public OrderService(BoxtyDbContext context, ShoppingCart shoppingCart, IMapper mapper, IProductService productRepository, IHttpContextAccessor httpContextAccessor)
+        public OrderService(IUserService userService, BoxtyDbContext context, IMapper mapper, IProductService productService, IHttpContextAccessor httpContextAccessor)
         {
+            this.userService = userService;
             this.context = context;
-            this.shoppingCart = shoppingCart;
             this.mapper = mapper;
-            this.productRepository = productRepository;
+            this.producService = productService;
             this.httpContextAccessor = httpContextAccessor;
         }
 
@@ -35,16 +35,11 @@ namespace Boxty.Services
             
             foreach (var order in context.Orders.Where(x => x.Status == GlobalConstants.SentStatus))
             {
-                foreach (var detail in context.OrderDetails.Where(x => x.OrderId == order.Id).Where(x => x.Status != GlobalConstants.DeliveringStatus))
+                foreach (var detail in context.OrderDetails.Where(x => x.Id == order.Id).Where(x => x.Status != GlobalConstants.DeliveringStatus))
                 {
-                    var model = new OrderOutputModel
-                    {
-                        OrderId = order.Id,
-                        Date = detail.Date,
-                        Comment = detail.Comment,
-                        Product = productRepository.GetProductById(detail.ProductId)
-                    };
-
+                    var model = mapper.Map<OrderOutputModel>(detail);
+                    model.Product = producService.GetProductById(detail.Id);
+                    
                     orders.Add(model);
                 }
             }
@@ -52,57 +47,47 @@ namespace Boxty.Services
             return orders.OrderByDescending(x=>x.Date);
         }
 
-        public void CreateOrder(Order order)
+        public void CreateOrder(Order order, BaseOrder[] items)
         {
-            order.Date = DateTime.Now;
-            order.SenderId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            order.Delivery = "false";
-            order.Status = GlobalConstants.SentStatus;
-
             context.Orders.Add(order);
             context.SaveChanges();
-            CreateOrderDetail(order);
+
+            context.OrderDetails.AddRange(CreateOrderDetail(order, order.Status, items));
+            context.SaveChanges();
         }
 
-        private void CreateOrderDetail(Order order)
+        private BaseOrder[] CreateOrderDetail(Order order ,string status, BaseOrder[] items)
         {
-            var shoppingCartItems = shoppingCart.Items;
-            List<OrderDetail> orderDetails = new List<OrderDetail>();
-            foreach (var shoppingCartItem in shoppingCartItems)
+            var userId = userService.GetCurrentUser().Id;
+            if (status == GlobalConstants.SentOnlineStatus)
             {
-                for (int i = 0; i < shoppingCartItem.Amount;i++)
+                foreach (var item in items)
                 {
-                    var orderDetail = new OrderDetail()
-                    {
-                        OrderId = order.Id,
-                        ProductId = shoppingCartItem.Product.Id,
-                        Comment = shoppingCartItem.Comment,
-                        Date = DateTime.Now,
-                        Status = GlobalConstants.SentStatus
-                    };
-                    orderDetails.Add(orderDetail);
+                    item.Status = status;
+                    item.SentOn = DateTime.Now;
+                    item.OrderId = order.Id;
+
                 }
-                context.OrderDetails.AddRange(orderDetails);
             }
-            context.SaveChanges();
+            return items;
         }
 
         public void MarkAsDone(int productId, int orderId)
         {
-            var product = context.OrderDetails.First(
-                s => s.ProductId == productId && s.OrderId == orderId);
+            //var product = context.OrderDetails.First(
+            //    s => s.ProductId == productId && s.OrderId == orderId);
 
-            product.Status = GlobalConstants.DeliveringStatus;
-            context.SaveChanges();
+            //product.Status = GlobalConstants.DeliveringStatus;
+            //context.SaveChanges();
         }
 
         public void RemoveFromOrders(int productId, int orderId)
         {
-            var product = context.OrderDetails.First(
-                s => s.ProductId == productId && s.OrderId == orderId);
+            //var product = context.OrderDetails.First(
+            //    s => s.ProductId == productId && s.OrderId == orderId);
 
-            product.Status = GlobalConstants.RemovedStatus;
-            context.SaveChanges();
+            //product.Status = GlobalConstants.RemovedStatus;
+            //context.SaveChanges();
         }
     }
 

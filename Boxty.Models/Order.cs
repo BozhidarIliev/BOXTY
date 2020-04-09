@@ -9,10 +9,10 @@ namespace Boxty.Models
     {
         [Key]
         public int Id { get; set; }
-        public string SenderId { get; set; }
-        public DateTime Date { get; set; }
-        public string Delivery { get; set; }
-        public DateTime? IsDeliveredOn { get; set; }
         public string Status { get; set; }
+        public DateTime SentOn{ get; set; }
+        public string Destination { get; set; }
+        public string Sender { get; set; }
+
     }
 }

@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Index";
+    Layout = "_Layout";
     var tables = tableService.GetTables().Result;
 }
 <head>
@@ -24,7 +25,6 @@
                 <tr>
                     <th scope="col">Id</th>
                     <th scope="col">Product</th>
-                    <th scope="col">Price</th>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -53,13 +53,37 @@
         </div>
     </div>
 </div>
+
+<button onclick="sendItems()" class="btn btn-info">Send</button>
+
 @section Scripts{
     <script>
 
         $(document).ready(function () {
-            //data  tables
             initProductLine();
         });
+
+        function sendItems() {
+            var f = document.getElementById("tableId");
+            var tableId = f.selectedIndex + 1
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "/api/Order",
+                data: tableId,
+                success: function (data) {
+                    initPosLine();
+                    toastr.success('Insert POS line success for item: ' + productName, 'Success');
+                },
+                failure: function (xhr, status, error) {
+                }, 
+                error: function (xhr, status, thrownError) {
+                    alert('Error ' + thrownError + " " + xhr.status);
+                }
+
+            })
+        }
+
 
         function initProductLine() {
             $.ajax({
@@ -75,16 +99,15 @@
                         var rows = "<tr>" +
                             "<td id='id'>" + item.id + "</td>" +
                             "<td id='name'>" + item.name + "</td>" +
-                            "<td id='price'>" + item.price + "</td>" +
                             '<td>' + button + '</td>'
                         "</tr>";
                         $('#productLine').append(rows);
-                    }); //End of foreach Loop
-                }, //End of AJAX Success function
+                    }); 
+                },
 
                 failure: function (data) {
                     alert(data.responseText);
-                }, //End of AJAX failure function
+                }, 
                 error: function (data) {
                     alert(data.responseText);
                 }
@@ -93,7 +116,7 @@
 
         function initPosLine() {
             var e = document.getElementById("tableId");
-            var tableId = e.options[e.selectedIndex].value;
+            var tableId = e.selectedIndex;
             $.ajax({
                 type: "GET",
                 url: "/api/TableItem/GetTableItems?tableId=" + tableId + "",
@@ -103,24 +126,26 @@
                     $("#DIV").html('');
                     var DIV = '';
                     $('#posLine > tr').slice(0).remove();
-                    $.each(data, function (i, item) {
+                    $.each(data.tableItems, function (i, item) {
+                        var name = 'selectedProduct';
+                        if (item.status == 'sent') name ='sentProduct'
                         var btnDelete = '<button onclick="deleteLine(\'' + item.id + '\')" class="btn btn-danger">DELETE</button>';
-                        var rows = "<tr id='posLineRow'>" +
-                            "<td id='id'>" + item.product.id + "</td>" +
-                            "<td id='name'>" + item.product.name + "</td>" +
+                        var rows = "<tr name=\""+ name + "\">" +
+                            "<td id='id'>" + item.productId + "</td>" +
+                            "<td id='name'>" + item.productName + "</td>" +
                             "<td id='amount'>" + item.amount + "</td>" +
-                            "<td id='price'>" + item.product.price * item.amount + "</td>" +
+                            "<td id='price'>" + item.productPrice * item.amount + "</td>" +
                             "<td id='comment'>" + item.comment + "</td>" +
                             "<td>" + btnDelete + "</td>"
                         "</tr>";
                         $('#posLine').append(rows);
-                    }); //End of foreach Loop
+                    }); 
                     console.log(data);
-                }, //End of AJAX Success function
+                }, 
 
                 failure: function (data) {
                     alert(data.responseText);
-                }, //End of AJAX failure function
+                }, 
                 error: function (data) {
                     alert(data.responseText);
                 }
@@ -137,7 +162,7 @@
             $.ajax({
                 type: "POST",
                 contentType: "application/json; charset=utf-8",
-                url: "api/TableItem",
+                url: "/api/TableItem",
                 data: JSON.stringify({
                     'TableId': tableId,
                     'ProductId': productId,
@@ -148,7 +173,7 @@
                     toastr.success('Insert POS line success for item: ' + productName, 'Success');
                 },
                 failure: function (xhr, status, error) {
-                }, //End of AJAX failure function
+                },
                 error: function (xhr, status, thrownError) {
                     alert('Error ' + thrownError + " " + xhr.status);
                 }
@@ -160,13 +185,13 @@
             $.ajax({
                 type: "DELETE",
                 contentType: "application/json; charset=utf-8",
-                url: "api/TableItem/DeleteSelectedItem?tableItemId=" + productId + "",
+                url: "/api/TableItem/DeleteSelectedItem?tableItemId=" + productId + "",
                 success: function (data) {
                     initPosLine();
                     toastr.success('Insert POS line success for item: ' + productName, 'Success');
                 },
                 failure: function (xhr, status, error) {
-                }, //End of AJAX failure function
+                },
                 error: function (xhr, status, thrownError) {
                     alert('Error ' + thrownError + " " + xhr.status);
                 }

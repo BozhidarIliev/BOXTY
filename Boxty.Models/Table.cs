@@ -9,6 +9,6 @@ namespace Boxty.Models
     {
         [Key]
         public int Id { get; set; }
-        public string Taken { get; set; }
+        public string Status { get; set; }
     }
 }

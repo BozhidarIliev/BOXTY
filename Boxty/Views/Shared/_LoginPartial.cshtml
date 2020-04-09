@@ -3,53 +3,48 @@
 @inject UserManager<BoxtyUser> UserManager
 @inject Boxty.Services.IShoppingCartService cartService;
 @inject IServiceProvider serviceProvider;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor contextAccessor;
 
 @{
-    var cart = cartService.GetCart(serviceProvider);
-    var items = cartService.GetCartItems(cart.Id);
-    int itemsCount = 0;
-    foreach (var item in items)
-    {
-        itemsCount += item.Amount;
-    }
+    var items = Boxty.Services.SessionHelper.GetObjectFromJson<List<BaseOrder>>(contextAccessor.HttpContext.Session, "cart") ?? null ;
     var countOfItemsInCart = 0;
-    if (itemsCount > 0)
+    if (items != null)
     {
-        countOfItemsInCart = itemsCount;
+        countOfItemsInCart = items.Count;
     }
 }
 
 <div class="navbar-nav">
-@if (SignInManager.IsSignedIn(User))
-{
-    <a class="nav-link text-dark" asp-controller="Home" asp-action="Profile" asp-route-userId="@UserManager.GetUserId(User)">Hello @string.Concat(User.Identity.Name.First().ToString().ToUpper(), User.Identity.Name.Substring(1))!</a>
-    <a class="nav-link text-dark" asp-controller="Users" asp-action="Logout">Logout</a>
-   @if (User.IsInRole(Boxty.Services.GlobalConstants.Driver))
+    @if (SignInManager.IsSignedIn(User))
     {
-        <div class="dropdown">
-            <button class="dropbtn">Driver Panel</button>
-            <div class="dropdown-content">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Driver" asp-action="Index">Index</a>
-                <a class="nav-link text-dark" asp-area="" asp-controller="Driver" asp-action="RolesList">Index2</a>
+        <a class="nav-link text-dark" asp-controller="Home" asp-action="Profile" asp-route-userId="@UserManager.GetUserId(User)">Hello @string.Concat(User.Identity.Name.First().ToString().ToUpper(), User.Identity.Name.Substring(1))!</a>
+        <a class="nav-link text-dark" asp-controller="Users" asp-action="Logout">Logout</a>
+        @if (User.IsInRole(Boxty.Services.GlobalConstants.Driver))
+        {
+            <div class="dropdown">
+                <button class="dropbtn">Driver Panel</button>
+                <div class="dropdown-content">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Driver" asp-action="Index">Index</a>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Driver" asp-action="RolesList">Index2</a>
+                </div>
             </div>
-        </div>
+        }
+        @if (User.IsInRole(Boxty.Services.GlobalConstants.Admin))
+        {
+            <div class="dropdown">
+                <button class="dropbtn">Admin Panel</button>
+                <div class="dropdown-content">
+                    <a class="nav-link text-dark" asp-area="Administration" asp-controller="Admins" asp-action="UsersList">Users</a>
+                    <a class="nav-link text-dark" asp-area="Administration" asp-controller="Admins" asp-action="RolesList">Roles</a>
+                </div>
+            </div>
+        }
     }
-    @if (User.IsInRole(Boxty.Services.GlobalConstants.Admin))
+    else
     {
-        <div class="dropdown">
-            <button class="dropbtn">Admin Panel</button>
-            <div class="dropdown-content">
-                <a class="nav-link text-dark" asp-area="Administration" asp-controller="Admins" asp-action="UsersList">Users</a>
-                <a class="nav-link text-dark" asp-area="Administration" asp-controller="Admins" asp-action="RolesList">Roles</a>
-            </div>
-        </div>
+        <a class="nav-link text-dark" asp-controller="Users" asp-action="Register">Register</a>
+        <a class="nav-link text-dark" asp-controller="Users" asp-action="Login">Login</a>
     }
-}
-else
-{
-    <a class="nav-link text-dark" asp-controller="Users" asp-action="Register">Register</a>
-    <a class="nav-link text-dark" asp-controller="Users" asp-action="Login">Login</a>
-}
 </div>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -60,7 +55,7 @@ else
 <body>
     <a href="/ShoppingCart">
         <i class="fa" style="font-size:24px">&#xf07a;</i>
-        @if (countOfItemsInCart > 0)
+        @if (countOfItemsInCart != 0)
         {
             <span class='badge badge-warning' id='lblCartCount'> @countOfItemsInCart </span>
         }

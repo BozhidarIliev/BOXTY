@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "2ho1k0tvN0L1Mvz1jIETxVD7nlyps2hYIxrFfv993Etgfj3DUgkXs3Jo7RNja8wrNK5A2p7Inym9yVLMeyhG0g==",
+  "dgSpecHash": "KCW9a+kKYeOTVGrRxr9cxRA7EZHREauN2FurYd2f/ZQuieyr7Bw1odW3oW4oAej1Gy6A2NVaaf4ZRuYvTntjyw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Bozhidar\\Desktop\\Boxty\\Boxty.ViewModels\\Boxty.ViewModels.csproj",
+  "projectFilePath": "C:\\Users\\Bozhidar\\Desktop\\BOXTY\\Boxty.ViewModels\\Boxty.ViewModels.csproj",
   "expectedPackageFiles": [
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.aspnetcore.antiforgery\\2.2.0\\microsoft.aspnetcore.antiforgery.2.2.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.aspnetcore.authentication.abstractions\\2.2.0\\microsoft.aspnetcore.authentication.abstractions.2.2.0.nupkg.sha512",

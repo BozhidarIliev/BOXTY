@@ -10,16 +10,14 @@ namespace Boxty.Controllers
     public class OrderController : Controller
     {
         private readonly IOrderService orderService;
-        private readonly IShoppingCartService shoppingCartService; 
-        private readonly ShoppingCart shoppingCart;
+        private readonly IShoppingCartService shoppingCartService;
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly IUserService userService;
 
-        public OrderController(IOrderService orderService,IShoppingCartService shoppingCartService, ShoppingCart shoppingCart, IHttpContextAccessor httpContextAccessor, IUserService userService)
+        public OrderController(IOrderService orderService,IShoppingCartService shoppingCartService, IHttpContextAccessor httpContextAccessor, IUserService userService)
         {
             this.orderService = orderService;
             this.shoppingCartService = shoppingCartService;
-            this.shoppingCart = shoppingCart;
             this.httpContextAccessor = httpContextAccessor;
             this.userService = userService; 
         }

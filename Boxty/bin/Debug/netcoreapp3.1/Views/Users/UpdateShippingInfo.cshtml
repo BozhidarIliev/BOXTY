@@ -1,31 +1,44 @@
 ﻿@model Boxty.ViewModels.UpdateUserViewModel
+@inject Microsoft.AspNetCore.Identity.SignInManager<BoxtyUser> signInManager;
 
-<div class="row orderForm ">
-    <h3 class="text-center">You are just one step away from ordering your food.</h3>
+    <div class="row orderForm ">
+        <h3 class="text-center">Before you continue</h3>
+        @if (signInManager.IsSignedIn(User))
+        {
+            <p>You are not logged in</p>
 
-    <form method="post" asp-action="UpdateShippingInfo" asp-controller="Users">
-        <div class="form-group">
-            <label asp-for="FirstName" class="control-label"></label>
-            <input asp-for="FirstName" class="form-control" />
-            <span asp-validation-for="FirstName" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="LastName" class="control-label"></label>
-            <input asp-for="LastName" class="form-control" />
-            <span asp-validation-for="LastName" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Address" class="control-label"></label>
-            <input asp-for="Address" class="form-control" />
-            <span asp-validation-for="Address" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="PhoneNumber" class="control-label"></label>
-            <input asp-for="PhoneNumber" class="form-control" />
-            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <input type="submit" value="Submit" class="btn btn-primary" />
-        </div>
-    </form>
-</div>
+            <div class="form-group">
+                <a class="nav-link text-dark" asp-controller="Users" asp-action="Login">Login</a>
+            </div>
+            <p>Or fill your data below</p>
+        }
+        else
+        {
+            <h2>Please fill your info</h2>
+        }
+        <form method="post" asp-action="UpdateShippingInfo" asp-controller="Users">
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhoneNumber" class="control-label"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
