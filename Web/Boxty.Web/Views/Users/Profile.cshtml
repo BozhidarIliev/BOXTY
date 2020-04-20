@@ -1,10 +1,10 @@
 ﻿@model Boxty.ViewModels.OutputModels.UserOutputModel
-@inject Microsoft.AspNetCore.Identity.UserManager<BoxtyUser> userManager
+@inject Microsoft.AspNetCore.Identity.UserManager<Boxty.Data.Models.BoxtyUser> userManager
 @{
     ViewData["Title"] = "Profile";
-    var error = TempData[Boxty.Services.GlobalConstants.Error];
+    var error = TempData[Boxty.Common.GlobalConstants.Error];
     var user = this.userManager.FindByNameAsync(this.User.Identity.Name).GetAwaiter().GetResult();
-    var hasRole = this.userManager.GetRolesAsync(user).GetAwaiter().GetResult().Any(x => x == Boxty.Services.GlobalConstants.Admin);
+    var hasRole = this.userManager.GetRolesAsync(user).GetAwaiter().GetResult().Any(x => x == Boxty.Common.GlobalConstants.Admin);
 
 }
 

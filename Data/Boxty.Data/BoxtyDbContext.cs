@@ -3,12 +3,14 @@
     using System;
     using System.Linq;
     using System.Reflection;
+    using System.Security.Claims;
     using System.Threading;
     using System.Threading.Tasks;
 
     using Boxty.Data.Common.Models;
     using Boxty.Data.Models;
     using Boxty.Models;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
 
@@ -19,16 +21,19 @@
                 nameof(SetIsDeletedQueryFilter),
                 BindingFlags.NonPublic | BindingFlags.Static);
 
-        public BoxtyDbContext(DbContextOptions<BoxtyDbContext> options)
+        private readonly IHttpContextAccessor httpContextAccessor;
+
+        public BoxtyDbContext(DbContextOptions<BoxtyDbContext> options, IHttpContextAccessor httpContextAccessor)
             : base(options)
         {
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         public DbSet<Product> Products { get; set; }
 
         public DbSet<Order> Orders { get; set; }
 
-        public DbSet<BaseOrder> OrderDetails { get; set; }
+        public DbSet<OrderItem> OrderDetails { get; set; }
 
         public DbSet<Category> Categories { get; set; }
 
@@ -39,6 +44,7 @@
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
             this.ApplyAuditInfoRules();
+            this.ApplyCreatorInfoRules();
             return base.SaveChanges(acceptAllChangesOnSuccess);
         }
 
@@ -50,6 +56,7 @@
             CancellationToken cancellationToken = default)
         {
             this.ApplyAuditInfoRules();
+            this.ApplyCreatorInfoRules();
             return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
 
@@ -110,6 +117,28 @@
                 else
                 {
                     entity.ModifiedOn = DateTime.UtcNow;
+                }
+            }
+        }
+
+        private void ApplyCreatorInfoRules()
+        {
+            var changedEntries = this.ChangeTracker
+                .Entries()
+                .Where(e =>
+                    e.Entity is ICreatorInfo &&
+                    (e.State == EntityState.Added || e.State == EntityState.Modified));
+
+            foreach (var entry in changedEntries)
+            {
+                var entity = (ICreatorInfo)entry.Entity;
+                if (entry.State == EntityState.Added && entity.CreatedBy == default)
+                {
+                    entity.CreatedBy = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                }
+                else
+                {
+                    entity.ModifiedBy = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 }
             }
         }

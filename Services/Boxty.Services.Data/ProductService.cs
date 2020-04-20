@@ -2,24 +2,27 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-
-    using Boxty.Models;
+    using Boxty.Data.Common.Repositories;
+    using Boxty.Data.Models;
     using Boxty.Services.Interfaces;
 
     public class ProductService : IProductService
     {
-        private readonly BoxtyDbContext context;
+        private readonly IDeletableEntityRepository<Product> productRepository;
 
-        public ProductService(BoxtyDbContext context)
+        public ProductService(IDeletableEntityRepository<Product> productRepository)
         {
-            this.context = context;
+            this.productRepository = productRepository;
         }
 
-        public IEnumerable<Product> Products => context.Products;
+        public IEnumerable<Product> GetProducts()
+        {
+            return productRepository.All();
+        }
 
         public Product GetProductById(int id)
         {
-            return context.Products.FirstOrDefault(x => x.Id == id);
+            return productRepository.All().FirstOrDefault(x => x.Id == id);
         }
     }
 }

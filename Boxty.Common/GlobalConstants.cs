@@ -22,15 +22,11 @@
 
         public const string Driver = "driver";
 
+        public const string KitchenStaff = "kitchenStaff";
+
         public const string ReturnAllUsers = "All";
 
-        public const string SentStatus = "sent";
-
-        public const string DoneStatus = "done";
-
         public const string DeliveringStatus = "delivering";
-
-        public const string RemovedStatus = "removed";
 
         public const string Yes = "yes";
 
@@ -40,6 +36,14 @@
 
         public const string SentByWaiter = "order placed by waiter";
 
-        public const string Available = "available";
+        public const string TableIsAvailable = "available";
+
+        public const string ReadyForServing = "readyForServing";
+
+        public const string Served = "served";
+
+        public const string OrderCompleted = "orderCompleted";
+
+        public const string ShoppingCart = "shoppingCart";
     }
 }

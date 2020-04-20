@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<BoxtyUser> SignInManager
+@inject SignInManager<Boxty.Data.Models.BoxtyUser> SignInManager
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,7 +32,7 @@
                         @if (SignInManager.IsSignedIn(User))
                         {
                         }
-                        @if (User.IsInRole(Boxty.Services.GlobalConstants.Admin))
+                        @if (User.IsInRole(Boxty.Common.GlobalConstants.Admin))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="Index">Orders</a>
@@ -58,7 +58,7 @@
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>

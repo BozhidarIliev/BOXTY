@@ -4,13 +4,14 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
-    using AutoMapper;
     using Boxty.Common;
     using Boxty.Data.Models;
     using Boxty.Models;
     using Boxty.Services.Data;
+    using Boxty.Services.Data.Interfaces;
     using Boxty.Services.Interfaces;
+    using Boxty.Services.Mapping;
+    using Boxty.ViewModels;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
 
@@ -18,65 +19,111 @@
     {
         private readonly HttpContext httpContext;
         private readonly IUserService userService;
+        private readonly IOrderItemService orderItemService;
         private readonly IOrderService orderService;
         private readonly IProductService productService;
         private readonly UserManager<BoxtyUser> userManager;
-        private readonly IMapper mapper;
 
-        public ShoppingCartService(IUserService userService, IOrderService orderService, IHttpContextAccessor httpContextAccessor, IProductService productService, UserManager<BoxtyUser> userManager, IMapper mapper)
+        public ShoppingCartService(IUserService userService, IOrderItemService orderItemService, IOrderService orderService, IHttpContextAccessor httpContextAccessor, IProductService productService, UserManager<BoxtyUser> userManager)
         {
             this.httpContext = httpContextAccessor.HttpContext;
             this.userService = userService;
+            this.orderItemService = orderItemService;
             this.orderService = orderService;
             this.productService = productService;
             this.userManager = userManager;
-            this.context = context;
-            this.mapper = mapper;
         }
 
-        public async Task<List<Product>> GetItemsFromCart()
+        public async Task<IQueryable<OrderItem>> GetItemsFromShoppingCart()
         {
-            var cart = SessionHelper.GetObjectFromJson<List<BaseOrder>>(httpContext.Session, "cart");
-            var result = mapper.Map<List<Product>>(cart);
-            return result;
+            var cart = await this.GetShoppingCart();
+            return cart.Items.AsQueryable();
         }
 
-        public void AddToCart(int productId)
+        public async Task<ShoppingCart> GetShoppingCart() // TODO httpContext should be passed as a parameter
         {
-            List<BaseOrder> cart = SessionHelper.GetObjectFromJson<List<BaseOrder>>(httpContext.Session, "cart");
+            var cart = await SessionHelper.GetObjectFromJsonAsync<ShoppingCart>(httpContext.Session, GlobalConstants.ShoppingCart);
             if (cart == null)
             {
-                cart = new List<BaseOrder>();
+                cart = new ShoppingCart();
+                await SessionHelper.SetObjectAsJsonAsync(httpContext.Session, GlobalConstants.ShoppingCart, cart);
             }
 
-            cart.Add(new BaseOrder { Product = productService.GetProductById(productId) });
-            SessionHelper.SetObjectAsJson(httpContext.Session, "cart", cart);
+            return cart;
         }
 
-        public void RemoveFromCart(int productId)
+        public async Task AddToCart(int productId)
         {
-            List<BaseOrder> cart = SessionHelper.GetObjectFromJson<List<BaseOrder>>(httpContext.Session, "cart");
-            var product = cart.FirstOrDefault(x => x.Product.Id == productId);
-            cart.Remove(product);
-            SessionHelper.SetObjectAsJson(httpContext.Session, "cart", cart);
+            var cart = await this.GetShoppingCart();
+            var product = productService.GetProductById(productId);
+            var shoppingCartItem = cart.Items.FirstOrDefault(x => (x.Product.Id == product.Id) && (x.Comment == null));
+
+            if (shoppingCartItem != null)
+            {
+                shoppingCartItem.Amount++;
+            }
+            else 
+            {
+                cart.Items = cart.Items.Concat(new List<OrderItem> { 
+                    new OrderItem { Product = product, Amount = 1 } });
+            }
+
+            await SessionHelper.SetObjectAsJsonAsync(httpContext.Session, GlobalConstants.ShoppingCart, cart);
+        }
+
+        public async Task RemoveFromCart(int productId)
+        {
+            var cart = await this.GetShoppingCart();
+            var shoppingCartItems = cart.Items.ToList();
+            var shoppingCartItem = shoppingCartItems.FirstOrDefault(x => x.Product.Id == productId);
+
+            if (shoppingCartItem != null && shoppingCartItem.Amount > 1)
+            {
+                shoppingCartItem.Amount--;
+            }
+            else
+            {
+                shoppingCartItems.Remove(shoppingCartItem);
+            }
+            cart.Items = shoppingCartItems;
+            await SessionHelper.SetObjectAsJsonAsync(httpContext.Session, GlobalConstants.ShoppingCart, cart);
         }
 
         public void ClearCart()
         {
-            httpContext.Session.Remove("cart");
+            httpContext.Session.Remove(GlobalConstants.ShoppingCart);
         }
 
-        public void CreateOrder()
+        public async Task CreateOrder(string address)
         {
-            BaseOrder[] cart = SessionHelper.GetObjectFromJson<BaseOrder[]>(httpContext.Session, "cart");
+            var cart = await this.GetShoppingCart();
+            var shoppingCartItems = cart.Items.AsQueryable().To<OrderItem>().ToList();
+
             var user = userService.GetCurrentUser();
             Order order = new Order
             {
                 Status = GlobalConstants.SentOnlineStatus,
-                SenderId = user.Id,
-                Destination = user.Address,
+                Destination = address,
             };
-            orderService.CreateOrder(order, cart);
+            await orderService.CreateOrder(order, shoppingCartItems);
         }
+
+        public async Task AddComment(int productId, string comment)
+        {
+            var cart = await this.GetShoppingCart();
+            var shoppingCartItems = cart.Items.ToList();
+            var product = shoppingCartItems.FirstOrDefault(x => x.Product.Id == productId);
+
+            if (product != null)
+            {
+                await this.RemoveFromCart(productId);
+
+                product.Comment = comment;
+
+                shoppingCartItems.Add(product);
+                await SessionHelper.SetObjectAsJsonAsync(httpContext.Session, GlobalConstants.ShoppingCart, cart);
+            }
+        }
+
     }
 }

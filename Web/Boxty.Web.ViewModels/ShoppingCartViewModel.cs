@@ -1,15 +1,15 @@
 ﻿namespace Boxty.ViewModels
 {
+    using System.Collections.Generic;
+
+    using Boxty.Data.Models;
+    using Boxty.Models;
+    using Boxty.Services.Mapping;
+
     public class ShoppingCartViewModel
     {
-        public int ProductId { get; set; }
+        public IEnumerable<OrderItem> Items { get; set; }
 
-        public string ProductName { get; set; }
-
-        public double ProductPrice { get; set; }
-
-        public int Amount { get; set; }
-
-        public string Comment { get; set; }
+        public double Total { get; set; }
     }
 }

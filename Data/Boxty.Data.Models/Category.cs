@@ -2,7 +2,7 @@
 {
     using Boxty.Data.Common.Models;
 
-    public class Category : BaseModel<int>
+    public class Category : BaseDeletableModel<int>
     {
         public string Name { get; set; }
     }

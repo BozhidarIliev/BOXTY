@@ -2,11 +2,11 @@
 {
     using System;
 
-    using Boxty.Models;
+    using Boxty.Data.Models;
 
     public class OrderOutputModel
     {
-        public int OrderId { get; set; }
+        public int Id { get; set; }
 
         public DateTime CreatedOn { get; set; }
 

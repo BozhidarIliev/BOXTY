@@ -1,12 +1,10 @@
 ﻿namespace Boxty
 {
-    using System;
     using System.Threading.Tasks;
 
     using AutoMapper;
     using Boxty.Common;
     using Boxty.Data.Models;
-    using Boxty.Services;
     using Boxty.Services.Interfaces;
     using Boxty.ViewModels;
     using Microsoft.AspNetCore.Authorization;
@@ -19,10 +17,10 @@
     {
         private readonly IAdminService adminService;
         private readonly IMapper mapper;
-        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly RoleManager<ApplicationRole> roleManager;
         private readonly UserManager<BoxtyUser> userManager;
 
-        public AdminsController(IMapper mapper, RoleManager<IdentityRole> roleManager, UserManager<BoxtyUser> userManager, IAdminService adminService)
+        public AdminsController(IMapper mapper, RoleManager<ApplicationRole> roleManager, UserManager<BoxtyUser> userManager, IAdminService adminService)
         {
             this.mapper = mapper;
             this.roleManager = roleManager;
@@ -55,7 +53,7 @@
         {
             if (ModelState.IsValid)
             {
-                IdentityRole identityRole = new IdentityRole
+                ApplicationRole identityRole = new ApplicationRole
                 {
                     Name = model.RoleName,
                 };

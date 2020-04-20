@@ -1,6 +1,6 @@
 ﻿namespace Boxty.Data.Configurations
 {
-    using Boxty.Models;
+    using Boxty.Data.Models;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

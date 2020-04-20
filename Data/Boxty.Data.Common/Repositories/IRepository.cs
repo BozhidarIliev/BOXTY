@@ -1,6 +1,7 @@
 ﻿namespace Boxty.Data.Common.Repositories
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -9,9 +10,13 @@
     {
         IQueryable<TEntity> All();
 
+        Task<IQueryable<TEntity>> AllAsync();
+
         IQueryable<TEntity> AllAsNoTracking();
 
         Task AddAsync(TEntity entity);
+
+        Task AddRangeAsync(IEnumerable<TEntity> entities);
 
         void Update(TEntity entity);
 

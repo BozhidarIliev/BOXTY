@@ -28,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Services\Boxty.Services.Mapping\Boxty.Services.Mapping.csproj" />
     <ProjectReference Include="..\..\Web\Boxty.Web\Boxty.Web.csproj" />
   </ItemGroup>
 

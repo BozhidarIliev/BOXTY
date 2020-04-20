@@ -1,38 +1,45 @@
 ﻿namespace Boxty.Controllers.Api
 {
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-
-    using AutoMapper;
-    using Boxty.Models;
     using Boxty.Services;
+    using Boxty.ViewModels;
+    using Boxty.Web.ViewModels.InputModels;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using System.Linq;
+    using System.Threading.Tasks;
 
     [Route("api/[controller]")]
     [ApiController]
     public class ShoppingCartController : Controller
     {
-        private readonly IMapper mapper;
         private readonly IShoppingCartService shoppingCartService;
 
-        public ShoppingCartController(IMapper mapper, IShoppingCartService shoppingCartService)
+        public ShoppingCartController(IShoppingCartService shoppingCartService)
         {
-            this.mapper = mapper;
             this.shoppingCartService = shoppingCartService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Product>>> GetItemsFromCart()
+        public async Task<ShoppingCartViewModel> GetItemsFromCart()
         {
-            var items = await shoppingCartService.GetItemsFromCart();
+            var cart = await shoppingCartService.GetShoppingCart();
 
-            return items;
+            return new ShoppingCartViewModel { Items = cart.Items, Total = cart.Total };
+        }
+
+        [HttpDelete]
+        [AllowAnonymous]
+        public void RemoveItem(int id)
+        {
+            shoppingCartService.RemoveFromCart(id);
         }
 
         [HttpPost]
-        public void AddToCart(int productId)
+        public void AddComment(AddCommentInputModel model)
         {
-            shoppingCartService.AddToCart(productId);
+            shoppingCartService.AddComment(model.ProductId, model.Comment);
         }
+
     }
+
 }

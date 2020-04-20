@@ -1,35 +1,77 @@
-﻿@model IEnumerable<Boxty.ViewModels.OutputModels.OrderOutputModel>
+﻿@model IEnumerable<Boxty.Web.ViewModels.OrderOutputModel>
 <div class="row checkoutForm">
     <h2>Orders list</h2>
     <h4>Here are the orders in your shopping cart.</h4>
     <table class="table table-bordered table-striped">
          <thead>
              <tr>
-                 <th>Product Id</th>
                  <th>Order Id</th>
+                 <th>Product Id</th>
                  <th>Product Name</th>
+                 <th>Comment</th>
                  <th class="text-right">Order placed at:</th>
                  <th>Actions</th>
              </tr>
          </thead>
-         <tbody>
-             @foreach (var line in Model)
-             {
-             <tr>
-                 <td class="text-center">@line.Product.Id</td>
-                 <td class="text-center">@line.OrderId</td>
-                 <td class="text-left">@line.Product.Name</td>
-                 <td class="text-right">@line.Date</td>
-                 <td>
-                     <div class="btn-group ">
-                         <a class="btn btn-danger" asp-controller="Order" asp-action="RemoveFromOrders" asp-route-productId="@line.Product.Id" asp-route-orderId="@line.OrderId">Delete</a>
-                     </div>
-                     <div class="btn-group ">
-                         <a class="btn btn-success"  asp-controller="Order" asp-action="MarkAsDone" asp-route-productId="@line.Product.Id" asp-route-orderId="@line.OrderId">Done</a>
-                     </div>
-                 </td>
-             </tr>
-             }
-         </tbody>
     </table>
 </div>
+
+@section Scripts
+{
+    <script>
+        $(function () {
+            setInterval(loadOrders, 60000);  // invoke load every 60 seconds
+            loadOrders(); // load on initial page loaded
+        });
+
+        function loadOrders() {
+            $.ajax({
+                type: "GET",
+                url: "/api/Order",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    $('#posLine > tr').slice(0).remove();
+                    $.each(data, function (i, item) {
+                        var rows = "<tr>" +
+                            "<td>" + item.id + "</td>" +
+                            "<td>" + item.product.Id + "</td>" +
+                            "<td>" + item.productName + "</td>" +
+                            '<td>' + item.CreatedOn + '</td>' +
+                            '<td>' + item.Comment + '</td>' +
+                            '<td><button type="button" onclick="markAsDone(' +  item.id + ')" class="btn btn-success">Done</button></td>'
+                        "</tr>";
+                        $('#shoppingCart').append(rows);
+                    });
+                },
+
+                failure: function (data) {
+                    alert(data.responseText);
+                },
+                error: function (data) {
+                    alert('Error ' + thrownError + " " + xhr.status);
+                }
+            })
+        }
+
+        function markAsDone(orderItemId) { // TODO!
+            $.ajax({
+                type: "POST",
+                url: "/api/order",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    loadOrders();
+                },
+
+                failure: function (data) {
+                    alert(data.responseText);
+                },
+                error: function (data) {
+                    alert('Error ' + thrownError + " " + xhr.status);
+                }
+            })
+        }
+
+    </script>
+} 

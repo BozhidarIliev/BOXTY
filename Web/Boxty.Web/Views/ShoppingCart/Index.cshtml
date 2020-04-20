@@ -1,4 +1,4 @@
-﻿@inject Microsoft.AspNetCore.Identity.SignInManager<BoxtyUser> signInManager;
+﻿@inject Microsoft.AspNetCore.Identity.SignInManager<Boxty.Data.Models.BoxtyUser> signInManager;
 @inject Boxty.Services.IUserService userService; 
     <div class="row checkoutForm">
 
@@ -9,23 +9,50 @@
                 <tr>
                     <th>Product Id</th>
                     <th>Product</th>
-                    <th class="text-center">Amount</th>
-                    <th class="text-right">Price</th>
+                    <th>Amount</th>
+                    <th>Price</th>
+                    <th class="text-right">Subtotal</th>
                     <th class="text-right">Actions</th>
                 </tr>
             </thead>
             <tfoot>
                 <tr>
-                    <td colspan="2" class="text-right">Total:</td>
-                    <td class="text-right" id="total">
-                    </td>
+                    <td colspan="4" class="text-right">Total:</td>
+                    <td class="text-right" id="total"></td>
                 </tr>
             </tfoot>
         </table>
 
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <div class="modal-body">
+                        <form id="commentForm">
+                            @model Boxty.Web.ViewModels.AddCommentViewModel
+                            <input type="hidden" id="productId" value="">
+                            <div class="form-group">
+                                <p>Write your comment here</p>
+                                <input asp-for="@Model.Comment" class="form-control" />
+                                <span asp-validation-for="@Model.Comment" class="text-danger"></span>
+                            </div>
+
+                        </form>
+                    </div>
+
+                    <div class="modal-footer">
+                        <a  class="btn btn-success" onclick="addComment()" data-dismiss="modal">Add</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="text-right">
             <div class="btn-group ">
-                <a class="btn btn-success" asp-controller="ShoppingCart" asp-action="Checkout">Checkout</a>
+                <a type="submit" class="btn btn-success" asp-controller="ShoppingCart" asp-action="Checkout">Checkout</a>
             </div>
         </div>
 
@@ -36,17 +63,15 @@
     <script>
         $(document).ready(function () {
             initShoppingCart();
-
         });
 
-        function deleteLine(productId) {
+        function deleteItem(productId) { // TODO!
             $.ajax({
                 type: "DELETE",
+                url: "/api/ShoppingCart?id=" + productId + "",
                 contentType: "application/json; charset=utf-8",
-                url: "/api/TableItem/DeleteSelectedItem?tableItemId=" + productId + "",
                 success: function (data) {
-                    initPosLine();
-                    toastr.success('Insert POS line success for item: ' + productName, 'Success');
+                    //toastr.success('Insert POS line success for item: ' + productName, 'Success');
                 },
                 failure: function (xhr, status, error) {
                 },
@@ -55,6 +80,7 @@
                 }
 
             })
+            initShoppingCart()
         }
 
         function initShoppingCart() {
@@ -64,15 +90,21 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (data) {
-                    $("#DIV").html('');
-                    var DIV = '';
-                    $.each(data, function (i, item) {
+
+                    $('#shoppingCart > tr').slice(0).remove();
+
+                    $.each(data.items, function (i, item) {
                         var rows = "<tr>" +
-                            "<td>" + item.id + "</td>" +
-                            "<td>" + item.name + "</td>" +
-                            '<td class="price">' + item.price + '</td>' +
+                            "<td>" + item.product.id + "</td>" +
+                            "<td>" + item.product.name + "</td>" +
+                            "<td>" + item.amount + "</td>" +
+                            '<td>' + item.product.price + '</td>' +
+                            '<td>' + item.subtotal + '</td>' +
+                            '<td><button type="button" onclick="deleteItem(\'' + item.product.id + '\')" class="btn btn-danger">Remove</button> <button type="button" onclick="showCommentBox(\'' + item.product.id + '\')" class="btn btn-info">Comment</button></td>' +
                             "</tr>";
+
                         $('#shoppingCart').append(rows);
+                        $('#total').html(data.total);
                     });
                 },
 
@@ -80,21 +112,43 @@
                     alert(data.responseText);
                 },
                 error: function (data) {
-                    alert('Error ' + thrownError + " " + xhr.status);
+                    alert('Error ' + data.responsetext);
+                }
+            });
+        }
+
+        function showCommentBox(id) {
+            $("#myModal").modal();
+            $("#productId").value = id;
+        }
+
+        function addComment() {
+            document.getElementById("commentForm").submit();
+        }
+
+        $("#commentForm").submit(function (e) {
+            e.preventDefault();
+            var data = $(this)
+
+            $.ajax({
+                type: "POST",
+                url: "/api/ShoppingCart",
+                data: data.serialize(),
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+
+                },
+
+                failure: function (data) {
+                    alert(data.responseText);
+                },
+                error: function (data) {
+                    alert('Error ' + data.responsetext);
                 }
             });
 
-
-            updateCartTotal(); // TODO!
-        }
-
-        function updateCartTotal() {
-            var totalPrice = 0;
-            $("#shoppingCart").find(".price").each(function () {
-                totalPrice += parseFloat($(this).html());
-            });
-            $("#total").html(totalPrice)
-        }
+            initShoppingCart();
+        })
 
     </script>
 }

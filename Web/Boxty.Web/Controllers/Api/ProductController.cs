@@ -6,7 +6,7 @@
     using System.Threading.Tasks;
 
     using Boxty.Data;
-    using Boxty.Models;
+    using Boxty.Data.Models;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
 

@@ -10,14 +10,14 @@
     using Boxty.Data.Repositories;
     using Boxty.Extensions;
     using Boxty.Services;
+    using Boxty.Services.Data;
+    using Boxty.Services.Data.Interfaces;
     using Boxty.Services.Interfaces;
     using Boxty.Services.Mapping;
     using Boxty.Web.ViewModels;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -40,7 +40,7 @@
                     Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDefaultIdentity<BoxtyUser>(IdentityOptionsProvider.GetIdentityOptions)
-                .AddRoles<IdentityRole>().AddEntityFrameworkStores<BoxtyDbContext>();
+                .AddRoles<ApplicationRole>().AddEntityFrameworkStores<BoxtyDbContext>();
 
             services.Configure<CookiePolicyOptions>(
                 options =>
@@ -49,11 +49,11 @@
                     options.MinimumSameSitePolicy = SameSiteMode.None;
                 });
 
-            services.AddControllersWithViews(
-                options =>
-                {
-                    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-                });
+            // services.AddControllersWithViews(
+            //    options =>
+            //    {
+            //        options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            //    });
             services.AddRazorPages();
 
             services.AddSingleton(this.Configuration);
@@ -69,8 +69,8 @@
             services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<IAdminService, AdminService>();
             services.AddTransient<ICategoryService, CategoryService>();
-            services.AddTransient<ITableService, TableService>();
-            services.AddTransient<ITableItemService, TableItemService>();
+            services.AddTransient<IOrderService, OrderService>();
+            services.AddTransient<IOrderItemService, OrderItemService>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -123,8 +123,14 @@
             app.UseEndpoints(
                 endpoints =>
                 {
-                    endpoints.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-                    endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                    endpoints.MapControllerRoute(
+                    name: "areaRoute",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+                    endpoints.MapControllerRoute(
+                        name: "default",
+                        pattern: "{controller=Home}/{action=Index}/{id?}");
+
                     endpoints.MapRazorPages();
                 });
         }

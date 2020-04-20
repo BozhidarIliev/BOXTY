@@ -23,6 +23,14 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
     <PackageReference Include="BuildBundlerMinifier" Version="3.2.447" />
     <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.0.96" />
@@ -34,10 +42,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Bocty.Services.Mapping\Boxty.Services.Mapping.csproj" />
-    <ProjectReference Include="..\..\Data\Boxty.Data.Models\Boxty.Data.Models.csproj" />
     <ProjectReference Include="..\..\Data\Boxty.Data\Boxty.Data.csproj" />
     <ProjectReference Include="..\..\Services\Boxty.Services.Data\Boxty.Services.Data.csproj" />
+    <ProjectReference Include="..\..\Services\Boxty.Services.Mapping\Boxty.Services.Mapping.csproj" />
     <ProjectReference Include="..\..\Services\Boxty.Services.Messaging\Boxty.Services.Messaging.csproj" />
     <ProjectReference Include="..\..\Services\Boxty.Services\Boxty.Services.csproj" />
     <ProjectReference Include="..\Boxty.Web.Infrastructure\Boxty.Web.Infrastructure.csproj" />

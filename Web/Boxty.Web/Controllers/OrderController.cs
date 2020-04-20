@@ -29,9 +29,9 @@
 
         [Authorize(Roles = GlobalConstants.Admin)]
         [HttpPost]
-        public IActionResult MarkAsDone(int productId, int orderId)
+        public IActionResult MarkAsDone(int orderId)
         {
-            this.orderService.MarkAsDone(productId, orderId);
+            this.orderService.MarkAsDone(orderId);
             return this.RedirectToAction("Index");
         }
 

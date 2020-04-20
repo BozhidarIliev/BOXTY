@@ -16,8 +16,10 @@
       "files": [
         "dist/css/bootstrap.css",
         "dist/css/bootstrap.min.css",
+        "dist/css/bootstrap.min.css.map",
         "dist/js/bootstrap.js",
-        "dist/js/bootstrap.min.js"
+        "dist/js/bootstrap.min.js",
+        "dist/js/bootstrap.min.js.map"
       ]
     },
     {

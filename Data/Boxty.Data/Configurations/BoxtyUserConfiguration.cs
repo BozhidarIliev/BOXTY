@@ -9,10 +9,10 @@
         public void Configure(EntityTypeBuilder<BoxtyUser> builder)
         {
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.FirstName).IsRequired();
-            builder.Property(x => x.LastName).IsRequired();
-            builder.Property(x => x.Email).IsRequired();
-            builder.Property(x => x.UserName).IsRequired();
+            builder.Property(x => x.FirstName);
+            builder.Property(x => x.LastName);
+            builder.Property(x => x.Email);
+            builder.Property(x => x.UserName);
         }
     }
 }

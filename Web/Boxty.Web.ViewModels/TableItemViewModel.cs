@@ -1,17 +1,13 @@
-﻿namespace Boxty.ViewModels
+﻿using Boxty.Data.Models;
+
+namespace Boxty.ViewModels
 {
     public class TableItemViewModel
     {
-        public int ProductId { get; set; }
-
-        public string ProductName { get; set; }
-
-        public double ProductPrice { get; set; }
+        public Product Product { get; set; }
 
         public int Amount { get; set; }
 
         public string Comment { get; set; }
-
-        public string Status { get; set; }
     }
 }

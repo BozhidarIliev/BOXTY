@@ -2,7 +2,10 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    public class RegisterInputModel
+    using Boxty.Data.Models;
+    using Boxty.Services.Mapping;
+
+    public class RegisterInputModel : IMapTo<BoxtyUser>
     {
         [Required]
         [StringLength(ViewModelsConstants.UserModelUserNameMaxLength, MinimumLength = ViewModelsConstants.UserModelUserNameMinLength)]

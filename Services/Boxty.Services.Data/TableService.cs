@@ -2,23 +2,23 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
+    using Boxty.Data.Common.Repositories;
     using Boxty.Models;
     using Boxty.Services.Interfaces;
     using Microsoft.EntityFrameworkCore;
 
     public class TableService : ITableService
     {
-        private readonly BoxtyDbContext context;
+        private readonly IDeletableEntityRepository<Table> tableRepositrory;
 
-        public TableService(BoxtyDbContext context)
+        public TableService(IDeletableEntityRepository<Table> tableRepositrory)
         {
-            this.context = context;
+            this.tableRepositrory = tableRepositrory;
         }
 
         public async Task<IEnumerable<Table>> GetTables()
         {
-            return await context.Tables.ToListAsync();
+            return await tableRepositrory.All().ToListAsync();
         }
     }
 }

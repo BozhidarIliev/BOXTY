@@ -8,7 +8,6 @@
     using Boxty.Data;
     using Boxty.Data.Models;
     using Boxty.Models;
-    using Boxty.Services;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
 
@@ -24,12 +23,17 @@
         public async Task InvokeAsync(
             HttpContext context,
             UserManager<BoxtyUser> userManager,
-            RoleManager<IdentityRole> roleManager,
+            RoleManager<ApplicationRole> roleManager,
             BoxtyDbContext dbContext)
         {
             if (!roleManager.Roles.Any())
             {
                 await SeedRoles(userManager, roleManager);
+            }
+
+            if (!userManager.Users.Any())
+            {
+                await SeedUsers(userManager, roleManager);
             }
 
             if (!dbContext.Tables.Any())
@@ -79,7 +83,7 @@
             {
                 tables.Add(new Table
                 {
-                    Status = GlobalConstants.Available,
+                    Status = GlobalConstants.TableIsAvailable,
                 });
             }
 
@@ -87,29 +91,10 @@
             context.SaveChanges();
         }
 
-        private async Task SeedRoles(
+        private async Task SeedUsers(
             UserManager<BoxtyUser> userManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<ApplicationRole> roleManager)
         {
-            await roleManager.CreateAsync(new IdentityRole
-            {
-                Name = GlobalConstants.Admin,
-            });
-            await roleManager.CreateAsync(new IdentityRole
-            {
-                Name = GlobalConstants.Waiter,
-            });
-
-            await roleManager.CreateAsync(new IdentityRole
-            {
-                Name = GlobalConstants.Manager,
-            });
-
-            await roleManager.CreateAsync(new IdentityRole
-            {
-                Name = GlobalConstants.DefaultRole,
-            });
-
             var user = new BoxtyUser
             {
                 UserName = "admin",
@@ -126,14 +111,43 @@
                 LastName = "iliev",
             };
 
-            string normalUserPass = "123";
-            string adminPass = "123";
+            string normalUserPass = "123456";
+            string adminPass = "123456";
 
             await userManager.CreateAsync(user, adminPass);
             await userManager.CreateAsync(normalUser, normalUserPass);
 
             await userManager.AddToRoleAsync(user, GlobalConstants.Admin);
             await userManager.AddToRoleAsync(normalUser, GlobalConstants.DefaultRole);
+        }
+
+        private async Task SeedRoles(
+            UserManager<BoxtyUser> userManager,
+            RoleManager<ApplicationRole> roleManager)
+        {
+            await roleManager.CreateAsync(new ApplicationRole
+            {
+                Name = GlobalConstants.Admin,
+            });
+            await roleManager.CreateAsync(new ApplicationRole
+            {
+                Name = GlobalConstants.Waiter,
+            });
+
+            await roleManager.CreateAsync(new ApplicationRole
+            {
+                Name = GlobalConstants.Manager,
+            });
+
+            await roleManager.CreateAsync(new ApplicationRole
+            {
+                Name = GlobalConstants.KitchenStaff,
+            });
+
+            await roleManager.CreateAsync(new ApplicationRole
+            {
+                Name = GlobalConstants.DefaultRole,
+            });
         }
     }
 }

@@ -1,12 +1,11 @@
 ﻿namespace Boxty.Services.Interfaces
 {
     using System.Collections.Generic;
-
-    using Boxty.Models;
+    using Boxty.Data.Models;
 
     public interface IProductService
     {
-        IEnumerable<Product> Products { get; }
+        IEnumerable<Product> GetProducts();
 
         Product GetProductById(int id);
     }

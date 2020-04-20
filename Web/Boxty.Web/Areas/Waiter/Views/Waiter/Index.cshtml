@@ -122,8 +122,6 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (data) {
-                    $("#DIV").html('');
-                    var DIV = '';
                     $('#posLine > tr').slice(0).remove();
                     $.each(data, function (i, item) {
                         var name = 'selectedProduct';

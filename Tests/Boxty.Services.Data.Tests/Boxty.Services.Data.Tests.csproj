@@ -28,7 +28,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Data\Boxty.Data\Boxty.Data.csproj" />
-    <ProjectReference Include="..\..\Services\Boxty.Services.Data\Boxty.Services.Data.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-﻿@model Boxty.Models.Product
+﻿@model Boxty.Data.Models.Product
 
 @{
     ViewData["Title"] = "Details";
@@ -33,26 +33,5 @@
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a class="btn btn-success" onclick="AddToCart(@Model.Id)">Add to cart</a>
+    <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-id="@Model.Id">Add to cart</a>
 </div>
-
-@section Scripts
-{
-    <script>
-        function AddToCart(modelId) {
-        $.ajax({
-            type: "POST",
-            url: "/api/shoppingCart?productId=" + modelId,
-            success: function (data) {
-                toastr.success('Insert POS line success for item: ' + productName, 'Success');
-            },
-            failure: function (xhr, status, error) {
-            },
-            error: function (xhr, status, thrownError) {
-                alert('Error ' + thrownError + " " + xhr.status);
-            }
-
-        })
-    }
-    </script>
-}

@@ -19,9 +19,8 @@
         private readonly IMapper mapper;
         private readonly ITableItemService tableItemService;
 
-        public TableItemController(BoxtyDbContext context, IUserService userService, IProductService productService, IMapper mapper, ITableItemService tableItemService)
+        public TableItemController(IOrderService orderService, IUserService userService, IProductService productService, IMapper mapper, ITableItemService tableItemService)
         {
-            this.context = context;
             this.userService = userService;
             this.productService = productService;
             this.mapper = mapper;
@@ -48,7 +47,7 @@
         }
 
         [HttpPost("{id}")]
-        public async void OrderSelectedItems(int tableId)
+        public void OrderSelectedItems(int tableId)
         {
             tableItemService.OrderSelectedItems(tableId);
         }

@@ -1,21 +1,19 @@
 ﻿namespace Boxty.Services.Interfaces
 {
     using System.Collections.Generic;
-
+    using System.Threading.Tasks;
     using Boxty.Data.Models;
     using Boxty.Models;
     using Boxty.Web.ViewModels;
 
     public interface IOrderService
     {
-        IEnumerable<T> GetAll<T>(int count);
-
         IEnumerable<OrderOutputModel> CurrentOrders();
 
-        void CreateOrder(Order order, BaseOrder[] items);
+        Task CreateOrder(Order order, IEnumerable<OrderItem> items);
 
-        public void MarkAsDone(int productId, int orderId);
+        Task MarkAsDone(int orderId);
 
-        public void RemoveFromOrders(int productId, int orderId);
+        Task<Order> GetOrderById(int orderId);
     }
 }

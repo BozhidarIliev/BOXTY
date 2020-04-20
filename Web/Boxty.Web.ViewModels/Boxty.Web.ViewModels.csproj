@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Data\Boxty.Data.Models\Boxty.Data.Models.csproj" />
+    <ProjectReference Include="..\..\Services\Boxty.Services.Mapping\Boxty.Services.Mapping.csproj" />
   </ItemGroup>
 
 </Project>

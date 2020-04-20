@@ -1,20 +1,23 @@
 ﻿namespace Boxty.Services
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
-
+    using Boxty.Data.Models;
     using Boxty.Models;
 
     public interface IShoppingCartService
     {
-        Task<List<Product>> GetItemsFromCart();
+        Task<ShoppingCart> GetShoppingCart();
 
-        void AddToCart(int productId);
+        Task AddToCart(int productId);
 
-        void RemoveFromCart(int productId);
+        Task RemoveFromCart(int productId);
 
         void ClearCart();
 
-        void CreateOrder();
+        Task CreateOrder(string address);
+
+        Task AddComment(int productId, string comment);
     }
 }

@@ -2,87 +2,75 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-
-    using AutoMapper;
+    using System.Threading.Tasks;
     using Boxty.Common;
     using Boxty.Data.Common.Repositories;
     using Boxty.Data.Models;
     using Boxty.Models;
+    using Boxty.Services.Data.Interfaces;
     using Boxty.Services.Interfaces;
     using Boxty.Services.Mapping;
     using Boxty.Web.ViewModels;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
 
     public class OrderService : IOrderService
     {
+        private readonly IOrderItemService orderItemService;
         private readonly IDeletableEntityRepository<Order> orderRepository;
-        private readonly IDeletableEntityRepository<BaseOrder> baseOrderRepository;
+        private readonly IDeletableEntityRepository<OrderItem> orderItemRepository;
         private readonly IUserService userService;
-        private readonly IMapper mapper;
         private readonly IProductService productService;
         private readonly IHttpContextAccessor httpContextAccessor;
 
-        public OrderService(IDeletableEntityRepository<Order> orderRepository, IDeletableEntityRepository<BaseOrder> baseOrderRepository, IUserService userService, IMapper mapper, IProductService productService, IHttpContextAccessor httpContextAccessor)
+        public OrderService(IOrderItemService orderItemService, IDeletableEntityRepository<Order> orderRepository, IDeletableEntityRepository<OrderItem> orderItemRepository, IUserService userService, IProductService productService, IHttpContextAccessor httpContextAccessor)
         {
+            this.orderItemService = orderItemService;
             this.orderRepository = orderRepository;
-            this.baseOrderRepository = baseOrderRepository;
+            this.orderItemRepository = orderItemRepository;
             this.userService = userService;
-            this.mapper = mapper;
             this.productService = productService;
             this.httpContextAccessor = httpContextAccessor;
         }
 
         public IEnumerable<OrderOutputModel> CurrentOrders()
         {
-            return baseOrderRepository.All().To<OrderOutputModel>().OrderByDescending(x => x.CreatedOn);
+            //return orderRepository.All().To<OrderOutputModel>().OrderByDescending(x => x.CreatedOn);
+            return null;
         }
 
-        public IEnumerable<OrderOutputModel> CurrentOrders()
+        public async Task CreateOrder(Order order, IEnumerable<OrderItem> items)
         {
-            return baseOrderRepository.All().To<OrderOutputModel>().OrderByDescending(x => x.CreatedOn);
+            await orderRepository.AddAsync(order);
+
+            await orderItemService.CreateOrderItem(order, order.Status, items);
         }
 
-        public void CreateOrder(Order order, BaseOrder[] items)
+        [Authorize(Roles = "waiter, admin, manager")]
+        public async Task MarkAsDone(int orderId)
         {
-            context.Orders.Add(order);
-            context.SaveChanges();
-
-            context.OrderDetails.AddRange(CreateOrderDetail(order, order.Status, items));
-            context.SaveChanges();
+            var order = await this.GetOrderById(orderId);
+            order.Status = GlobalConstants.OrderCompleted;
+            orderRepository.HardDelete(order);
+            await orderRepository.SaveChangesAsync();
         }
 
-        private BaseOrder[] CreateOrderDetail(Order order, string status, BaseOrder[] items)
+        public async Task<Order> GetOrderById(int orderId)
         {
-            var userId = userService.GetCurrentUser().Id;
-            if (status == GlobalConstants.SentOnlineStatus)
-            {
-                foreach (var item in items)
-                {
-                    item.Status = status;
-                    item.OrderId = order.Id;
-                    item.Product = productService.GetProductById(item.Product.Id);
-                }
-            }
-
-            return items;
+            return await this.orderRepository.GetByIdWithDeletedAsync(orderId);
         }
 
-        public void MarkAsDone(int productId, int orderId)
+        public async Task DeleteOrderItem(int orderId)
         {
-            // var product = context.OrderDetails.First(
-            //    s => s.ProductId == productId && s.OrderId == orderId);
-
-            // product.Status = GlobalConstants.DeliveringStatus;
-            // context.SaveChanges();
+            var order = await this.GetOrderById(orderId);
+            this.orderRepository.HardDelete(order);
+            await this.orderItemRepository.SaveChangesAsync();
         }
 
-        public void RemoveFromOrders(int productId, int orderId)
+        public async Task<IQueryable> GetOrderByDestination(string destination)
         {
-            // var product = context.OrderDetails.First(
-            //    s => s.ProductId == productId && s.OrderId == orderId);
-
-            // product.Status = GlobalConstants.RemovedStatus;
-            // context.SaveChanges();
+            var list = await this.orderRepository.AllAsync();
+            return list.Where(x => x.Destination == destination);
         }
     }
 }

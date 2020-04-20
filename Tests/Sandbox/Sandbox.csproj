@@ -37,7 +37,6 @@
     <ProjectReference Include="..\..\Data\Boxty.Data.Common\Boxty.Data.Common.csproj" />
     <ProjectReference Include="..\..\Data\Boxty.Data.Models\Boxty.Data.Models.csproj" />
     <ProjectReference Include="..\..\Data\Boxty.Data\Boxty.Data.csproj" />
-    <ProjectReference Include="..\..\Services\Boxty.Services.Data\Boxty.Services.Data.csproj" />
     <ProjectReference Include="..\..\Services\Boxty.Services.Messaging\Boxty.Services.Messaging.csproj" />
     <ProjectReference Include="..\..\Services\Boxty.Services\Boxty.Services.csproj" />
   </ItemGroup>

@@ -2,11 +2,9 @@
 {
     using System;
     using System.Linq;
-
-    using AutoMapper;
+    using System.Threading.Tasks;
     using Boxty.Common;
     using Boxty.Data.Models;
-    using Boxty.Models;
     using Boxty.Services;
     using Boxty.Services.Interfaces;
     using Microsoft.AspNetCore.Authorization;
@@ -16,15 +14,13 @@
     public class ShoppingCartController : Controller
     {
         private readonly IProductService productService;
-        private readonly IMapper mapper;
         private readonly IUserService userService;
         private readonly IShoppingCartService shoppingCartService;
         private readonly IOrderService orderService;
         private readonly SignInManager<BoxtyUser> signInManager;
 
-        public ShoppingCartController(IMapper mapper, IProductService productService, IUserService userService, IShoppingCartService shoppingCartService, IOrderService orderRepository, SignInManager<BoxtyUser> signInManager)
+        public ShoppingCartController(IProductService productService, IUserService userService, IShoppingCartService shoppingCartService, IOrderService orderRepository, SignInManager<BoxtyUser> signInManager)
         {
-            this.mapper = mapper;
             this.productService = productService;
             this.userService = userService;
             this.shoppingCartService = shoppingCartService;
@@ -39,10 +35,10 @@
             return View();
         }
 
-        public IActionResult AddToCart(int productId)
+        public IActionResult AddToCart(int id)
         {
-            shoppingCartService.AddToCart(productId);
-            return RedirectToAction("Index");
+            shoppingCartService.AddToCart(id);
+            return Redirect("/product");
         }
 
         public IActionResult Remove(int productId)
@@ -53,11 +49,11 @@
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Checkout()
+        public async Task<IActionResult> Checkout()
         {
             if (!IsAuthenticated)
             {
-                return RedirectToAction("Login", "Users");
+                return RedirectToAction("Login", "Identity");
             }
 
             if (userService.CheckCurrentUserBeforePurchase())
@@ -65,7 +61,8 @@
                 return RedirectToAction("UpdateShippingInfo", "Users");
             }
 
-            var items = shoppingCartService.GetItemsFromCart().Result;
+            var cart = await shoppingCartService.GetShoppingCart();
+            var items = cart.Items;
             if (items.Count() == 0)
             {
                 ModelState.AddModelError(string.Empty, "Your card is empty, add some products first");
@@ -73,17 +70,13 @@
 
             if (ModelState.IsValid)
             {
-                var result = mapper.Map<BaseOrder[]>(items);
-
                 var user = userService.GetCurrentUser();
                 Order order = new Order
                 {
                     Status = GlobalConstants.SentOnlineStatus,
-                    SentOn = DateTime.Now,
-                    Sender = user.Id,
                     Destination = user.Address,
                 };
-                orderService.CreateOrder(order, result);
+                await orderService.CreateOrder(order, items);
                 shoppingCartService.ClearCart();
             }
 
