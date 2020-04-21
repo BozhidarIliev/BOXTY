@@ -2,7 +2,7 @@
 {
     public class AddCommentInputModel
     {
-        public int ProductId { get; set; }
+        public string ProductId { get; set; }
 
         public string Comment { get; set; }
     }

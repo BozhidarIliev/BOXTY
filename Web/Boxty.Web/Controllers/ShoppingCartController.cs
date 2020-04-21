@@ -41,11 +41,6 @@
             return Redirect("/product");
         }
 
-        public IActionResult Remove(int productId)
-        {
-            shoppingCartService.RemoveFromCart(productId);
-            return RedirectToAction("Index");
-        }
 
         [HttpGet]
         [AllowAnonymous]

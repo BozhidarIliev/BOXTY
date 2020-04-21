@@ -9,6 +9,7 @@
                 <tr>
                     <th>Product Id</th>
                     <th>Product</th>
+                    <th>Comment</th>
                     <th>Amount</th>
                     <th>Price</th>
                     <th class="text-right">Subtotal</th>
@@ -33,18 +34,15 @@
                     <div class="modal-body">
                         <form id="commentForm">
                             @model Boxty.Web.ViewModels.AddCommentViewModel
-                            <input type="hidden" id="productId" value="">
+                            <input type="hidden" id="itemIndexInput" value="">
                             <div class="form-group">
-                                <p>Write your comment here</p>
-                                <input asp-for="@Model.Comment" class="form-control" />
+                                <p>Write your comment here</p> 
+                                <input id="commentInput"asp-for="@Model.Comment" class="form-control" />
                                 <span asp-validation-for="@Model.Comment" class="text-danger"></span>
                             </div>
 
+                            <button onclick="addComment()" class="btn btn-success" data-dismiss="modal">Add</button>
                         </form>
-                    </div>
-
-                    <div class="modal-footer">
-                        <a  class="btn btn-success" onclick="addComment()" data-dismiss="modal">Add</a>
                     </div>
                 </div>
             </div>
@@ -65,23 +63,6 @@
             initShoppingCart();
         });
 
-        function deleteItem(productId) { // TODO!
-            $.ajax({
-                type: "DELETE",
-                url: "/api/ShoppingCart?id=" + productId + "",
-                contentType: "application/json; charset=utf-8",
-                success: function (data) {
-                    //toastr.success('Insert POS line success for item: ' + productName, 'Success');
-                },
-                failure: function (xhr, status, error) {
-                },
-                error: function (xhr, status, thrownError) {
-                    alert('Error ' + thrownError + " " + xhr.status);
-                }
-
-            })
-            initShoppingCart()
-        }
 
         function initShoppingCart() {
             $.ajax({
@@ -94,13 +75,14 @@
                     $('#shoppingCart > tr').slice(0).remove();
 
                     $.each(data.items, function (i, item) {
-                        var rows = "<tr>" +
+                        var rows = "<tr id=" + i +">" +
                             "<td>" + item.product.id + "</td>" +
                             "<td>" + item.product.name + "</td>" +
+                            "<td>" + item.comment + "</td>" +
                             "<td>" + item.amount + "</td>" +
                             '<td>' + item.product.price + '</td>' +
                             '<td>' + item.subtotal + '</td>' +
-                            '<td><button type="button" onclick="deleteItem(\'' + item.product.id + '\')" class="btn btn-danger">Remove</button> <button type="button" onclick="showCommentBox(\'' + item.product.id + '\')" class="btn btn-info">Comment</button></td>' +
+                            '<td><button type="button" onclick="deleteItem(' + i + ')" class="btn btn-danger">Remove</button> <button type="button" onclick="showCommentBox(' + i + ')" class="btn btn-info">Comment</button></td>' +
                             "</tr>";
 
                         $('#shoppingCart').append(rows);
@@ -117,26 +99,42 @@
             });
         }
 
-        function showCommentBox(id) {
+        function deleteItem(index) { // TODO!
+            $.ajax({
+                type: "DELETE",
+                url: "/api/ShoppingCart?index=" + index + "",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    //toastr.success('Insert POS line success for item: ' + productName, 'Success');
+                    initShoppingCart()
+                },
+                failure: function (xhr, status, error) {
+                },
+                error: function (xhr, status, thrownError) {
+                    alert('Error ' + thrownError + " " + xhr.status);
+                }
+
+            })
+        }
+
+        function showCommentBox(index) {
             $("#myModal").modal();
-            $("#productId").value = id;
+            document.getElementById("itemIndexInput").value = index;
         }
 
         function addComment() {
-            document.getElementById("commentForm").submit();
-        }
+            var index = Number(document.getElementById("itemIndexInput").value);
+            var comment = document.getElementById("commentInput").value;
 
-        $("#commentForm").submit(function (e) {
-            e.preventDefault();
-            var data = $(this)
+            var data = { "ItemIndex": index, "Comment": comment };
 
             $.ajax({
                 type: "POST",
                 url: "/api/ShoppingCart",
-                data: data.serialize(),
+                data: JSON.stringify(data),
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
-
+                    initShoppingCart();
                 },
 
                 failure: function (data) {
@@ -146,9 +144,7 @@
                     alert('Error ' + data.responsetext);
                 }
             });
-
-            initShoppingCart();
-        })
+        }
 
     </script>
 }

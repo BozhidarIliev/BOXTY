@@ -12,6 +12,7 @@
     using Boxty.Services.Interfaces;
     using Boxty.Services.Mapping;
     using Boxty.ViewModels;
+    using Boxty.Web.ViewModels;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
 
@@ -56,7 +57,7 @@
         {
             var cart = await this.GetShoppingCart();
             var product = productService.GetProductById(productId);
-            var shoppingCartItem = cart.Items.FirstOrDefault(x => (x.Product.Id == product.Id) && (x.Comment == null));
+            var shoppingCartItem = cart.Items.FirstOrDefault(x => (x.Product.Id == product.Id) && (x.Comment == string.Empty));
 
             if (shoppingCartItem != null)
             {
@@ -71,11 +72,12 @@
             await SessionHelper.SetObjectAsJsonAsync(httpContext.Session, GlobalConstants.ShoppingCart, cart);
         }
 
-        public async Task RemoveFromCart(int productId)
+
+        public async Task<ShoppingCart> RemoveFromCart(int index)
         {
             var cart = await this.GetShoppingCart();
             var shoppingCartItems = cart.Items.ToList();
-            var shoppingCartItem = shoppingCartItems.FirstOrDefault(x => x.Product.Id == productId);
+            var shoppingCartItem = shoppingCartItems[index];
 
             if (shoppingCartItem != null && shoppingCartItem.Amount > 1)
             {
@@ -85,13 +87,30 @@
             {
                 shoppingCartItems.Remove(shoppingCartItem);
             }
+
             cart.Items = shoppingCartItems;
             await SessionHelper.SetObjectAsJsonAsync(httpContext.Session, GlobalConstants.ShoppingCart, cart);
+
+            return cart;
         }
 
-        public void ClearCart()
+
+        public async Task AddComment(AddCommentViewModel model)
         {
-            httpContext.Session.Remove(GlobalConstants.ShoppingCart);
+            var cart = await this.GetShoppingCart();
+            var shoppingCartItems = cart.Items.ToList();
+            var item = shoppingCartItems[model.ItemIndex];
+
+            if (item != null)
+            {
+                cart = await this.RemoveFromCart(model.ItemIndex);
+                shoppingCartItems = cart.Items.ToList();
+
+                shoppingCartItems.Add(new OrderItem { Product = item.Product, Amount = 1, Comment = model.Comment,});
+
+                cart.Items = shoppingCartItems;
+                await SessionHelper.SetObjectAsJsonAsync(httpContext.Session, GlobalConstants.ShoppingCart, cart);
+            }
         }
 
         public async Task CreateOrder(string address)
@@ -108,22 +127,9 @@
             await orderService.CreateOrder(order, shoppingCartItems);
         }
 
-        public async Task AddComment(int productId, string comment)
+        public void ClearCart()
         {
-            var cart = await this.GetShoppingCart();
-            var shoppingCartItems = cart.Items.ToList();
-            var product = shoppingCartItems.FirstOrDefault(x => x.Product.Id == productId);
-
-            if (product != null)
-            {
-                await this.RemoveFromCart(productId);
-
-                product.Comment = comment;
-
-                shoppingCartItems.Add(product);
-                await SessionHelper.SetObjectAsJsonAsync(httpContext.Session, GlobalConstants.ShoppingCart, cart);
-            }
+            httpContext.Session.Remove(GlobalConstants.ShoppingCart);
         }
-
     }
 }

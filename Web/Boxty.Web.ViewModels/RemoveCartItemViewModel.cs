@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Boxty.Web.ViewModels
 {
-    public class AddCommentViewModel
+    public class RemoveCartItemViewModel
     {
-        [Required]
-        public int ItemIndex { get; set; }
+        public string ProductId { get; set; }
 
-        [Required]
+        public string Amount { get; set; }
+
         public string Comment { get; set; }
     }
 }

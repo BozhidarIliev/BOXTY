@@ -2,6 +2,7 @@
 {
     using Boxty.Services;
     using Boxty.ViewModels;
+    using Boxty.Web.ViewModels;
     using Boxty.Web.ViewModels.InputModels;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -29,15 +30,15 @@
 
         [HttpDelete]
         [AllowAnonymous]
-        public void RemoveItem(int id)
+        public void RemoveItem(int index)
         {
-            shoppingCartService.RemoveFromCart(id);
+            shoppingCartService.RemoveFromCart(index);
         }
 
         [HttpPost]
-        public void AddComment(AddCommentInputModel model)
+        public void AddComment(AddCommentViewModel index)
         {
-            shoppingCartService.AddComment(model.ProductId, model.Comment);
+            shoppingCartService.AddComment(index);
         }
 
     }

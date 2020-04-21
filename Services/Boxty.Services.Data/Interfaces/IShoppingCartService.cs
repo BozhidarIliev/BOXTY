@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
     using Boxty.Data.Models;
     using Boxty.Models;
+    using Boxty.Web.ViewModels;
 
     public interface IShoppingCartService
     {
@@ -12,12 +13,12 @@
 
         Task AddToCart(int productId);
 
-        Task RemoveFromCart(int productId);
+        Task<ShoppingCart> RemoveFromCart(int index);
 
         void ClearCart();
 
         Task CreateOrder(string address);
 
-        Task AddComment(int productId, string comment);
+        Task AddComment(AddCommentViewModel model);
     }
 }
