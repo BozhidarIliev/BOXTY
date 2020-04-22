@@ -8,7 +8,7 @@
 
     public interface IOrderService
     {
-        IEnumerable<OrderOutputModel> CurrentOrders();
+        IEnumerable<T> CurrentOrders<T>();
 
         Task CreateOrder(Order order, IEnumerable<OrderItem> items);
 

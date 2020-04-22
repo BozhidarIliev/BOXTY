@@ -31,7 +31,6 @@
                         </li>
                         @if (SignInManager.IsSignedIn(User))
                         {
-                        }
                         @if (User.IsInRole(Boxty.Common.GlobalConstants.Admin))
                         {
                             <li class="nav-item">
@@ -40,6 +39,7 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="Waiter" asp-controller="Waiter" asp-action="Index">WaiterIndex</a>
                             </li>
+                        }
                         }
                     </ul>
                 </div>

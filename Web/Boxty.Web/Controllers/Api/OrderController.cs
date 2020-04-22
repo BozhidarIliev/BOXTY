@@ -20,7 +20,8 @@
         [HttpGet]
         public IEnumerable<OrderOutputModel> GetOrders()
         {
-            return orderService.CurrentOrders();
+            //return orderService.CurrentOrders();
+            return null;
         }
 
         [HttpPost]

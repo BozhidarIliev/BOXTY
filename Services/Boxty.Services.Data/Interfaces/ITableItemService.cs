@@ -1,17 +1,16 @@
 ﻿namespace Boxty.Services.Interfaces
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     using Boxty.ViewModels;
 
     public interface ITableItemService
     {
-        Task<TableItemViewModel[]> GetTableItems(int tableId);
+        Task<IEnumerable<T>> GetPendingItems<T>(int tableId);
 
-        Task<string> SelectTableItem(TableItemInputModel model);
+        Task AddPendingItem(int tableId, int productId);
 
-        Task<string> DeleteSelectedItem(int tableItemId);
-
-        void OrderSelectedItems(int tableId);
+        Task RemovePendingItem(int tableId, int productId);
     }
 }

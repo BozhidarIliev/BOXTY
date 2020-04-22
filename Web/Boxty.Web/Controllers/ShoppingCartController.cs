@@ -70,6 +70,7 @@
                 {
                     Status = GlobalConstants.SentOnlineStatus,
                     Destination = user.Address,
+                    Delivery = GlobalConstants.Yes,
                 };
                 await orderService.CreateOrder(order, items);
                 shoppingCartService.ClearCart();

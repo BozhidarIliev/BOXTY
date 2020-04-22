@@ -24,7 +24,8 @@
 
         public IActionResult Index()
         {
-            return this.View(this.orderService.CurrentOrders());
+            //return this.View(this.orderService.CurrentOrders());
+            return null;
         }
 
         [Authorize(Roles = GlobalConstants.Admin)]

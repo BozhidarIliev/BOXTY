@@ -10,7 +10,7 @@ namespace Boxty.Services.Data.Interfaces
         Task CreateOrderItem(Order order, string status, IEnumerable<OrderItem> items);
 
         // IOrderable Remove(int itemId, IOrderable orderable);
-
+        Task<IEnumerable<T>> GetCurrentOrderItems<T>();
 
     }
 }

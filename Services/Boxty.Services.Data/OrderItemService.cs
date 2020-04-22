@@ -24,9 +24,10 @@ namespace Boxty.Services.Data
             this.orderItemRepository = orderItemRepository;
         }
 
-        public IEnumerable<T> GetCurrentOrderItems<T>()
+        public async Task<IEnumerable<T>> GetCurrentOrderItems<T>()
         {
-            return orderItemRepository.All().Where(x => x.Status == GlobalConstants.ReadyForServing).To<T>();
+            var items = await orderItemRepository.AllAsync();
+            return items.To<T>();
         }
 
         public IEnumerable<OrderItem> GetAllOrderItems()

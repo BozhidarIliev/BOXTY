@@ -3,19 +3,14 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "_Layout";
-    var tables = tableService.GetTables().Result;
 }
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
 
-<select id="tableId" onchange="initPosLine()">
+<select id="tableList" onchange="initPosLine()">
     <option selected>Select role...</option>
-    @foreach (var table in tables)
-    {
-        <option value="@table.Id">@table.Id</option>
-    }
-    <option value="All">All</option>
+    
 </select>
 
 <div class="row">
@@ -25,16 +20,13 @@
                 <tr>
                     <th scope="col">Id</th>
                     <th scope="col">Product</th>
+                    <th scope="col">Price</th>
                     <th scope="col"></th>
                 </tr>
             </thead>
         </table>
     </div>
     <div class="col-md-3">
-        <div class="form-group">
-            <label class="control-label">Comment</label>
-            <input type="text" class="form-control" id="comment" />
-        </div>
         <div class="row">
             <div class="col-md-12">
                 <table class="table" id="posLine" style="width:100%">
@@ -42,9 +34,10 @@
                         <tr>
                             <th scope="col">Id</th>
                             <th scope="col">Product</th>
-                            <th scope="col">Qty</th>
-                            <th scope="col">Price</th>
                             <th scope="col">Comment</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Subtotal</th>
                             <th scope="col"></th>
                         </tr>
                     </thead>
@@ -60,23 +53,23 @@
     <script>
 
         $(document).ready(function () {
+            initTablesList();
             initProductLine();
         });
 
         function sendItems() {
-            var f = document.getElementById("tableId");
-            var tableId = f.selectedIndex + 1
+            var tableId = document.getElementById("tableList").value;
+
             $.ajax({
                 type: "POST",
                 contentType: "application/json; charset=utf-8",
                 url: "/api/TableItem?id=" + tableId,
-                data: tableId,
                 success: function (data) {
                     initPosLine();
                     toastr.success('Insert POS line success for item: ' + productName, 'Success');
                 },
                 failure: function (xhr, status, error) {
-                }, 
+                },
                 error: function (xhr, status, thrownError) {
                     alert('Error ' + thrownError + " " + xhr.status);
                 }
@@ -84,6 +77,34 @@
             })
         }
 
+        function initTablesList() {
+            $.ajax({
+                type: "GET",
+                url: "/api/Table",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    $("#DIV").html('');
+                    $.each(data, function (i, item) {
+                        var rows = ""
+                        if (item.status == "available") {
+                            rows = "<option style='color:green' value=" + item.id + ">" + item.id + "</option>"
+                        }
+                        else {
+                            rows = "<option style='color:red' value=" + item.id + ">" + item.id + "</option>"
+                        }
+                        $('#tableList').append(rows);
+                    });
+                },
+
+                failure: function (data) {
+                    alert(data.responseText);
+                },
+                error: function (data) {
+                    alert(data.responseText);
+                }
+            });
+        }
 
         function initProductLine() {
             $.ajax({
@@ -94,19 +115,19 @@
                 success: function (data) {
                     $("#DIV").html('');
                     $.each(data, function (i, item) {
-                        var button = "<button onclick='posLineInsert(" + item.id + ")'class='btn btn-info'>Select</button>"
                         var rows = "<tr>" +
                             "<td id='id'>" + item.id + "</td>" +
                             "<td id='name'>" + item.name + "</td>" +
-                            '<td>' + button + '</td>'
+                            "<td id='name'>" + item.price + "</td>" +
+                            "<td><button onclick='posLineInsert(\"" + item.id + "\")'class='btn btn-info'>Select</button></td>"
                         "</tr>";
                         $('#productLine').append(rows);
-                    }); 
+                    });
                 },
 
                 failure: function (data) {
                     alert(data.responseText);
-                }, 
+                },
                 error: function (data) {
                     alert(data.responseText);
                 }
@@ -114,8 +135,8 @@
         }
 
         function initPosLine() {
-            var e = document.getElementById("tableId");
-            var tableId = e.selectedIndex;
+            var tableId = document.getElementById("tableList").value;
+
             $.ajax({
                 type: "GET",
                 url: "/api/TableItem/GetTableItems?tableId=" + tableId + "",
@@ -124,74 +145,102 @@
                 success: function (data) {
                     $('#posLine > tr').slice(0).remove();
                     $.each(data, function (i, item) {
-                        var name = 'selectedProduct';
-                        //if (item.status == 'sent') name ='sentProduct'
-                        var btnDelete = '<button onclick="deleteLine(\'' + item.id + '\')" class="btn btn-danger">DELETE</button>';
+                        var name = 'orderedItem';
+                        var btnComment = '<button onclick="deleteLine(\'' + item.id + '\')" class="btn btn-danger">DELETE</button>';
                         var rows = "<tr name=\""+ name + "\">" +
-                            "<td id='id'>" + item.productId + "</td>" +
-                            "<td id='name'>" + item.productName + "</td>" +
-                            "<td id='amount'>" + item.amount + "</td>" +
-                            "<td id='price'>" + item.productPrice * item.amount + "</td>" +
-                            "<td id='comment'>" + item.comment + "</td>" +
-                            "<td>" + btnDelete + "</td>"
+                            "<td>" + item.product.id + "</td>" +
+                            "<td style='color:green 'id='name'>" + item.product.name + "</td>" +
+                            "<td>" + item.comment + "</td>" +
+                            "<td>" + item.product.price + "</td>" +
+                            "<td>" + item.amount + "</td>" +
+                            "<td>" + item.subtotal + "</td>" +
+                            "<td>" + btnComment + "</td>"
                         "</tr>";
                         $('#posLine').append(rows);
-                    }); 
-                    console.log(data);
-                }, 
+                    });
+                    initPosLinePendingItems();
+                },
 
                 failure: function (data) {
                     alert(data.responseText);
-                }, 
+                },
                 error: function (data) {
                     alert(data.responseText);
                 }
             });
+        }
 
-            return false;
+        function initPosLinePendingItems() {
+            var tableId = document.getElementById("tableList").value;
+
+            $.ajax({
+                type: "GET",
+                url: "/api/TableItem/GetPendingItems?tableId=" + tableId + "",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    $('#posLine > tr').slice(0).remove();
+                    $.each(data, function (i, item) {
+                        var name = 'orderedItem';
+                        var btnComment = '<button onclick="deleteLine(\'' + item.product.id + '\')" class="btn btn-danger">DELETE</button>';
+                        var rows = "<tr name=\"" + name + "\">" +
+                            "<td>" + item.product.id + "</td>" +
+                            "<td style='color:Red 'id='name'>" + item.product.name + "</td>" +
+                            "<td>" + item.comment + "</td>" +
+                            "<td>" + item.product.price + "</td>" +
+                            "<td>" + item.amount + "</td>" +
+                            "<td>" + item.subtotal + "</td>" +
+                            "<td>" + btnComment + "</td>"
+                        "</tr>";
+                        $('#posLine').append(rows);
+                    });
+                    console.log(data);
+                }});
         }
 
         function posLineInsert(productId) {
-            var e = document.getElementById("tableId");
-            var tableId = e.selectedIndex;
+            var tableId = document.getElementById("tableList").value;
+
+            var product = { "ProductId": Number(productId), "TableId": Number(tableId) };
 
             $.ajax({
                 type: "POST",
                 contentType: "application/json; charset=utf-8",
                 url: "/api/TableItem",
-                data: JSON.stringify({
-                    'TableId': tableId,
-                    'ProductId': productId,
-                    'Comment': $("#comment").val()
-                }),
+                data: JSON.stringify(product),
                 success: function (data) {
-                    initPosLine();
-                    toastr.success('Insert POS line success for item: ' + productName, 'Success');
+
+                    initPosLinePendingItems();
+                    
                 },
                 failure: function (xhr, status, error) {
                 },
                 error: function (xhr, status, thrownError) {
                     alert('Error ' + thrownError + " " + xhr.status);
                 }
-
             })
         }
 
         function deleteLine(productId) {
+            var tableId = document.getElementById("tableList").value;
+
+            var product = { "ProductId": Number(productId), "TableId": Number(tableId) };
+
             $.ajax({
                 type: "DELETE",
                 contentType: "application/json; charset=utf-8",
-                url: "/api/TableItem/DeleteSelectedItem?tableItemId=" + productId + "",
+                url: "/api/TableItem",
+                data: JSON.stringify(product),
                 success: function (data) {
-                    initPosLine();
-                    toastr.success('Insert POS line success for item: ' + productName, 'Success');
+
+                    initPosLinePendingItems();
+
                 },
                 failure: function (xhr, status, error) {
                 },
                 error: function (xhr, status, thrownError) {
                     alert('Error ' + thrownError + " " + xhr.status);
                 }
-
             })
         }
     </script>

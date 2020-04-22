@@ -66,7 +66,8 @@
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IShoppingCartService, ShoppingCartService>();
             services.AddTransient<IProductService, ProductService>();
-            services.AddTransient<IOrderService, OrderService>();
+            services.AddTransient<ITableService, TableService>();
+            services.AddTransient<ITableItemService, TableItemService>();
             services.AddTransient<IAdminService, AdminService>();
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IOrderService, OrderService>();

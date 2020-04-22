@@ -33,10 +33,9 @@
             this.httpContextAccessor = httpContextAccessor;
         }
 
-        public IEnumerable<OrderOutputModel> CurrentOrders()
+        public IEnumerable<T> CurrentOrders<T>()
         {
-            //return orderRepository.All().To<OrderOutputModel>().OrderByDescending(x => x.CreatedOn);
-            return null;
+            return orderRepository.All().To<T>();
         }
 
         public async Task CreateOrder(Order order, IEnumerable<OrderItem> items)

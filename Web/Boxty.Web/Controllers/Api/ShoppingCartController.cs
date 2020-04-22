@@ -1,13 +1,14 @@
 ﻿namespace Boxty.Controllers.Api
 {
+    using System.Linq;
+    using System.Threading.Tasks;
+
     using Boxty.Services;
     using Boxty.ViewModels;
     using Boxty.Web.ViewModels;
     using Boxty.Web.ViewModels.InputModels;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using System.Linq;
-    using System.Threading.Tasks;
 
     [Route("api/[controller]")]
     [ApiController]

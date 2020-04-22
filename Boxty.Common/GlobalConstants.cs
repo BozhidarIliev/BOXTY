@@ -36,7 +36,9 @@
 
         public const string SentByWaiter = "order placed by waiter";
 
-        public const string TableIsAvailable = "available";
+        public const string TableAvailable = "available";
+
+        public const string TableUnavailable = "unavailable";
 
         public const string ReadyForServing = "readyForServing";
 

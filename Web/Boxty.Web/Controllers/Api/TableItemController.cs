@@ -1,12 +1,20 @@
 ﻿namespace Boxty.Controllers.Api
 {
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using AutoMapper;
+    using Boxty.Common;
     using Boxty.Data;
+    using Boxty.Data.Models;
+    using Boxty.Models;
     using Boxty.Services;
+    using Boxty.Services.Data.Interfaces;
     using Boxty.Services.Interfaces;
     using Boxty.ViewModels;
+    using Boxty.Web.ViewModels;
     using Microsoft.AspNetCore.Mvc;
 
     [Route("api/[controller]")]
@@ -14,42 +22,62 @@
     public class TableItemController : Controller
     {
         private readonly BoxtyDbContext context;
+        private readonly IOrderService orderService;
+        private readonly IOrderItemService orderItemService;
         private readonly IUserService userService;
         private readonly IProductService productService;
-        private readonly IMapper mapper;
         private readonly ITableItemService tableItemService;
 
-        public TableItemController(IOrderService orderService, IUserService userService, IProductService productService, IMapper mapper, ITableItemService tableItemService)
+        public TableItemController(IOrderService orderService, IOrderItemService orderItemService, IUserService userService, IProductService productService,  ITableItemService tableItemService)
         {
+            this.orderService = orderService;
+            this.orderItemService = orderItemService;
             this.userService = userService;
             this.productService = productService;
-            this.mapper = mapper;
             this.tableItemService = tableItemService;
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<TableItemViewModel[]>> GetTableItems(int tableId)
+        [Route("GetTableItems")]
+        public async Task<IEnumerable<TableItemViewModel>> GetTableItems(int tableId)
         {
-            return await tableItemService.GetTableItems(tableId);
+            var items = await orderItemService.GetCurrentOrderItems<TableItemViewModel>();
+            return items.Where(x => x.Destination == tableId.ToString());
+        }
+
+        [HttpGet("{id}")]
+        [Route("GetPendingItems")]
+        public async Task<IEnumerable<TableItemViewModel>> GetPendingItems(int tableId)
+        {
+            return await tableItemService.GetPendingItems<TableItemViewModel>(tableId);
         }
 
         [HttpPost]
-        public async Task<JsonResult> SelectTableItem(TableItemInputModel model)
+        public async Task AddPendingItem(TableItemInputModel model)
         {
-            var a = new { Success = await tableItemService.SelectTableItem(model) };
-            return Json(a);
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteSelectedItem(int tableItemId)
-        {
-            return Json(await tableItemService.DeleteSelectedItem(tableItemId));
+            await tableItemService.AddPendingItem(model.TableId, model.ProductId);
         }
 
         [HttpPost("{id}")]
-        public void OrderSelectedItems(int tableId)
+        public async Task SendOrderItems(int tableId)
         {
-            tableItemService.OrderSelectedItems(tableId);
+            var items = await tableItemService.GetPendingItems<OrderItem>(tableId);
+            Order order = new Order
+            {
+                Status = GlobalConstants.SentByWaiter,
+                Destination = tableId.ToString(),
+                Delivery = GlobalConstants.No,
+            };
+            await this.orderService.CreateOrder(order, items);
         }
+
+        [HttpDelete]
+        public async Task RemovePendingItem(TableItemInputModel model)
+        {
+            await tableItemService.RemovePendingItem(model.TableId, model.ProductId);
+        }
+
+
+
     }
 }
