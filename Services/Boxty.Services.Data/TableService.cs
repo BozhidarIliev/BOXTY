@@ -1,6 +1,7 @@
 ﻿namespace Boxty.Services
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using Boxty.Common;
     using Boxty.Data.Common.Repositories;
@@ -12,22 +13,28 @@
 
     public class TableService : ITableService
     {
-        private readonly IDeletableEntityRepository<Table> tableRepositrory;
+        private readonly IRepository<Table> tableRepository;
 
-        public TableService(IDeletableEntityRepository<Table> tableRepositrory)
+        public TableService(IRepository<Table> tableRepositrory)
         {
-            this.tableRepositrory = tableRepositrory;
+            this.tableRepository = tableRepositrory;
         }
 
-        public async Task<IEnumerable<T>> GetTables<T>()
+        public IEnumerable<T> GetTables<T>()
         {
-            var tables = await tableRepositrory.AllAsync();
+            var tables = tableRepository.All();
             return tables.To<T>();
+        }
+
+        public Table GetTableById(int tableId)
+        {
+            var tables = tableRepository.All();
+            return tables.FirstOrDefault(x => x.Id == tableId);
         }
 
         public async Task ChangeTableStatus(int tableId)
         {
-            var tables = await tableRepositrory.AllAsync();
+            var tables = await tableRepository.AllAsync();
             var table = await tables.FirstAsync(x => x.Id == tableId);
             if (table.Status == GlobalConstants.TableAvailable)
             {
@@ -37,6 +44,21 @@
             {
                 table.Status = GlobalConstants.TableUnavailable;
             }
+        }
+
+        public void DeleteTable(int tableId)
+        {
+            var table = this.GetTableById(tableId);
+            this.tableRepository.Delete(table);
+        }
+
+        public async Task CreateTable(int id)
+        {
+            var table = new Table
+            {
+                Id = id,
+            };
+            await this.tableRepository.AddAsync(table);
         }
     }
 }

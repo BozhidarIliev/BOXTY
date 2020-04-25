@@ -17,7 +17,7 @@
 
         void ClearCart();
 
-        Task CreateOrder(string address);
+        Task CreateOrder();
 
         Task AddComment(AddCommentViewModel model);
     }

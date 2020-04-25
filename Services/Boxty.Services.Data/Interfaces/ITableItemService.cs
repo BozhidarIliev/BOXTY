@@ -12,5 +12,7 @@
         Task AddPendingItem(int tableId, int productId);
 
         Task RemovePendingItem(int tableId, int productId);
+
+        Task ClearPendingItems(int tableId);
     }
 }

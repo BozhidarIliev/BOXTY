@@ -42,7 +42,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boxty.Services.Mapping", "Services\Boxty.Services.Mapping\Boxty.Services.Mapping.csproj", "{64E2BBC7-6039-491E-98F9-35EAD0A3A558}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boxty.Services.Data", "Services\Boxty.Services.Data\Boxty.Services.Data.csproj", "{5B73A9D5-9EAE-4A9D-8201-688D010FDC70}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boxty.Services.Data", "Services\Boxty.Services.Data\Boxty.Services.Data.csproj", "{5B73A9D5-9EAE-4A9D-8201-688D010FDC70}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

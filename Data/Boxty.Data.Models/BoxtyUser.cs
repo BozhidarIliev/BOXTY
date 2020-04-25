@@ -3,6 +3,7 @@ namespace Boxty.Data.Models
 {
     using System;
     using System.Collections.Generic;
+
     using Boxty.Data.Common.Models;
 
     using Microsoft.AspNetCore.Identity;

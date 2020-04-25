@@ -2,13 +2,14 @@
 {
     using Boxty.Data.Common.Models;
     using Boxty.Data.Models;
-    using Boxty.Services.Mapping;
 
     public class OrderItem : BaseDeletableModel<int>
     {
         public int OrderId { get; set; }
 
-        public Product Product { get; set; }
+        public int ProductId { get; set; }
+
+        public virtual Product Product { get; set; }
 
         public int Amount { get; set; }
 

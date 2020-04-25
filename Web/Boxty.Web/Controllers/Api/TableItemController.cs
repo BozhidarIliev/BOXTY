@@ -21,7 +21,6 @@
     [ApiController]
     public class TableItemController : Controller
     {
-        private readonly BoxtyDbContext context;
         private readonly IOrderService orderService;
         private readonly IOrderItemService orderItemService;
         private readonly IUserService userService;
@@ -39,10 +38,16 @@
 
         [HttpGet("{id}")]
         [Route("GetTableItems")]
-        public async Task<IEnumerable<TableItemViewModel>> GetTableItems(int tableId)
+        public IEnumerable<TableItemViewModel> GetTableItems(int tableId)
         {
-            var items = await orderItemService.GetCurrentOrderItems<TableItemViewModel>();
-            return items.Where(x => x.Destination == tableId.ToString());
+            var order = orderService.GetOrderByDestination(tableId.ToString());
+            if (order == null)
+            {
+                return null;
+            }
+
+            var items = orderItemService.GetCurrentOrderItemsByOrderId<TableItemViewModel>(order.Id);
+            return items;
         }
 
         [HttpGet("{id}")]
@@ -58,17 +63,20 @@
             await tableItemService.AddPendingItem(model.TableId, model.ProductId);
         }
 
-        [HttpPost("{id}")]
-        public async Task SendOrderItems(int tableId)
+        [HttpPost]
+        [Route("SendOrder")]
+        public async Task SendOrderItems(int id)
         {
-            var items = await tableItemService.GetPendingItems<OrderItem>(tableId);
+            var items = await tableItemService.GetPendingItems<OrderItem>(id);
             Order order = new Order
             {
                 Status = GlobalConstants.SentByWaiter,
-                Destination = tableId.ToString(),
-                Delivery = GlobalConstants.No,
+                Destination = id.ToString(),
+                Delivery = false,
+                Items = items,
             };
-            await this.orderService.CreateOrder(order, items);
+            orderService.CreateOrder(order);
+            await tableItemService.ClearPendingItems(id);
         }
 
         [HttpDelete]

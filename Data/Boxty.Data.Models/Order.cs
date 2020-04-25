@@ -2,12 +2,14 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
     using Boxty.Data.Common.Models;
     using Boxty.Models;
 
-    public class Order : BaseDeletableModel<int>, IOrderable
+    public class Order : BaseDeletableModel<int>
     {
+        [NotMapped]
         public IEnumerable<OrderItem> Items { get; set; }
 
         public string Status { get; set; }
@@ -16,6 +18,6 @@
 
         public string Destination { get; set; }
 
-        public string Delivery { get; set; }
+        public bool Delivery { get; set; }
     }
 }

@@ -7,8 +7,14 @@
 
     public interface ITableService
     {
-        Task<IEnumerable<T>> GetTables<T>();
+        IEnumerable<T> GetTables<T>();
+
+        Table GetTableById(int tableId);
 
         Task ChangeTableStatus(int tableId);
+
+        Task CreateTable(int tableId);
+
+        void DeleteTable(int tableId);
     }
 }

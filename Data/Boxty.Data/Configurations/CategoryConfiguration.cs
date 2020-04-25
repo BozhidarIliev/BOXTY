@@ -9,6 +9,8 @@
         public void Configure(EntityTypeBuilder<Category> builder)
         {
             builder.HasKey("Id");
+
+            //builder.HasOne(x => x.CreatedBy).WithOne().HasForeignKey<BoxtyUser>(u => u.Id);
         }
     }
 }

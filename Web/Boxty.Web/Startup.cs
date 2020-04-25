@@ -18,6 +18,7 @@
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -49,11 +50,11 @@
                     options.MinimumSameSitePolicy = SameSiteMode.None;
                 });
 
-            // services.AddControllersWithViews(
-            //    options =>
-            //    {
-            //        options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-            //    });
+            services.AddControllersWithViews(
+               options =>
+               {
+                   options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+               });
             services.AddRazorPages();
 
             services.AddSingleton(this.Configuration);
@@ -75,8 +76,6 @@
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            // object associated with a request
-            // two different people asking for the shopping cart are going to get different instances
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddSession(options =>
@@ -87,15 +86,14 @@
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
 
-            // Seed data on application startup
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
                 var dbContext = serviceScope.ServiceProvider.GetRequiredService<BoxtyDbContext>();
+                dbContext.Database.EnsureCreated();
                 dbContext.Database.Migrate();
             }
 

@@ -8,10 +8,10 @@
     <title>@ViewData["Title"] - Boxty</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/css/css.css" />
 
 </head>
 <body>
+    <span class="AntiForge"> @Html.AntiForgeryToken() </span>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
@@ -31,15 +31,21 @@
                         </li>
                         @if (SignInManager.IsSignedIn(User))
                         {
-                        @if (User.IsInRole(Boxty.Common.GlobalConstants.Admin))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="Index">Orders</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="Waiter" asp-controller="Waiter" asp-action="Index">WaiterIndex</a>
-                            </li>
-                        }
+                            @if (User.IsInRole(Boxty.Common.GlobalConstants.Admin))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="Index">Orders</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="Waiter" asp-controller="Waiter" asp-action="Index">WaiterIndex</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Tables" asp-action="Index">Tables</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="Index">Categories</a>
+                                </li>
+                            }
                         }
                     </ul>
                 </div>

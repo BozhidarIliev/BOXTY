@@ -35,12 +35,6 @@
             this.userManager = userManager;
         }
 
-        public async Task<IQueryable<OrderItem>> GetItemsFromShoppingCart()
-        {
-            var cart = await this.GetShoppingCart();
-            return cart.Items.AsQueryable();
-        }
-
         public async Task<ShoppingCart> GetShoppingCart() // TODO httpContext should be passed as a parameter
         {
             var cart = await SessionHelper.GetObjectFromJsonAsync<ShoppingCart>(httpContext.Session, GlobalConstants.ShoppingCart);
@@ -113,18 +107,19 @@
             }
         }
 
-        public async Task CreateOrder(string address)
+        public async Task CreateOrder()
         {
             var cart = await this.GetShoppingCart();
             var shoppingCartItems = cart.Items.AsQueryable().To<OrderItem>().ToList();
 
-            var user = userService.GetCurrentUser();
             Order order = new Order
             {
                 Status = GlobalConstants.SentOnlineStatus,
-                Destination = address,
+                Destination = userService.GetCurrentUser().Address,
+                Delivery = true,
+                Items = shoppingCartItems
             };
-            await orderService.CreateOrder(order, shoppingCartItems);
+            orderService.CreateOrder(order);
         }
 
         public void ClearCart()

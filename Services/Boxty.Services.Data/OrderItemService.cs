@@ -5,6 +5,7 @@ using Boxty.Models;
 using Boxty.Services.Data.Interfaces;
 using Boxty.Services.Interfaces;
 using Boxty.Services.Mapping;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,75 +25,55 @@ namespace Boxty.Services.Data
             this.orderItemRepository = orderItemRepository;
         }
 
-        public async Task<IEnumerable<T>> GetCurrentOrderItems<T>()
+        public IEnumerable<T> GetCurrentOrderItems<T>()
         {
-            var items = await orderItemRepository.AllAsync();
+            var items = orderItemRepository.All();
             return items.To<T>();
         }
 
-        public IEnumerable<OrderItem> GetAllOrderItems()
+        public IEnumerable<T> GetCurrentOrderItemsByOrderId<T>(int orderId)
         {
-            return null;
+            var items = orderItemRepository.All().Where(x => x.OrderId == orderId);
+            return items.To<T>();
         }
 
-        public async Task CreateOrderItem(Order order, string status, IEnumerable<OrderItem> items)
+        public async Task CreateOrderItem(Order order)
         {
-            var userId = userService.GetCurrentUser().Id;
-            if (status == GlobalConstants.SentOnlineStatus)
+            var id = order.Id;
+            var items = order.Items.ToList();
+            foreach (var item in items)
             {
-                foreach (var item in items)
-                {
-                    item.Status = status;
-                    item.OrderId = order.Id;
-                    item.Product = productService.GetProductById(item.Product.Id);
-                }
+                item.OrderId = id;
             }
 
-            await this.orderItemRepository.AddRangeAsync(items);
-            await this.orderItemRepository.SaveChangesAsync();
+            await orderItemRepository.AddRangeAsync(items);
+            await orderItemRepository.SaveChangesAsync();
         }
 
         public async Task MarkAsDone(int orderItemId)
         {
-            var orderItem = await this.GetOrderItemById(orderItemId);
+            var orderItem = this.GetOrderItemById(orderItemId);
             orderItem.Status = GlobalConstants.ReadyForServing;
             await this.orderItemRepository.SaveChangesAsync();
         }
 
         public async Task MarkAsServed(int orderItemId)
         {
-            var orderItem = await this.GetOrderItemById(orderItemId);
+            var orderItem = this.GetOrderItemById(orderItemId);
             orderItem.Status = GlobalConstants.Served;
             await this.orderItemRepository.SaveChangesAsync();
         }
 
         public async Task DeleteOrderItem(int orderItemId)
         {
-            var orderItem = await this.GetOrderItemById(orderItemId);
+            var orderItem = this.GetOrderItemById(orderItemId);
             this.orderItemRepository.HardDelete(orderItem);
             await this.orderItemRepository.SaveChangesAsync();
         }
 
-        public async Task<OrderItem> GetOrderItemById(int orderItemId)
+        public OrderItem GetOrderItemById(int orderItemId)
         {
-            return await this.orderItemRepository.GetByIdWithDeletedAsync(orderItemId);
+            return this.orderItemRepository.All().FirstOrDefault(x => x.Id == orderItemId);
         }
-
-        //public  Remove(int productId, IOrderable orderable)
-        //{
-        //    var items = orderable.Items.ToList();
-        //    var item = items.FirstOrDefault(x => x.Product.Id == productId);
-
-        //    if (item != null && item.Amount > 1)
-        //    {
-        //        item.Amount--;
-        //    }
-        //    else
-        //    {
-        //        items.Remove(item);
-        //    }
-
-        //    return orderable;
-        //}
     }
 }

@@ -9,16 +9,31 @@
 </head>
 
 <select id="tableList" onchange="initPosLine()">
-    <option selected>Select role...</option>
+    <option selected>Select table...</option>
     
 </select>
 
 <div class="row">
     <div class="col-md-5">
+        <div class="tab">
+            <button class="tablinks" onclick="openCategory(event, 'nz')">nz</button>
+            <button class="tablinks" onclick="openCategory(event, 'nz2')">nz2</button>
+        </div>
+
+        <div id="nz" class="tabcontent">
+            <button type="button" class="btn btn-primary">chushki</button>
+            <button type="button" class="btn btn-primary">domati</button>
+            <button type="button" class="btn btn-primary">chushki s domati</button>
+        </div>
+        <div id="nz2" class="tabcontent">
+            <button type="button" class="btn btn-primary">voda</button>
+            <button type="button" class="btn btn-primary">sok</button>
+            <button type="button" class="btn btn-primary">boza</button>
+        </div>
+
         <table class="table" id="productLine" style="width:100%">
             <thead class="thead-dark">
                 <tr>
-                    <th scope="col">Id</th>
                     <th scope="col">Product</th>
                     <th scope="col">Price</th>
                     <th scope="col"></th>
@@ -32,7 +47,6 @@
                 <table class="table" id="posLine" style="width:100%">
                     <thead class="thead-dark" id='posLineRow'>
                         <tr>
-                            <th scope="col">Id</th>
                             <th scope="col">Product</th>
                             <th scope="col">Comment</th>
                             <th scope="col">Price</th>
@@ -57,13 +71,39 @@
             initProductLine();
         });
 
+        function openCategory(event, categoryName) {
+            var i, tabcontent, tablinks;
+
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+
+            document.getElementById(categoryName).style.display = "block";
+            event.currentTarget.className += " active";
+        }
+
+        function loadCategories() {
+
+        }
+
         function sendItems() {
             var tableId = document.getElementById("tableList").value;
 
+            console.log(tableId);
+
             $.ajax({
                 type: "POST",
-                contentType: "application/json; charset=utf-8",
-                url: "/api/TableItem?id=" + tableId,
+                url: "/api/TableItem/SendOrder?id=" + tableId,
+                headers: {
+                    RequestVerificationToken:
+                        $('input:hidden[name="__RequestVerificationToken"]').val()
+                },  
                 success: function (data) {
                     initPosLine();
                     toastr.success('Insert POS line success for item: ' + productName, 'Success');
@@ -116,7 +156,6 @@
                     $("#DIV").html('');
                     $.each(data, function (i, item) {
                         var rows = "<tr>" +
-                            "<td id='id'>" + item.id + "</td>" +
                             "<td id='name'>" + item.name + "</td>" +
                             "<td id='name'>" + item.price + "</td>" +
                             "<td><button onclick='posLineInsert(\"" + item.id + "\")'class='btn btn-info'>Select</button></td>"
@@ -145,13 +184,12 @@
                 success: function (data) {
                     $('#posLine > tr').slice(0).remove();
                     $.each(data, function (i, item) {
-                        var name = 'orderedItem';
+                        var name = 'sentItem';
                         var btnComment = '<button onclick="deleteLine(\'' + item.id + '\')" class="btn btn-danger">DELETE</button>';
                         var rows = "<tr name=\""+ name + "\">" +
-                            "<td>" + item.product.id + "</td>" +
-                            "<td style='color:green 'id='name'>" + item.product.name + "</td>" +
+                            "<td style='color:green 'id='name'>" + item.productName + "</td>" +
                             "<td>" + item.comment + "</td>" +
-                            "<td>" + item.product.price + "</td>" +
+                            "<td>" + item.productPrice + "</td>" +
                             "<td>" + item.amount + "</td>" +
                             "<td>" + item.subtotal + "</td>" +
                             "<td>" + btnComment + "</td>"
@@ -179,15 +217,15 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (data) {
-                    $('#posLine > tr').slice(0).remove();
+
+                    $("[name=pendingItem]").remove();
                     $.each(data, function (i, item) {
-                        var name = 'orderedItem';
-                        var btnComment = '<button onclick="deleteLine(\'' + item.product.id + '\')" class="btn btn-danger">DELETE</button>';
+                        var name = 'pendingItem';
+                        var btnComment = '<button onclick="deleteLine(\'' + item.productId + '\')" class="btn btn-danger">DELETE</button>';
                         var rows = "<tr name=\"" + name + "\">" +
-                            "<td>" + item.product.id + "</td>" +
-                            "<td style='color:Red 'id='name'>" + item.product.name + "</td>" +
+                            "<td style='color:Red 'id='name'>" + item.productName + "</td>" +
                             "<td>" + item.comment + "</td>" +
-                            "<td>" + item.product.price + "</td>" +
+                            "<td>" + item.productPrice + "</td>" +
                             "<td>" + item.amount + "</td>" +
                             "<td>" + item.subtotal + "</td>" +
                             "<td>" + btnComment + "</td>"
@@ -205,9 +243,13 @@
 
             $.ajax({
                 type: "POST",
-                contentType: "application/json; charset=utf-8",
                 url: "/api/TableItem",
+                contentType: "application/json; charset=utf-8",
                 data: JSON.stringify(product),
+                headers: {
+                    RequestVerificationToken:
+                        $('input:hidden[name="__RequestVerificationToken"]').val()
+                },     
                 success: function (data) {
 
                     initPosLinePendingItems();
@@ -228,9 +270,13 @@
 
             $.ajax({
                 type: "DELETE",
-                contentType: "application/json; charset=utf-8",
                 url: "/api/TableItem",
+                contentType: "application/json; charset=utf-8",
                 data: JSON.stringify(product),
+                headers: {
+                    RequestVerificationToken:
+                        $('input:hidden[name="__RequestVerificationToken"]').val()
+                },  
                 success: function (data) {
 
                     initPosLinePendingItems();

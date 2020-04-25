@@ -53,7 +53,7 @@
 
             // Call the next delegate/middleware in the pipeline
             dbContext.SaveChanges();
-            await _next(context);
+             await _next(context);
         }
 
         private async Task SeedCategories(BoxtyDbContext dbContext)

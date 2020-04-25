@@ -57,24 +57,12 @@
             }
 
             var cart = await shoppingCartService.GetShoppingCart();
-            var items = cart.Items;
-            if (items.Count() == 0)
+            if (cart.Items.Count() == 0)
             {
                 ModelState.AddModelError(string.Empty, "Your card is empty, add some products first");
             }
 
-            if (ModelState.IsValid)
-            {
-                var user = userService.GetCurrentUser();
-                Order order = new Order
-                {
-                    Status = GlobalConstants.SentOnlineStatus,
-                    Destination = user.Address,
-                    Delivery = GlobalConstants.Yes,
-                };
-                await orderService.CreateOrder(order, items);
-                shoppingCartService.ClearCart();
-            }
+            await shoppingCartService.CreateOrder();
 
             return RedirectToAction("CheckoutComplete");
         }

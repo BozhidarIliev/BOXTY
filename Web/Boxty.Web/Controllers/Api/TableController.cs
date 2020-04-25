@@ -26,9 +26,9 @@
         }
 
         [HttpGet]
-        public async Task<IEnumerable<TableViewModel>> GetTables()
+        public IEnumerable<TableViewModel> GetTables()
         {
-            return await this.tableService.GetTables<TableViewModel>();
+            return this.tableService.GetTables<TableViewModel>();
         }
 
         [HttpGet("{id}")]

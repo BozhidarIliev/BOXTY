@@ -7,10 +7,17 @@ namespace Boxty.Services.Data.Interfaces
 {
     public interface IOrderItemService
     {
-        Task CreateOrderItem(Order order, string status, IEnumerable<OrderItem> items);
+        Task CreateOrderItem(Order order);
+        IEnumerable<T> GetCurrentOrderItems<T>();
 
-        // IOrderable Remove(int itemId, IOrderable orderable);
-        Task<IEnumerable<T>> GetCurrentOrderItems<T>();
+        Task MarkAsDone(int orderItemId);
 
+        Task MarkAsServed(int orderItemId);
+
+        Task DeleteOrderItem(int orderItemId);
+
+        OrderItem GetOrderItemById(int orderItemId);
+
+        IEnumerable<T> GetCurrentOrderItemsByOrderId<T>(int orderId);
     }
 }

@@ -10,10 +10,12 @@
     {
         IEnumerable<T> CurrentOrders<T>();
 
-        Task CreateOrder(Order order, IEnumerable<OrderItem> items);
+        void CreateOrder(Order order);
 
         Task MarkAsDone(int orderId);
 
         Task<Order> GetOrderById(int orderId);
+
+        Order GetOrderByDestination(string destination);
     }
 }

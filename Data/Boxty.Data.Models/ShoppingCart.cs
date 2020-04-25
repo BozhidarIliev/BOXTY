@@ -7,7 +7,7 @@
 
     using Boxty.Models;
 
-    public class ShoppingCart : IOrderable 
+    public class ShoppingCart
     {
         public ShoppingCart()
         {

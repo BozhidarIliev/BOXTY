@@ -6,7 +6,6 @@
     using System.Security.Claims;
     using System.Threading;
     using System.Threading.Tasks;
-
     using Boxty.Data.Common.Models;
     using Boxty.Data.Models;
     using Boxty.Models;
@@ -33,7 +32,7 @@
 
         public DbSet<Order> Orders { get; set; }
 
-        public DbSet<OrderItem> OrderDetails { get; set; }
+        public DbSet<OrderItem> OrderDetails { get; set; } // order items
 
         public DbSet<Category> Categories { get; set; }
 

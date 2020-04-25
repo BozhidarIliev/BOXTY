@@ -1,5 +1,6 @@
 ﻿namespace Boxty.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -38,11 +39,14 @@
             return orderRepository.All().To<T>();
         }
 
-        public async Task CreateOrder(Order order, IEnumerable<OrderItem> items)
+        public void CreateOrder(Order order)
         {
-            await orderRepository.AddAsync(order);
+            orderRepository.AddAsync(order);
+            orderRepository.SaveChangesAsync().Wait();
 
-            await orderItemService.CreateOrderItem(order, order.Status, items);
+            var id = order.Id;
+
+            orderItemService.CreateOrderItem(order).Wait();
         }
 
         [Authorize(Roles = "waiter, admin, manager")]
@@ -66,10 +70,10 @@
             await this.orderItemRepository.SaveChangesAsync();
         }
 
-        public async Task<IQueryable> GetOrderByDestination(string destination)
+        public Order GetOrderByDestination(string destination)
         {
-            var list = await this.orderRepository.AllAsync();
-            return list.Where(x => x.Destination == destination);
+            var list = this.orderRepository.All();
+            return list.FirstOrDefault(x => x.Destination == destination);
         }
     }
 }
