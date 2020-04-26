@@ -5,6 +5,7 @@ using Boxty.Models;
 using Boxty.Services.Data.Interfaces;
 using Boxty.Services.Interfaces;
 using Boxty.Services.Mapping;
+using Boxty.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +35,7 @@ namespace Boxty.Services.Data
         public IEnumerable<T> GetCurrentOrderItemsByOrderId<T>(int orderId)
         {
             var items = orderItemRepository.All().Where(x => x.OrderId == orderId);
+            
             return items.To<T>();
         }
 
@@ -47,7 +49,7 @@ namespace Boxty.Services.Data
             }
 
             await orderItemRepository.AddRangeAsync(items);
-            await orderItemRepository.SaveChangesAsync();
+            orderItemRepository.SaveChangesAsync().Wait();
         }
 
         public async Task MarkAsDone(int orderItemId)
@@ -74,6 +76,36 @@ namespace Boxty.Services.Data
         public OrderItem GetOrderItemById(int orderItemId)
         {
             return this.orderItemRepository.All().FirstOrDefault(x => x.Id == orderItemId);
+        }
+
+        public void UpdateOrderItem(int orderId, int tableId, IEnumerable<OrderItem> items)
+        {
+            var orderItems = orderItemRepository.All().Where(x => x.OrderId == orderId);
+            var itemsToAdd = new List<OrderItem>();
+            foreach (var item in items)
+            {
+                if (orderItems.Any(x => x.ProductId == item.ProductId))
+                {
+                    var orderItem = orderItems.First(x => x.ProductId == item.ProductId);
+                    orderItem.Amount += item.Amount;
+                    orderItemRepository.Update(orderItem);
+                    orderItemRepository.SaveChangesAsync().Wait();
+                }
+                else
+                {
+                    itemsToAdd.Add(new OrderItem { Product = item.Product, Amount = item.Amount, Comment = item.Comment });
+                }
+            }
+            if (itemsToAdd.Count > 0)
+            {
+                var order = new Order
+                {
+                    Id = orderId,
+                    Destination = tableId.ToString(),
+                    Items = itemsToAdd,
+                };
+                CreateOrderItem(order);
+            }
         }
     }
 }

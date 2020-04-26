@@ -44,8 +44,6 @@
             orderRepository.AddAsync(order);
             orderRepository.SaveChangesAsync().Wait();
 
-            var id = order.Id;
-
             orderItemService.CreateOrderItem(order).Wait();
         }
 
@@ -74,6 +72,12 @@
         {
             var list = this.orderRepository.All();
             return list.FirstOrDefault(x => x.Destination == destination);
+        }
+
+        public void UpdateOrder(int tableId, IEnumerable<OrderItem> items)
+        {
+            var order = GetOrderByDestination(tableId.ToString());
+            orderItemService.UpdateOrderItem(order.Id, tableId, items);
         }
     }
 }

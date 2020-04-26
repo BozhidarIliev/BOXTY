@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
 
     using Boxty.ViewModels;
+    using Boxty.Web.ViewModels;
 
     public interface ITableItemService
     {
@@ -14,5 +15,7 @@
         Task RemovePendingItem(int tableId, int productId);
 
         Task ClearPendingItems(int tableId);
+
+        Task AddComment(AddTableCommentViewModel model);
     }
 }

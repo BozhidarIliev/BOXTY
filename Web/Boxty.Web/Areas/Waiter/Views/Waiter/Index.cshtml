@@ -1,5 +1,6 @@
 ﻿@inject Boxty.Services.Interfaces.ITableService tableService;
-
+@model Boxty.Web.ViewModels.AddTableCommentViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     ViewData["Title"] = "Index";
     Layout = "_Layout";
@@ -10,7 +11,7 @@
 
 <select id="tableList" onchange="initPosLine()">
     <option selected>Select table...</option>
-    
+
 </select>
 
 <div class="row">
@@ -59,6 +60,31 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <div class="modal-body">
+                    <form id="commentForm">
+                        <input type="hidden" id="itemIndexInput" value="">
+                        <input type="hidden" id="tableIdInput" value="">
+                        <div class="form-group">
+                            <p>Write your comment here</p>
+                            <input id="commentInput" asp-for="@Model.Comment" class="form-control" />
+                            <span asp-validation-for="@Model.Comment" class="text-danger"></span>
+                        </div>
+
+                        <button onclick="addComment()" class="btn btn-success" data-dismiss="modal">Add</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <button onclick="sendItems()" class="btn btn-info">Send</button>
@@ -70,6 +96,41 @@
             initTablesList();
             initProductLine();
         });
+
+        function showCommentBox(index) {
+            $("#myModal").modal();
+            document.getElementById("itemIndexInput").value = index;
+            document.getElementById("tableIdInput").value = document.getElementById("tableList").value;
+        }
+
+        function addComment(id) {
+            var tableId = document.getElementById("tableList").value;
+            var index = Number(document.getElementById("itemIndexInput").value);
+            var comment = document.getElementById("commentInput").value;
+
+            var data = { "TableId": Number(tableId), "ItemIndex": Number(index), "Comment": comment };
+
+            $.ajax({
+                type: "POST",
+                url: "/api/TableItem/Comment",
+                data: JSON.stringify(data),
+                contentType: "application/json; charset=utf-8",
+                headers: {
+                    RequestVerificationToken:
+                        $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+                success: function (data) {
+                    initPosLinePendingItems();
+                },
+
+                failure: function (data) {
+                    alert(data.responseText);
+                },
+                error: function (data) {
+                    alert('Error ' + data.responsetext);
+                }
+            });
+        }
 
         function openCategory(event, categoryName) {
             var i, tabcontent, tablinks;
@@ -103,7 +164,7 @@
                 headers: {
                     RequestVerificationToken:
                         $('input:hidden[name="__RequestVerificationToken"]').val()
-                },  
+                },
                 success: function (data) {
                     initPosLine();
                     toastr.success('Insert POS line success for item: ' + productName, 'Success');
@@ -127,7 +188,7 @@
                     $("#DIV").html('');
                     $.each(data, function (i, item) {
                         var rows = ""
-                        if (item.status == "available") {
+                        if (item.available == true) {
                             rows = "<option style='color:green' value=" + item.id + ">" + item.id + "</option>"
                         }
                         else {
@@ -185,15 +246,13 @@
                     $('#posLine > tr').slice(0).remove();
                     $.each(data, function (i, item) {
                         var name = 'sentItem';
-                        var btnComment = '<button onclick="deleteLine(\'' + item.id + '\')" class="btn btn-danger">DELETE</button>';
-                        var rows = "<tr name=\""+ name + "\">" +
+                        var rows = "<tr name=\"" + name + "\">" +
                             "<td style='color:green 'id='name'>" + item.productName + "</td>" +
                             "<td>" + item.comment + "</td>" +
                             "<td>" + item.productPrice + "</td>" +
                             "<td>" + item.amount + "</td>" +
                             "<td>" + item.subtotal + "</td>" +
-                            "<td>" + btnComment + "</td>"
-                        "</tr>";
+                            "</tr>";
                         $('#posLine').append(rows);
                     });
                     initPosLinePendingItems();
@@ -221,7 +280,7 @@
                     $("[name=pendingItem]").remove();
                     $.each(data, function (i, item) {
                         var name = 'pendingItem';
-                        var btnComment = '<button onclick="deleteLine(\'' + item.productId + '\')" class="btn btn-danger">DELETE</button>';
+                        var btnComment = '<button onclick="deleteLine(\'' + item.productId + '\')" class="btn btn-danger">DELETE</button>' + '<button type="button" onclick="showCommentBox(' + i + ')" class="btn btn-info">Comment</button>'
                         var rows = "<tr name=\"" + name + "\">" +
                             "<td style='color:Red 'id='name'>" + item.productName + "</td>" +
                             "<td>" + item.comment + "</td>" +
@@ -233,7 +292,8 @@
                         $('#posLine').append(rows);
                     });
                     console.log(data);
-                }});
+                }
+            });
         }
 
         function posLineInsert(productId) {
@@ -249,11 +309,11 @@
                 headers: {
                     RequestVerificationToken:
                         $('input:hidden[name="__RequestVerificationToken"]').val()
-                },     
+                },
                 success: function (data) {
 
                     initPosLinePendingItems();
-                    
+
                 },
                 failure: function (xhr, status, error) {
                 },
@@ -276,7 +336,7 @@
                 headers: {
                     RequestVerificationToken:
                         $('input:hidden[name="__RequestVerificationToken"]').val()
-                },  
+                },
                 success: function (data) {
 
                     initPosLinePendingItems();

@@ -35,14 +35,14 @@
         public async Task ChangeTableStatus(int tableId)
         {
             var tables = await tableRepository.AllAsync();
-            var table = await tables.FirstAsync(x => x.Id == tableId);
-            if (table.Status == GlobalConstants.TableAvailable)
+            var table = tables.FirstOrDefault(x => x.Id == tableId);
+            if (table.Available == true)
             {
-                table.Status = GlobalConstants.TableAvailable;
+                table.Available = false;
             }
             else
             {
-                table.Status = GlobalConstants.TableUnavailable;
+                table.Available = true;
             }
         }
 

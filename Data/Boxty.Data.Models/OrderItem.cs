@@ -2,6 +2,7 @@
 {
     using Boxty.Data.Common.Models;
     using Boxty.Data.Models;
+    using Boxty.Services.Mapping;
 
     public class OrderItem : BaseDeletableModel<int>
     {

@@ -21,14 +21,16 @@
     [ApiController]
     public class TableItemController : Controller
     {
+        private readonly ITableService tableService;
         private readonly IOrderService orderService;
         private readonly IOrderItemService orderItemService;
         private readonly IUserService userService;
         private readonly IProductService productService;
         private readonly ITableItemService tableItemService;
 
-        public TableItemController(IOrderService orderService, IOrderItemService orderItemService, IUserService userService, IProductService productService,  ITableItemService tableItemService)
+        public TableItemController(ITableService tableService, IOrderService orderService, IOrderItemService orderItemService, IUserService userService, IProductService productService,  ITableItemService tableItemService)
         {
+            this.tableService = tableService;
             this.orderService = orderService;
             this.orderItemService = orderItemService;
             this.userService = userService;
@@ -68,15 +70,27 @@
         public async Task SendOrderItems(int id)
         {
             var items = await tableItemService.GetPendingItems<OrderItem>(id);
-            Order order = new Order
+            if (items != null)
             {
-                Status = GlobalConstants.SentByWaiter,
-                Destination = id.ToString(),
-                Delivery = false,
-                Items = items,
-            };
-            orderService.CreateOrder(order);
-            await tableItemService.ClearPendingItems(id);
+                if (tableService.GetTableById(id).Available == true)
+                {
+                    await tableService.ChangeTableStatus(id);
+                    Order order = new Order
+                    {
+                        Status = GlobalConstants.SentByWaiter,
+                        Destination = id.ToString(),
+                        Delivery = false,
+                        Items = items,
+                    };
+                    orderService.CreateOrder(order);
+                }
+                else
+                {
+                    orderService.UpdateOrder(id, items);
+                }
+
+                await tableItemService.ClearPendingItems(id);
+            }
         }
 
         [HttpDelete]
@@ -85,7 +99,12 @@
             await tableItemService.RemovePendingItem(model.TableId, model.ProductId);
         }
 
-
+        [HttpPost]
+        [Route("Comment")]
+        public void AddComment(AddTableCommentViewModel model)
+        {
+            tableItemService.AddComment(model);
+        }
 
     }
 }

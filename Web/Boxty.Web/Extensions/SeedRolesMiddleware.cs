@@ -83,7 +83,7 @@
             {
                 tables.Add(new Table
                 {
-                    Status = GlobalConstants.TableAvailable,
+                    Available = true,
                 });
             }
 

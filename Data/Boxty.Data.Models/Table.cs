@@ -6,6 +6,6 @@
 
     public class Table : BaseModel<int>
     {
-        public string Status { get; set; } = GlobalConstants.TableAvailable;
+        public bool Available { get; set; } = true;
     }
 }

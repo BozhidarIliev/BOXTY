@@ -1,6 +1,7 @@
 ﻿namespace Boxty.Areas.Waiter.Controllers
 {
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
     [Authorize(Roles = "waiter, admin")]

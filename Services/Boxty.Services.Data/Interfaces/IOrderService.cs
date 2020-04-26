@@ -17,5 +17,7 @@
         Task<Order> GetOrderById(int orderId);
 
         Order GetOrderByDestination(string destination);
+
+        void UpdateOrder(int orderId, IEnumerable<OrderItem> items);
     }
 }

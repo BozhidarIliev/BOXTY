@@ -93,7 +93,6 @@
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
                 var dbContext = serviceScope.ServiceProvider.GetRequiredService<BoxtyDbContext>();
-                dbContext.Database.EnsureCreated();
                 dbContext.Database.Migrate();
             }
 

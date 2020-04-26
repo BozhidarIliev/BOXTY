@@ -19,5 +19,7 @@ namespace Boxty.Services.Data.Interfaces
         OrderItem GetOrderItemById(int orderItemId);
 
         IEnumerable<T> GetCurrentOrderItemsByOrderId<T>(int orderId);
+
+        void UpdateOrderItem(int orderId,int tableId, IEnumerable<OrderItem> items);
     }
 }
