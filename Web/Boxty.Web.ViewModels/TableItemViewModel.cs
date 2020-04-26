@@ -1,9 +1,8 @@
-﻿using Boxty.Data.Models;
-using Boxty.Models;
-using Boxty.Services.Mapping;
-
-namespace Boxty.ViewModels
+﻿namespace Boxty.Web.ViewModels
 {
+    using Boxty.Models;
+    using Boxty.Services.Mapping;
+
     public class TableItemViewModel : IMapFrom<OrderItem>, IMapTo<OrderItem>, IMapTo<TableItemViewModel>
     {
         public int ProductId { get; set; }

@@ -5,7 +5,6 @@ using Boxty.Models;
 using Boxty.Services.Data.Interfaces;
 using Boxty.Services.Interfaces;
 using Boxty.Services.Mapping;
-using Boxty.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,7 +47,7 @@ namespace Boxty.Services.Data
                 item.OrderId = id;
             }
 
-            await orderItemRepository.AddRangeAsync(items);
+            orderItemRepository.AddRangeAsync(items);
             orderItemRepository.SaveChangesAsync().Wait();
         }
 
@@ -84,6 +83,19 @@ namespace Boxty.Services.Data
             var itemsToAdd = new List<OrderItem>();
             foreach (var item in items)
             {
+                if (item.Comment != string.Empty)
+                {
+                    if (orderItems.Any(x => x.Comment == item.Comment))
+                    {
+                        orderItemRepository.All().FirstOrDefault(x => (x.OrderId == orderId) && (x.Comment == item.Comment)).Amount += item.Amount;
+                        orderItemRepository.SaveChangesAsync().Wait();
+                    }
+                    else
+                    {
+                        itemsToAdd.Add(new OrderItem { ProductId = item.ProductId, Amount = 1, Comment = item.Comment });
+                    }
+                    continue;
+                }
                 if (orderItems.Any(x => x.ProductId == item.ProductId))
                 {
                     var orderItem = orderItems.First(x => x.ProductId == item.ProductId);

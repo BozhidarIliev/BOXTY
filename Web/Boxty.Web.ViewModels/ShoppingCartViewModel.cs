@@ -1,10 +1,8 @@
-﻿namespace Boxty.ViewModels
+﻿namespace Boxty.Web.ViewModels
 {
     using System.Collections.Generic;
 
-    using Boxty.Data.Models;
     using Boxty.Models;
-    using Boxty.Services.Mapping;
 
     public class ShoppingCartViewModel
     {

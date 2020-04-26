@@ -3,7 +3,7 @@
     using System.Threading.Tasks;
 
     using Boxty.Data.Models;
-    using Boxty.ViewModels;
+    using Boxty.Web.ViewModels;
     using Microsoft.AspNetCore.Identity;
 
     public interface IUserService

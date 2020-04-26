@@ -1,4 +1,4 @@
-﻿namespace Boxty.ViewModels
+﻿namespace Boxty.Web.ViewModels
 {
     public class ViewModelsConstants
     {

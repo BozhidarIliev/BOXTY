@@ -11,7 +11,6 @@
     using Boxty.Services.Data.Interfaces;
     using Boxty.Services.Interfaces;
     using Boxty.Services.Mapping;
-    using Boxty.ViewModels;
     using Boxty.Web.ViewModels;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;

@@ -2,8 +2,11 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    public class AddCommentViewModel
+    public class AddTableItemCommentInputModel
     {
+        [Required]
+        public int TableId { get; set; }
+
         [Required]
         public int ItemIndex { get; set; }
 

@@ -1,4 +1,4 @@
-﻿namespace Boxty.ViewModels.InputModels
+﻿namespace Boxty.Web.ViewModels.InputModels
 {
     using System.ComponentModel.DataAnnotations;
 

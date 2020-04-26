@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    using Boxty.ViewModels;
     using Boxty.Web.ViewModels;
 
     public interface ITableItemService
@@ -16,6 +15,6 @@
 
         Task ClearPendingItems(int tableId);
 
-        Task AddComment(AddTableCommentViewModel model);
+        Task AddComment(AddTableItemCommentInputModel model);
     }
 }

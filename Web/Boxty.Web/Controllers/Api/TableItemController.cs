@@ -94,14 +94,14 @@
         }
 
         [HttpDelete]
-        public async Task RemovePendingItem(TableItemInputModel model)
+        public async Task RemovePendingItem(TableItemDeleteModel model)
         {
-            await tableItemService.RemovePendingItem(model.TableId, model.ProductId);
+            await tableItemService.RemovePendingItem(model.TableId, model.ItemIndex);
         }
 
         [HttpPost]
         [Route("Comment")]
-        public void AddComment(AddTableCommentViewModel model)
+        public void AddComment(AddTableItemCommentInputModel model)
         {
             tableItemService.AddComment(model);
         }

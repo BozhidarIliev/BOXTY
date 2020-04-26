@@ -1,7 +1,7 @@
 ﻿namespace Boxty.Controllers
 {
     using Boxty.Services;
-    using Boxty.ViewModels;
+    using Boxty.Web.ViewModels;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 

@@ -5,7 +5,7 @@
 
     using AutoMapper;
     using Boxty.Data.Models;
-    using Boxty.ViewModels;
+    using Boxty.Web.ViewModels;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
 

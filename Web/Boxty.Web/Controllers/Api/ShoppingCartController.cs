@@ -4,7 +4,6 @@
     using System.Threading.Tasks;
 
     using Boxty.Services;
-    using Boxty.ViewModels;
     using Boxty.Web.ViewModels;
     using Boxty.Web.ViewModels.InputModels;
     using Microsoft.AspNetCore.Authorization;

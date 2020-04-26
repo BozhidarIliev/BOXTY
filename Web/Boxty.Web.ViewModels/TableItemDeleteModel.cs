@@ -1,9 +1,9 @@
 ﻿namespace Boxty.Web.ViewModels
 {
-    public class TableItemInputModel
+    public class TableItemDeleteModel
     {
         public int TableId { get; set; }
 
-        public int ProductId { get; set; }
+        public int ItemIndex { get; set; }
     }
 }
