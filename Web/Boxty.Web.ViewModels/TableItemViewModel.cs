@@ -9,13 +9,13 @@
 
         public string ProductName { get; set; }
 
-        public double ProductPrice { get; set; }
+        public decimal ProductPrice { get; set; }
 
         public string Destination { get; set; }
 
         public int Amount { get; set; }
 
-        public double Subtotal => ProductPrice * Amount;
+        public decimal Subtotal => ProductPrice * Amount;
 
         public string Comment { get; set; } = string.Empty;
     }

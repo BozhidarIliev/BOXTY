@@ -133,7 +133,7 @@
                 var entity = (ICreatorInfo)entry.Entity;
                 if (entry.State == EntityState.Added && entity.CreatedBy == default)
                 {
-                    entity.CreatedBy = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                    // entity.CreatedBy = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 }
                 else
                 {

@@ -1,9 +1,10 @@
 ﻿namespace Boxty.Controllers.Api
 {
     using Boxty.Models;
-    using Boxty.Services.Interfaces;
+    using Boxty.Services.Data.Interfaces;
     using Boxty.Web.ViewModels;
     using Microsoft.AspNetCore.Mvc;
+
     using System.Collections.Generic;
 
     [Route("api/[controller]")]

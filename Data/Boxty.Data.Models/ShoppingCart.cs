@@ -16,7 +16,7 @@
 
         public IEnumerable<OrderItem> Items { get; set; }
 
-        public double Total => Items.Sum(x => x.Subtotal);
+        public decimal Total => Items.Sum(x => x.Subtotal);
 
         public string Status { get; set; }
 

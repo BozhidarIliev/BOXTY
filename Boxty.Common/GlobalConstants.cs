@@ -32,9 +32,11 @@
 
         public const string No = "no";
 
-        public const string SentOnlineStatus = "order placed online";
+        public const string SentOnlineStatus = "sent";
 
-        public const string SentByWaiter = "order placed by waiter";
+        public const string SentByWaiter = "sent";
+
+        public const string Sent = "sent";
 
         public const string TableAvailable = "available";
 

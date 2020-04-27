@@ -6,7 +6,10 @@
     using System.Threading.Tasks;
 
     using Boxty.Data;
+    using Boxty.Data.Common.Repositories;
     using Boxty.Data.Models;
+    using Boxty.Services.Interfaces;
+    using Boxty.Web.ViewModels;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
 
@@ -14,23 +17,26 @@
     [ApiController]
     public class ProductController : Controller
     {
-        private readonly BoxtyDbContext context;
+        private readonly IProductService productService;
+        private readonly IDeletableEntityRepository<Product> productRepository;
 
-        public ProductController(BoxtyDbContext context)
+        public ProductController(IProductService productService, IDeletableEntityRepository<Product> productRepository)
         {
-            this.context = context;
+            this.productService = productService;
+            this.productRepository = productRepository;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public IEnumerable<ProductOutputModel> GetProducts()
         {
-            return await context.Products.ToListAsync();
+            return productService.GetProducts<ProductOutputModel>();
         }
+
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            var product = await context.Products.FindAsync(id);
+            var product = await productRepository.All().FirstAsync(x => x.Id == id);
 
             if (product == null)
             {
@@ -43,30 +49,30 @@
         [HttpPost]
         public async Task<ActionResult<Product>> PostProduct(Product product)
         {
-            await context.SaveChangesAsync();
+            await productRepository.SaveChangesAsync();
 
             return CreatedAtAction("GetProduct", new { id = product.Id }, product);
         }
 
-        // DELETE: api/Product/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Product>> DeleteProduct(Guid id)
+        public async Task<ActionResult<Product>> DeleteProduct(int id)
         {
-            var product = await context.Products.FindAsync(id);
+            var product = await productRepository.All().FirstAsync(x => x.Id == id);
+
             if (product == null)
             {
                 return NotFound();
             }
 
-            context.Products.Remove(product);
-            await context.SaveChangesAsync();
+            productRepository.Delete(product);
+            await productRepository.SaveChangesAsync();
 
             return product;
         }
 
         private bool ProductExists(int id)
         {
-            return context.Products.Any(e => e.Id == id);
+            return productRepository.All().Any(e => e.Id == id);
         }
     }
 }

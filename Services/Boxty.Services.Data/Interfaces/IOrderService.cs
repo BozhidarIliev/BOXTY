@@ -1,4 +1,4 @@
-﻿namespace Boxty.Services.Interfaces
+﻿namespace Boxty.Services.Data.Interfaces
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -8,7 +8,7 @@
 
     public interface IOrderService
     {
-        IEnumerable<T> CurrentOrders<T>();
+        IEnumerable<T> GetOrders<T>();
 
         void CreateOrder(Order order);
 

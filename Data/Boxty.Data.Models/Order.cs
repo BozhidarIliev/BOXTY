@@ -14,7 +14,7 @@
 
         public string Status { get; set; }
 
-        public double Total => Items.Sum(x => x.Subtotal);
+        public decimal Total => Items.Sum(x => x.Subtotal);
 
         public string Destination { get; set; }
 

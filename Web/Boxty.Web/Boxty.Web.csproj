@@ -51,4 +51,10 @@
     <ProjectReference Include="..\Boxty.Web.Infrastructure\Boxty.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\Boxty.Web.ViewModels\Boxty.Web.ViewModels.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Areas\KitchenStaff\Views\KitchenStaff\Index.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

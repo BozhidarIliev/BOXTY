@@ -14,7 +14,7 @@
 
         public int Amount { get; set; }
 
-        public double Subtotal => this.Product.Price * this.Amount;
+        public decimal Subtotal => this.Product.Price * this.Amount;
 
         public string Comment { get; set; } = string.Empty;
 

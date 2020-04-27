@@ -6,6 +6,7 @@
     using Boxty.Common;
     using Boxty.Data.Models;
     using Boxty.Services;
+    using Boxty.Services.Data.Interfaces;
     using Boxty.Services.Interfaces;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;

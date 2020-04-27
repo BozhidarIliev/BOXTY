@@ -25,8 +25,7 @@
 
         public Category GetCategoryById(int categoryId)
         {
-            var items = categoryRepository.All();
-            return items.FirstOrDefault(x => x.Id == categoryId);
+            return GetAllCategories().FirstOrDefault(x => x.Id == categoryId);
         }
 
         public async Task CreateCategory(string name)
@@ -40,8 +39,7 @@
 
         public async Task UpdateCategory(Category category)
         {
-            var items = await categoryRepository.AllAsync();
-            if (items.Any(x => x.Name == category.Name))
+            if (GetAllCategories().Any(x => x.Name == category.Name))
             {
                 throw new DbUpdateConcurrencyException();
             }

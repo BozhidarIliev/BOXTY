@@ -9,12 +9,12 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
 
-    public class CategoriesController : Controller
+    public class CategoryController : Controller
     {
         private readonly BoxtyDbContext _context;
         private readonly ICategoryService categoryService;
 
-        public CategoriesController(ICategoryService categoryService)
+        public CategoryController(ICategoryService categoryService)
         {
             this.categoryService = categoryService;
         }

@@ -1,0 +1,63 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Index";
+    Layout = "_Layout";
+}
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<h1>Order Items</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product Name</th>
+            <th>Comment</th>
+            <th>Created On</th>
+            <th>Modified On</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+</table>
+
+
+@section Scripts{
+    <script>
+
+        $(document).ready(function () {
+            initOrderItems();
+        });
+
+        function initOrderItems() {
+            $.ajax({
+                type: "GET",
+                url: "/api/OrderItem",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    //$("[name=orderItem]").remove();
+                    $.each(data, function (i, item) {
+
+                        var btnComment = '<button onclick="deleteLine(\'' + i + '\')" class="btn btn-danger">DELETE</button>' + '<button type="button" onclick="showCommentBox(' + i + ')" class="btn btn-info">Comment</button>'
+                        var rows = "<tr name='orderItem'>" +
+                            "<td>" + item.product.name + "</td>" +
+                            "<td>" + item.comment + "</td>" +
+                            "<td>" + item.createdOn.toLocaleString() + "</td>" +
+                            "<td>" + item.modifiedOn.toLocaleString() + "</td>" +
+                            "<td>" + btnComment + "</td>"
+                        "</tr>";
+                        $('.table').append(rows);
+                    });
+                },
+                failure: function (data) {
+                    alert(data.responseText);
+                },
+                error: function (data) {
+                    alert(data.responseText);
+                }
+            });
+        }
+
+    </script>
+}

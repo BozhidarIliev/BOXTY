@@ -2,7 +2,7 @@
 {
     using Boxty.Common;
     using Boxty.Services;
-    using Boxty.Services.Interfaces;
+    using Boxty.Services.Data.Interfaces;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;

@@ -34,7 +34,7 @@
             this.httpContextAccessor = httpContextAccessor;
         }
 
-        public IEnumerable<T> CurrentOrders<T>()
+        public IEnumerable<T> GetOrders<T>()
         {
             return orderRepository.All().To<T>();
         }

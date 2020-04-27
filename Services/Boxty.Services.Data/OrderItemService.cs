@@ -25,7 +25,7 @@ namespace Boxty.Services.Data
             this.orderItemRepository = orderItemRepository;
         }
 
-        public IEnumerable<T> GetCurrentOrderItems<T>()
+        public IEnumerable<T> GetOrderItems<T>()
         {
             var items = orderItemRepository.All();
             return items.To<T>();
@@ -88,7 +88,6 @@ namespace Boxty.Services.Data
                     if (orderItems.Any(x => x.Comment == item.Comment))
                     {
                         orderItemRepository.All().FirstOrDefault(x => (x.OrderId == orderId) && (x.Comment == item.Comment)).Amount += item.Amount;
-                        orderItemRepository.SaveChangesAsync().Wait();
                     }
                     else
                     {
@@ -101,13 +100,13 @@ namespace Boxty.Services.Data
                     var orderItem = orderItems.First(x => x.ProductId == item.ProductId);
                     orderItem.Amount += item.Amount;
                     orderItemRepository.Update(orderItem);
-                    orderItemRepository.SaveChangesAsync().Wait();
                 }
                 else
                 {
                     itemsToAdd.Add(new OrderItem { Product = item.Product, Amount = item.Amount, Comment = item.Comment });
                 }
             }
+            orderItemRepository.SaveChangesAsync().Wait();
             if (itemsToAdd.Count > 0)
             {
                 var order = new Order
