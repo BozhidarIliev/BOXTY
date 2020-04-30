@@ -19,22 +19,20 @@
     {
         private readonly HttpContext httpContext;
         private readonly IUserService userService;
-        private readonly IOrderItemService orderItemService;
         private readonly IOrderService orderService;
         private readonly IProductService productService;
         private readonly UserManager<BoxtyUser> userManager;
 
-        public ShoppingCartService(IUserService userService, IOrderItemService orderItemService, IOrderService orderService, IHttpContextAccessor httpContextAccessor, IProductService productService, UserManager<BoxtyUser> userManager)
+        public ShoppingCartService(IUserService userService, IOrderService orderService, IHttpContextAccessor httpContextAccessor, IProductService productService, UserManager<BoxtyUser> userManager)
         {
             this.httpContext = httpContextAccessor.HttpContext;
             this.userService = userService;
-            this.orderItemService = orderItemService;
             this.orderService = orderService;
             this.productService = productService;
             this.userManager = userManager;
         }
 
-        public async Task<ShoppingCart> GetShoppingCart() // TODO httpContext should be passed as a parameter
+        public async Task<ShoppingCart> GetShoppingCart()
         {
             var cart = await SessionHelper.GetObjectFromJsonAsync<ShoppingCart>(httpContext.Session, GlobalConstants.ShoppingCart);
             if (cart == null)
@@ -58,8 +56,8 @@
             }
             else 
             {
-                cart.Items = cart.Items.Concat(new List<OrderItem> { 
-                    new OrderItem { Product = product, Amount = 1 } });
+                cart.Items = cart.Items.Concat(new List<OrderItemOutputModel> { 
+                    new OrderItemOutputModel { Product = product, Amount = 1 } });
             }
 
             await SessionHelper.SetObjectAsJsonAsync(httpContext.Session, GlobalConstants.ShoppingCart, cart);
@@ -99,7 +97,7 @@
                 cart = await this.RemoveFromCart(model.ItemIndex);
                 shoppingCartItems = cart.Items.ToList();
 
-                shoppingCartItems.Add(new OrderItem { Product = item.Product, Amount = 1, Comment = model.Comment,});
+                shoppingCartItems.Add(new OrderItemOutputModel { Product = item.Product, Amount = 1, Comment = model.Comment,});
 
                 cart.Items = shoppingCartItems;
                 await SessionHelper.SetObjectAsJsonAsync(httpContext.Session, GlobalConstants.ShoppingCart, cart);
@@ -109,16 +107,16 @@
         public async Task CreateOrder()
         {
             var cart = await this.GetShoppingCart();
-            var shoppingCartItems = cart.Items.AsQueryable().To<OrderItem>().ToList();
+            var shoppingCartItems = cart.Items.AsQueryable().To<OrderItem>();
 
             Order order = new Order
             {
-                Status = GlobalConstants.SentOnlineStatus,
+                Status = GlobalConstants.Sent,
                 Destination = userService.GetCurrentUser().Address,
                 Delivery = true,
                 Items = shoppingCartItems
             };
-            orderService.CreateOrder(order);
+            await orderService.CreateOrder(order);
         }
 
         public void ClearCart()

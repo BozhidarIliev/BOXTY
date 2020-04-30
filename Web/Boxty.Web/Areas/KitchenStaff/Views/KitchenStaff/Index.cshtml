@@ -29,6 +29,28 @@
             initOrderItems();
         });
 
+        function markAsDone(id) {
+            $.ajax({
+                type: "POST",
+                url: "/api/OrderItem/MarkAsDone?orderItemId=" + id,
+                contentType: "application/json; charset=utf-8",
+                headers: {
+                    RequestVerificationToken:
+                        $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+                success: function (data) {
+                    initOrderItems();
+                },
+                failure: function (xhr, status, error) {
+
+                },
+                error: function (xhr, status, thrownError) {
+                    alert('Error ' + thrownError + " " + xhr.status);
+                }
+
+            })
+        }
+
         function initOrderItems() {
             $.ajax({
                 type: "GET",
@@ -36,15 +58,14 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (data) {
-                    //$("[name=orderItem]").remove();
+                    $('.table > tr').slice(0).remove();
                     $.each(data, function (i, item) {
-
-                        var btnComment = '<button onclick="deleteLine(\'' + i + '\')" class="btn btn-danger">DELETE</button>' + '<button type="button" onclick="showCommentBox(' + i + ')" class="btn btn-info">Comment</button>'
+                        var btnComment = '<button onclick="markAsDone(\'' + item.id + '\')" class="btn btn-success">Mark As Done</button>';
                         var rows = "<tr name='orderItem'>" +
                             "<td>" + item.product.name + "</td>" +
                             "<td>" + item.comment + "</td>" +
-                            "<td>" + item.createdOn.toLocaleString() + "</td>" +
-                            "<td>" + item.modifiedOn.toLocaleString() + "</td>" +
+                            "<td>" + item.createdOn + "</td>" +
+                            "<td>" + item.modifiedOn + "</td>" +
                             "<td>" + btnComment + "</td>"
                         "</tr>";
                         $('.table').append(rows);

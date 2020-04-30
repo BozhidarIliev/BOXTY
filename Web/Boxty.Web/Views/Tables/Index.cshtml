@@ -8,13 +8,16 @@
 <h1>Tables</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-controller="Tables" asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Seats)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Available)
@@ -27,6 +30,9 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Seats)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Available)

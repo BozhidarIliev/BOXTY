@@ -25,7 +25,7 @@
         {
             var cart = await shoppingCartService.GetShoppingCart();
 
-            return new ShoppingCartViewModel { Items = cart.Items, Total = cart.Total };
+            return new ShoppingCartViewModel { Items = cart.Items };
         }
 
         [HttpDelete]

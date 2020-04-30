@@ -16,5 +16,9 @@
         Task ClearPendingItems(int tableId);
 
         Task AddComment(AddTableItemCommentInputModel model);
+
+        Task SendOrderItems(int id);
+
+        IEnumerable<TableItemViewModel> GetTableItems(int tableId);
     }
 }

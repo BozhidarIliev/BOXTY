@@ -1,14 +1,16 @@
 ﻿namespace Boxty.Controllers.Api
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+
     using Boxty.Common;
     using Boxty.Data.Models;
     using Boxty.Models;
     using Boxty.Services.Data.Interfaces;
-    using Boxty.Services.Interfaces;
     using Boxty.Web.ViewModels;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using System.Collections.Generic;
-    using System.Linq;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -24,26 +26,24 @@
         }
 
         [HttpGet]
-        public IEnumerable<OrderOutputModel> GetOrders()
+        [Authorize(Roles ="kitchenStaff,manager,admin")]
+        public IEnumerable<Web.ViewModels.OrderItemOutputModel> GetKitchenOrderItems()
         {
-            var orderItems = orderItemService.GetOrderItems<OrderOutputModel>().Where(x => (x.IsDeleted == false));
-            var output = new List<OrderOutputModel>();
-            foreach (var orderItem in orderItems)
-            {
-                for (int i = 0; i < orderItem.Amount; i++)
-                {
-                    output.Add(orderItem);
-                }
-            }
-
-            return output;
+            return orderItemService.GetKitchenOrderItems<Web.ViewModels.OrderItemOutputModel>();
         }
 
         [HttpPost]
-        public ActionResult CreateOrder(OrderItem[] orders)
+        [Route("MarkAsDone")]
+        public async Task MarkAsReady(int orderItemId)
         {
-            // orderService.CreateOrder(order,orders);
-            return null;
+            await orderItemService.MarkAsReady(orderItemId);
+        }
+
+        [HttpPost]
+        [Route("MarkAsServed")]
+        public async Task MarkAsDone(int orderItemId)
+        {
+            await orderItemService.MarkAsDone(orderItemId);
         }
     }
 }

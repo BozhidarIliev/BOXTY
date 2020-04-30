@@ -1,4 +1,7 @@
-﻿using Boxty.Models;
+﻿using Boxty.Common;
+using Boxty.Data.Models;
+using Boxty.Models;
+using Boxty.Services.Data.Interfaces;
 using Boxty.Services.Interfaces;
 using Boxty.Services.Mapping;
 using Boxty.Web.ViewModels;
@@ -14,13 +17,31 @@ namespace Boxty.Services.Data
 {
     public class TableItemService : ITableItemService
     {
+        private readonly IOrderItemService orderItemService;
+        private readonly ITableService tableService;
+        private readonly IOrderService orderService;
         private readonly IHttpContextAccessor context;
         private readonly IProductService productService;
 
-        public TableItemService(IHttpContextAccessor context, IProductService productService)
+        public TableItemService(IOrderItemService orderItemService, ITableService tableService, IOrderService orderService, IHttpContextAccessor context, IProductService productService)
         {
+            this.orderItemService = orderItemService;
+            this.tableService = tableService;
+            this.orderService = orderService;
             this.context = context;
             this.productService = productService;
+        }
+
+        public IEnumerable<TableItemViewModel> GetTableItems(int tableId)
+        {
+            var order = orderService.GetOrderByDestination(tableId.ToString());
+            if (order == null)
+            {
+                return null;
+            }
+
+            var items = orderItemService.GetCurrentOrderItemsByOrderId<TableItemViewModel>(order.Id);
+            return items;
         }
 
         public async Task<IEnumerable<T>> GetPendingItems<T>(int tableId)
@@ -103,6 +124,32 @@ namespace Boxty.Services.Data
                 commentedItem.Amount++;
                 SessionHelper.SetObjectAsJson(context.HttpContext.Session, model.TableId.ToString(), items);
                 await this.RemovePendingItem(model.TableId, model.ItemIndex);
+            }
+        }
+
+        public async Task SendOrderItems(int id)
+        {
+            var items = await GetPendingItems<OrderItem>(id);
+            if (items != null)
+            {
+                if (tableService.GetTableById(id).Available == true)
+                {
+                    await tableService.ChangeTableStatus(id);
+                    Order order = new Order
+                    {
+                        Status = GlobalConstants.Sent,
+                        Destination = id.ToString(),
+                        Delivery = false,
+                        Items = items,
+                    };
+                    await orderService.CreateOrder(order);
+                }
+                else
+                {
+                    await orderService.UpdateOrder(id, items);
+                }
+
+                await ClearPendingItems(id);
             }
         }
     }

@@ -1,9 +1,14 @@
 ﻿namespace Boxty.Services
 {
     using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Boxty.Common;
     using Boxty.Data.Models;
     using Boxty.Services.Interfaces;
+    using Boxty.Services.Mapping;
     using Boxty.ViewModels.OutputModels;
+    using Boxty.Web.ViewModels;
     using Microsoft.AspNetCore.Identity;
 
     public class AdminService : IAdminService
@@ -17,30 +22,60 @@
             this.userManager = userManager;
         }
 
-        public IEnumerable<UserOutputModel> AllUsers(string type)
+        public async Task<IdentityResult> CreateRole(CreateRoleViewModel model)
         {
-            //var users = userManager.Users.To<UserOutputModel>().ToListAsync().Result;
+            ApplicationRole identityRole = new ApplicationRole
+            {
+                Name = model.RoleName,
+            };
 
-            //foreach (var user in users)
-            //{
-            //    IList<string> role = userManager.GetRolesAsync(user).Result;
-            //    users.First(x => x.Id == user.Id).Role = role.FirstOrDefault() ?? GlobalConstants.DefaultRole;
-            //}
-
-            //if (string.IsNullOrEmpty(type) || type == GlobalConstants.ReturnAllUsers)
-            //{
-            //    return users;
-            //}
-
-            //users = users.Where(x => x.Role.ToLower() == type.ToLower());
-
-            //return users;
-            return null;
+            return await roleManager.CreateAsync(identityRole);
         }
 
-        public IEnumerable<UserOutputModel> FilterRoles(string filter, IEnumerable<UserOutputModel> result)
+        public async Task<EditRoleViewModel> GetUserRoles(ApplicationRole role)
         {
-            throw new System.NotImplementedException();
+            var model = new EditRoleViewModel
+            {
+                Id = role.Id,
+                RoleName = role.Name,
+            };
+
+            // Retrieve all the Users
+            foreach (var user in userManager.Users)
+            {
+                if (await userManager.IsInRoleAsync(user, role.Name))
+                {
+                    model.Users.Add(user.UserName);
+                }
+            }
+            return model;
+        }
+
+        public async Task<List<UserRoleViewModel>> EditUsersInRole(ApplicationRole role)
+        {
+            var model = new List<UserRoleViewModel>();
+
+            foreach (var user in userManager.Users)
+            {
+                var userRoleViewModel = new UserRoleViewModel
+                {
+                    UserId = user.Id,
+                    UserName = user.UserName,
+                };
+
+                if (await userManager.IsInRoleAsync(user, role.Name))
+                {
+                    userRoleViewModel.IsSelected = true;
+                }
+                else
+                {
+                    userRoleViewModel.IsSelected = false;
+                }
+
+                model.Add(userRoleViewModel);
+            }
+
+            return model;
         }
     }
 }

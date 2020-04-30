@@ -1,77 +1,82 @@
-﻿@model IEnumerable<Boxty.Web.ViewModels.OrderOutputModel>
-<div class="row checkoutForm">
-    <h2>Orders list</h2>
-    <h4>Here are the orders in your shopping cart.</h4>
-    <table class="table table-bordered table-striped">
-         <thead>
-             <tr>
-                 <th>Order Id</th>
-                 <th>Product Id</th>
-                 <th>Product Name</th>
-                 <th>Comment</th>
-                 <th class="text-right">Order placed at:</th>
-                 <th>Actions</th>
-             </tr>
-         </thead>
-    </table>
-</div>
+﻿@model IEnumerable<Boxty.Data.Models.Order>
 
-@section Scripts
-{
-    <script>
-        $(function () {
-            setInterval(loadOrders, 60000);  // invoke load every 60 seconds
-            loadOrders(); // load on initial page loaded
-        });
+@{
+    ViewData["Title"] = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
-        function loadOrders() {
-            $.ajax({
-                type: "GET",
-                url: "/api/Order",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (data) {
-                    $('#posLine > tr').slice(0).remove();
-                    $.each(data, function (i, item) {
-                        var rows = "<tr>" +
-                            "<td>" + item.id + "</td>" +
-                            "<td>" + item.product.Id + "</td>" +
-                            "<td>" + item.productName + "</td>" +
-                            '<td>' + item.CreatedOn + '</td>' +
-                            '<td>' + item.Comment + '</td>' +
-                            '<td><button type="button" onclick="markAsDone(' +  item.id + ')" class="btn btn-success">Done</button></td>'
-                        "</tr>";
-                        $('#shoppingCart').append(rows);
-                    });
-                },
+<h1>View</h1>
 
-                failure: function (data) {
-                    alert(data.responseText);
-                },
-                error: function (data) {
-                    alert('Error ' + thrownError + " " + xhr.status);
-                }
-            })
-        }
-
-        function markAsDone(orderItemId) { // TODO!
-            $.ajax({
-                type: "POST",
-                url: "/api/order",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (data) {
-                    loadOrders();
-                },
-
-                failure: function (data) {
-                    alert(data.responseText);
-                },
-                error: function (data) {
-                    alert('Error ' + thrownError + " " + xhr.status);
-                }
-            })
-        }
-
-    </script>
-} 
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Destination)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Delivery)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModifiedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsDeleted)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeletedOn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedOn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModifiedOn)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Destination)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Delivery)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModifiedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsDeleted)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeletedOn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedOn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModifiedOn)
+            </td>
+            <td>
+                <a asp-action="MarkAsDone" asp-route-id="@item.Id">Mark As Done</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

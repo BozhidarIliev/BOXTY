@@ -42,14 +42,7 @@
         [Route("GetTableItems")]
         public IEnumerable<TableItemViewModel> GetTableItems(int tableId)
         {
-            var order = orderService.GetOrderByDestination(tableId.ToString());
-            if (order == null)
-            {
-                return null;
-            }
-
-            var items = orderItemService.GetCurrentOrderItemsByOrderId<TableItemViewModel>(order.Id);
-            return items;
+            return tableItemService.GetTableItems(tableId);
         }
 
         [HttpGet("{id}")]
@@ -69,28 +62,7 @@
         [Route("SendOrder")]
         public async Task SendOrderItems(int id)
         {
-            var items = await tableItemService.GetPendingItems<OrderItem>(id);
-            if (items != null)
-            {
-                if (tableService.GetTableById(id).Available == true)
-                {
-                    await tableService.ChangeTableStatus(id);
-                    Order order = new Order
-                    {
-                        Status = GlobalConstants.SentByWaiter,
-                        Destination = id.ToString(),
-                        Delivery = false,
-                        Items = items,
-                    };
-                    orderService.CreateOrder(order);
-                }
-                else
-                {
-                    orderService.UpdateOrder(id, items);
-                }
-
-                await tableItemService.ClearPendingItems(id);
-            }
+            await tableItemService.SendOrderItems(id);
         }
 
         [HttpDelete]
@@ -104,6 +76,13 @@
         public void AddComment(AddTableItemCommentInputModel model)
         {
             tableItemService.AddComment(model);
+        }
+
+        [HttpPost]
+        [Route("MarkAsServed")]
+        public async Task MarkAsDone(int orderItemId)
+        {
+            await orderItemService.MarkAsDone(orderItemId);
         }
 
     }

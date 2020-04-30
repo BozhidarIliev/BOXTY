@@ -24,12 +24,6 @@
 
         public virtual IQueryable<TEntity> All() => this.DbSet;
 
-        public virtual async Task<IQueryable<TEntity>> AllAsync()
-        {
-            var list = await this.DbSet.ToListAsync();
-            return list.AsQueryable();
-        }
-
         public virtual IQueryable<TEntity> AllAsNoTracking() => this.DbSet.AsNoTracking();
 
         public virtual Task AddAsync(TEntity entity) => this.DbSet.AddAsync(entity).AsTask();

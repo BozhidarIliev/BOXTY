@@ -19,12 +19,12 @@
     {
         private readonly IOrderItemService orderItemService;
         private readonly IDeletableEntityRepository<Order> orderRepository;
-        private readonly IDeletableEntityRepository<OrderItem> orderItemRepository;
+        private readonly IDeletableEntityRepository<Models.OrderItem> orderItemRepository;
         private readonly IUserService userService;
         private readonly IProductService productService;
         private readonly IHttpContextAccessor httpContextAccessor;
 
-        public OrderService(IOrderItemService orderItemService, IDeletableEntityRepository<Order> orderRepository, IDeletableEntityRepository<OrderItem> orderItemRepository, IUserService userService, IProductService productService, IHttpContextAccessor httpContextAccessor)
+        public OrderService(IOrderItemService orderItemService, IDeletableEntityRepository<Order> orderRepository, IDeletableEntityRepository<Models.OrderItem> orderItemRepository, IUserService userService, IProductService productService, IHttpContextAccessor httpContextAccessor)
         {
             this.orderItemService = orderItemService;
             this.orderRepository = orderRepository;
@@ -33,51 +33,59 @@
             this.productService = productService;
             this.httpContextAccessor = httpContextAccessor;
         }
+        public IEnumerable<Order> GetAllOrders()
+        {
+            return orderRepository.All();
+        }
+
 
         public IEnumerable<T> GetOrders<T>()
         {
             return orderRepository.All().To<T>();
         }
 
-        public void CreateOrder(Order order)
+        [Authorize(Roles = "waiter, admin, manager")]
+        public async Task CreateOrder(Order order)
         {
-            orderRepository.AddAsync(order);
-            orderRepository.SaveChangesAsync().Wait();
+            order.Status = GlobalConstants.Sent;
+            orderRepository.AddAsync(order).Wait();
+            await orderRepository.SaveChangesAsync();
 
-            orderItemService.CreateOrderItem(order).Wait();
+            await orderItemService.CreateOrderItem(order);
         }
 
-        [Authorize(Roles = "waiter, admin, manager")]
         public async Task MarkAsDone(int orderId)
         {
-            var order = await this.GetOrderById(orderId);
+            var order = GetOrderById(orderId).Result;
             order.Status = GlobalConstants.OrderCompleted;
-            orderRepository.HardDelete(order);
+            orderRepository.Delete(order);
+            await orderItemService.DeleteOrderItemsByOrderId(orderId);
             await orderRepository.SaveChangesAsync();
         }
 
         public async Task<Order> GetOrderById(int orderId)
         {
-            return await this.orderRepository.GetByIdWithDeletedAsync(orderId);
+            return await orderRepository.GetByIdWithDeletedAsync(orderId);
         }
 
         public async Task DeleteOrderItem(int orderId)
         {
             var order = await this.GetOrderById(orderId);
-            this.orderRepository.HardDelete(order);
-            await this.orderItemRepository.SaveChangesAsync();
+            await orderItemService.DeleteOrderItemsByOrderId(orderId);
+            orderRepository.Delete(order);
+            await orderItemRepository.SaveChangesAsync();
         }
 
         public Order GetOrderByDestination(string destination)
         {
-            var list = this.orderRepository.All();
+            var list = orderRepository.All();
             return list.FirstOrDefault(x => x.Destination == destination);
         }
 
-        public void UpdateOrder(int tableId, IEnumerable<OrderItem> items)
+        public async Task UpdateOrder(int tableId, IEnumerable<Models.OrderItem> items)
         {
             var order = GetOrderByDestination(tableId.ToString());
-            orderItemService.UpdateOrderItem(order.Id, tableId, items);
+            await orderItemService.UpdateOrderItem(order.Id, tableId, items);
         }
     }
 }

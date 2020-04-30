@@ -1,4 +1,4 @@
-﻿namespace Boxty.Data.Models
+﻿namespace Boxty.Web.ViewModels
 {
     using System;
     using System.Collections.Generic;
@@ -11,10 +11,10 @@
     {
         public ShoppingCart()
         {
-            this.Items = new HashSet<OrderItem>();
+            this.Items = new HashSet<OrderItemOutputModel>();
         }
 
-        public IEnumerable<OrderItem> Items { get; set; }
+        public IEnumerable<OrderItemOutputModel> Items { get; set; }
 
         public decimal Total => Items.Sum(x => x.Subtotal);
 

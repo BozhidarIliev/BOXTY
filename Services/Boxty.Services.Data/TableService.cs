@@ -20,6 +20,16 @@
             this.tableRepository = tableRepositrory;
         }
 
+        public IEnumerable<Table> GetAllTables()
+        {
+            return tableRepository.All();
+        }
+
+        public IEnumerable<Table> GetTablesByNumberOfSeats(int seats)
+        {
+            return tableRepository.All().Where(x => x.Seats >= seats);
+        }
+
         public IEnumerable<T> GetTables<T>()
         {
             var tables = tableRepository.All();
@@ -34,7 +44,7 @@
 
         public async Task ChangeTableStatus(int tableId)
         {
-            var tables = await tableRepository.AllAsync();
+            var tables = tableRepository.All();
             var table = tables.FirstOrDefault(x => x.Id == tableId);
             if (table.Available == true)
             {
@@ -44,21 +54,21 @@
             {
                 table.Available = true;
             }
+            await tableRepository.SaveChangesAsync();
         }
 
-        public void DeleteTable(int tableId)
+        public async Task DeleteTable(int tableId)
         {
             var table = this.GetTableById(tableId);
             this.tableRepository.Delete(table);
+            await this.tableRepository.SaveChangesAsync();
+
         }
 
-        public async Task CreateTable(int id)
+        public async Task CreateTable(Table table)
         {
-            var table = new Table
-            {
-                Id = id,
-            };
             await this.tableRepository.AddAsync(table);
+            await this.tableRepository.SaveChangesAsync();
         }
     }
 }

@@ -131,8 +131,12 @@
             $.ajax({
                 type: "POST",
                 url: "/api/ShoppingCart",
-                data: JSON.stringify(data),
                 contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(data),
+                headers: {
+                    RequestVerificationToken:
+                        $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
                 success: function (data) {
                     initShoppingCart();
                 },

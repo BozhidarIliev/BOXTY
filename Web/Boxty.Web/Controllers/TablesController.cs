@@ -7,12 +7,13 @@
     using Boxty.Models;
     using Boxty.Services.Interfaces;
     using Boxty.Web.ViewModels;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
 
+    [Authorize(Roles = "manager,admin")]
     public class TablesController : Controller
     {
-        private readonly BoxtyDbContext _context;
         private readonly ITableService tableService;
 
         public TablesController(ITableService tableService)
@@ -36,58 +37,21 @@
             return View(table);
         }
 
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int id)
-        {
-            if (ModelState.IsValid)
-            {
-                await tableService.CreateTable(id);
-            }
-            return RedirectToAction(nameof(Index));
-        }
-
         [HttpGet]
-        public async Task<IActionResult> Edit(int id)
+        public IActionResult Create()
         {
-            var table = await _context.Tables.FindAsync(id);
-            if (table == null)
-            {
-                return NotFound();
-            }
-
-            return View(table);
+            return View();
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id")] Table table)
+        public async Task<IActionResult> Create([Bind("Seats")] Table table)
         {
-            if (id != table.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
-                try
-                {
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TableExists(table.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                await tableService.CreateTable(table);
             }
-            return View(table);
+
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
@@ -113,7 +77,7 @@
 
         private bool TableExists(int id)
         {
-            return _context.Tables.Any(e => e.Id == id);
+            return tableService.GetAllTables().Any(e => e.Id == id);
         }
     }
 }

@@ -4,7 +4,7 @@
     using Boxty.Data.Models;
     using Boxty.Services.Interfaces;
     using Boxty.Services.Mapping;
-
+    using Boxty.Web.ViewModels;
     using Microsoft.AspNetCore.Mvc;
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -23,9 +23,9 @@
         }
 
         [HttpGet]
-        public IEnumerable<Category> GetAllCategories()
+        public IEnumerable<CategoryDropDownViewModel> GetAllCategories()
         {
-            return categoryService.GetAllCategories();
+            return categoryService.GetAllCategories<CategoryDropDownViewModel>();
         }
     }
 }

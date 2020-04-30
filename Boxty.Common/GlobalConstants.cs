@@ -24,17 +24,9 @@
 
         public const string KitchenStaff = "kitchenStaff";
 
-        public const string ReturnAllUsers = "All";
-
-        public const string DeliveringStatus = "delivering";
-
         public const string Yes = "yes";
 
         public const string No = "no";
-
-        public const string SentOnlineStatus = "sent";
-
-        public const string SentByWaiter = "sent";
 
         public const string Sent = "sent";
 
@@ -42,12 +34,21 @@
 
         public const string TableUnavailable = "unavailable";
 
-        public const string ReadyForServing = "readyForServing";
+        public const string Ready = "ready";
 
-        public const string Served = "served";
+        public const string Completed = "completed";
 
         public const string OrderCompleted = "orderCompleted";
 
         public const string ShoppingCart = "shoppingCart";
+
+        public const string DriverControllerAuthorizeRoles = "driver,manager,admin";
+
+        public const string DriverArea = "Driver";
+
+        public const string KitchenStaffArea = "kitchenStaff";
+
+
+        public const string DefaultApiRoute = "api/[controller]";
     }
 }

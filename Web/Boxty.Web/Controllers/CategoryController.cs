@@ -6,9 +6,11 @@
     using Boxty.Data;
     using Boxty.Data.Models;
     using Boxty.Services.Interfaces;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
 
+    [Authorize(Roles = "manager,admin")]
     public class CategoryController : Controller
     {
         private readonly BoxtyDbContext _context;
@@ -21,7 +23,7 @@
 
         public IActionResult Index()
         {
-            return View(this.categoryService.GetAllCategories());
+            return View(this.categoryService.GetCategories());
         }
 
         public IActionResult Details(int id)
@@ -110,9 +112,9 @@
         [HttpPost]
         [ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            categoryService.DeleteCategory(id);
+            await categoryService.DeleteCategory(id);
             return RedirectToAction(nameof(Index));
         }
 

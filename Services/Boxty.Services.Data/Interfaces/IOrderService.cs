@@ -8,9 +8,10 @@
 
     public interface IOrderService
     {
+        IEnumerable<Order> GetAllOrders();
         IEnumerable<T> GetOrders<T>();
 
-        void CreateOrder(Order order);
+        Task CreateOrder(Order order);
 
         Task MarkAsDone(int orderId);
 
@@ -18,6 +19,6 @@
 
         Order GetOrderByDestination(string destination);
 
-        void UpdateOrder(int orderId, IEnumerable<OrderItem> items);
+        Task UpdateOrder(int orderId, IEnumerable<Models.OrderItem> items);
     }
 }

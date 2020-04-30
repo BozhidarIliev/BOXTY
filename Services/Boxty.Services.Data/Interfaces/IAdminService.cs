@@ -1,13 +1,18 @@
 ﻿namespace Boxty.Services.Interfaces
 {
     using System.Collections.Generic;
-
+    using System.Threading.Tasks;
+    using Boxty.Data.Models;
     using Boxty.ViewModels.OutputModels;
+    using Boxty.Web.ViewModels;
+    using Microsoft.AspNetCore.Identity;
 
     public interface IAdminService
     {
-        public IEnumerable<UserOutputModel> FilterRoles(string filter, IEnumerable<UserOutputModel> result);
+        Task<IdentityResult> CreateRole(CreateRoleViewModel model);
 
-        IEnumerable<UserOutputModel> AllUsers(string type);
+        Task<EditRoleViewModel> GetUserRoles(ApplicationRole role);
+
+        Task<List<UserRoleViewModel>> EditUsersInRole(ApplicationRole role);
     }
 }

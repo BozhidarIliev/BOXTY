@@ -32,11 +32,13 @@
 
         public DbSet<Order> Orders { get; set; }
 
-        public DbSet<OrderItem> OrderDetails { get; set; } // order items
+        public DbSet<OrderItem> OrderItems { get; set; } 
 
         public DbSet<Category> Categories { get; set; }
 
         public DbSet<Table> Tables { get; set; }
+
+        public DbSet<Reservation> Reservations { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
 
@@ -133,7 +135,7 @@
                 var entity = (ICreatorInfo)entry.Entity;
                 if (entry.State == EntityState.Added && entity.CreatedBy == default)
                 {
-                    // entity.CreatedBy = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                    entity.CreatedBy = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 }
                 else
                 {

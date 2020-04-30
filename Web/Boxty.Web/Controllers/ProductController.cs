@@ -5,35 +5,33 @@
 
     using Boxty.Data;
     using Boxty.Data.Models;
+    using Boxty.Services.Interfaces;
+    using Boxty.Web.ViewModels;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
 
+    [Authorize(Roles = "manager,admin")]
     public class ProductController : Controller
     {
-        private readonly BoxtyDbContext context;
+        private readonly IProductService productService;
+        private readonly ICategoryService categoryService;
 
-        public ProductController(BoxtyDbContext context)
+        public ProductController(IProductService productService, ICategoryService categoryService)
         {
-            this.context = context;
+            this.categoryService = categoryService;
+            this.productService = productService;
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await context.Products.ToListAsync());
+            return View(productService.GetProducts<ProductViewModel>());
         }
 
-        // GET: Item/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var item = await context.Products
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var item = productService.GetProductById(id);
             if (item == null)
             {
                 return NotFound();
@@ -42,63 +40,54 @@
             return View(item);
         }
 
-        // GET: Item/Create
         public IActionResult Create()
         {
-            return View();
+            var categories = categoryService.GetAllCategories<CategoryDropDownViewModel>();
+            var viewModel = new ProductCreateInputModel
+            {
+                Categories = categories,
+            };
+            return View(viewModel);
         }
 
-        // POST: Item/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Price,Summary,Type,ImageUrl")] Product item)
+        public async Task<IActionResult> Create(ProductCreateInputModel item)
         {
             if (ModelState.IsValid)
             {
-                context.Add(item);
-                await context.SaveChangesAsync();
+                await productService.AddProduct(item);
                 return RedirectToAction(nameof(Index));
             }
 
             return View(item);
         }
 
-        public async Task<IActionResult> Edit(int? id)
+        [HttpGet]
+        public IActionResult Edit(int id)
         {
-            if (id == null)
+            var product = productService.GetProductById(id);
+            if (product == null)
             {
                 return NotFound();
             }
 
-            var item = await context.Products.FindAsync(id);
-            if (item == null)
-            {
-                return NotFound();
-            }
+            ProductCreateInputModel item = new ProductCreateInputModel();
+            item.Categories = categoryService.GetAllCategories<CategoryDropDownViewModel>();
 
             return View(item);
         }
 
-        // POST: Item/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Price,Summary,Type,ImageUrl")] Product item)
+        public async Task<IActionResult> Edit(ProductCreateInputModel item)
         {
-            if (id != item.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
                 try
                 {
-                    context.Update(item);
-                    await context.SaveChangesAsync();
+                    item.Categories = categoryService.GetAllCategories<CategoryDropDownViewModel>();
+                    await productService.Update(item);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -118,16 +107,9 @@
             return View(item);
         }
 
-        // GET: Item/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var item = await context.Products
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var item = productService.GetProductById(id);
             if (item == null)
             {
                 return NotFound();
@@ -136,21 +118,18 @@
             return View(item);
         }
 
-        // POST: Item/Delete/5
         [HttpPost]
         [ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var item = await context.Products.FindAsync(id);
-            context.Products.Remove(item);
-            await context.SaveChangesAsync();
+            await productService.DeleteProduct(id);
             return RedirectToAction(nameof(Index));
         }
 
         private bool ProductExists(int id)
         {
-            return context.Products.Any(e => e.Id == id);
+            return productService.GetProducts<ProductViewModel>().Any(x => x.Id == id);
         }
     }
 }

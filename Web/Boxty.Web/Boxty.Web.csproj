@@ -53,6 +53,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Areas\Driver\Views\Driver\Index.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
     <Content Update="Areas\KitchenStaff\Views\KitchenStaff\Index.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

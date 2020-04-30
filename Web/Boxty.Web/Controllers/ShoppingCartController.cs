@@ -65,7 +65,7 @@
 
             await shoppingCartService.CreateOrder();
 
-            return RedirectToAction("CheckoutComplete");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

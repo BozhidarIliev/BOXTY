@@ -34,14 +34,7 @@
         [HttpGet("{id}")]
         public async Task<ActionResult<Table>> GetTable(int tableId)
         {
-            var tables = await context.Tables.FindAsync(tableId);
-
-            if (tables == null)
-            {
-                return NotFound();
-            }
-
-            return tables;
+            return this.tableService.GetTableById(tableId);
         }
 
     }

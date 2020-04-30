@@ -10,8 +10,6 @@
     {
         IQueryable<TEntity> All();
 
-        Task<IQueryable<TEntity>> AllAsync();
-
         IQueryable<TEntity> AllAsNoTracking();
 
         Task AddAsync(TEntity entity);

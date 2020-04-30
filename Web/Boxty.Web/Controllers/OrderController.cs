@@ -24,8 +24,7 @@
 
         public IActionResult Index()
         {
-            //return this.View(this.orderService.CurrentOrders());
-            return null;
+            return this.View(orderService.GetAllOrders());
         }
 
         [Authorize(Roles = GlobalConstants.Admin)]
@@ -34,12 +33,6 @@
         {
             this.orderService.MarkAsDone(orderId);
             return this.RedirectToAction("Index");
-        }
-
-        [HttpPost]
-        public IActionResult RemoveFromOrders()
-        {
-            return null;
         }
     }
 }

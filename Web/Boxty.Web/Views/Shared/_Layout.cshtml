@@ -29,24 +29,51 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Menu</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Reservation" asp-action="Create">Create Reservation</a>
+                        </li>
                         @if (SignInManager.IsSignedIn(User))
                         {
-                            @if (User.IsInRole(Boxty.Common.GlobalConstants.Admin))
+                            @if (User.IsInRole(Boxty.Common.GlobalConstants.Admin) || User.IsInRole(Boxty.Common.GlobalConstants.Manager))
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="Index">Orders</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="Waiter" asp-controller="Waiter" asp-action="Index">WaiterIndex</a>
+                                    <a class="nav-link text-dark" asp-area="Waiter" asp-controller="Waiter" asp-action="Index">Waiter Page</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="KitchenStaff" asp-controller="KitchenStaff" asp-action="Index">KitchenStaff</a>
                                 </li>
                                 <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="Driver" asp-controller="Driver" asp-action="Index">Driver page</a>
+                                </li>
+                                <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Tables" asp-action="Index">Tables</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="Index">Categories</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Index">Categories</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Reservation" asp-action="Index">Reservations</a>
+                                </li>
+                            }
+                            @if (User.IsInRole(Boxty.Common.GlobalConstants.Waiter))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="Waiter" asp-controller="Waiter" asp-action="Index">Waiter Page</a>
+                                </li>
+                            }
+                            @if (User.IsInRole(Boxty.Common.GlobalConstants.KitchenStaff))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="KitchenStaff" asp-controller="KitchenStaff" asp-action="Index">KitchenStaff Page</a>
+                                </li>
+                            }
+                            @if (User.IsInRole(Boxty.Common.GlobalConstants.Driver))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="Driver" asp-controller="Driver" asp-action="Index">Driver page</a>
                                 </li>
                             }
                         }

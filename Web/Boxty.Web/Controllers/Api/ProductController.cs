@@ -36,38 +36,19 @@
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            var product = await productRepository.All().FirstAsync(x => x.Id == id);
-
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            return product;
+            return await productRepository.All().FirstAsync(x => x.Id == id);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<Product>> PostProduct(Product product)
-        {
-            await productRepository.SaveChangesAsync();
-
-            return CreatedAtAction("GetProduct", new { id = product.Id }, product);
-        }
+        //[HttpPost]
+        //public async Task<ActionResult<Product>> PostProduct(Product product)
+        //{
+        //    await productRepository.SaveChangesAsync();
+        //}
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Product>> DeleteProduct(int id)
+        public async Task DeleteProduct(int id)
         {
-            var product = await productRepository.All().FirstAsync(x => x.Id == id);
-
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            productRepository.Delete(product);
-            await productRepository.SaveChangesAsync();
-
-            return product;
+            await productService.DeleteProduct(id);
         }
 
         private bool ProductExists(int id)

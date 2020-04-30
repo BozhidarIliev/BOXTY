@@ -1,0 +1,96 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Driver Page";
+    Layout = "_Layout";
+}
+
+<h1>Driver Page</h1>
+
+<table class="table">
+    
+</table>
+
+
+@section Scripts{
+    <script>
+
+        $(document).ready(function () {
+            initOrderItems();
+        });
+
+        function openAccordion() {
+            var acc = document.getElementsByClassName("accordion");
+            var i;
+
+            for (i = 0; i < acc.length; i++) {
+                acc[i].addEventListener("click", function () {
+                    this.classList.toggle("active");
+
+                    var panel = this.nextElementSibling;
+                    if (panel.style.display === "block") {
+                        panel.style.display = "none";
+                    } else {
+                        panel.style.display = "block";
+                    }
+                });
+            }
+        }
+
+        function markAsDone(id) {
+            $.ajax({
+                type: "POST",
+                url: "/api/Driver/MarkAsDone?orderItemId=" + id,
+                contentType: "application/json; charset=utf-8",
+                headers: {
+                    RequestVerificationToken:
+                        $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+                success: function (data) {
+                    initOrderItems();
+                },
+                failure: function (xhr, status, error) {
+
+                },
+                error: function (xhr, status, thrownError) {
+                    alert('Error ' + thrownError + " " + xhr.status);
+                }
+
+            })
+        }
+
+        function initOrderItems() {
+            $.ajax({
+                type: "GET",
+                url: "/api/Driver",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    $('.table > tr').slice(0).remove();
+                    $.each(data, function (i, order) {
+                        var button = "<button class='accordion'>" + "OrderId: " + order.id + ", Destination: " + order.destination + "</button>" + "<div class='panel'>";
+                        $.each(order.items, function (j, orderItem) {
+                            var row =
+                                "<p>" + orderItem.product.name + ", Amount: " + orderItem.amount + "<p>";
+
+                        $('.table').append(row);
+                        })
+                        var btnComment = '<button onclick="markAsDone(' + order.id + ')" class="btn btn-success">Mark As Done</button>'
+                        $('.table').append(btnComment);
+                        $('.table').append("</div>");
+
+                        $('.table').append(button);
+
+                    });
+
+                },
+                failure: function (data) {
+                    alert(data.responseText);
+                },
+                error: function (data) {
+                    alert(data.responseText);
+                }
+            });
+        }
+
+    </script>
+}

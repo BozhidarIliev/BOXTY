@@ -6,7 +6,9 @@
 
     public interface ICategoryService
     {
-        IEnumerable<Category> GetAllCategories();
+        IEnumerable<Category> GetCategories();
+
+        IEnumerable<T> GetAllCategories<T>();
 
         Category GetCategoryById(int categoryId);
 
@@ -14,6 +16,6 @@
 
         Task UpdateCategory(Category category);
 
-        void DeleteCategory(int id);
+        Task DeleteCategory(int id);
     }
 }

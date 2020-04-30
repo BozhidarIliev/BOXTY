@@ -7,7 +7,7 @@
     using Boxty.Data.Common.Models;
     using Boxty.Models;
 
-    public class Order : BaseDeletableModel<int>
+    public class Order : BaseDeletableModel<int>, ICreatorInfo
     {
         [NotMapped]
         public IEnumerable<OrderItem> Items { get; set; }
@@ -19,5 +19,9 @@
         public string Destination { get; set; }
 
         public bool Delivery { get; set; }
+
+        public string CreatedBy { get; set; }
+
+        public string ModifiedBy { get; set; }
     }
 }

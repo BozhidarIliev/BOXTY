@@ -38,5 +38,12 @@
         {
             return this.View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? this.HttpContext.TraceIdentifier });
         }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult ActionCompleted()
+        {
+            return this.View();
+        }
     }
 }

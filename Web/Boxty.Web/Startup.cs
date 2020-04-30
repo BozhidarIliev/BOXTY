@@ -8,7 +8,7 @@
     using Boxty.Data.Common.Repositories;
     using Boxty.Data.Models;
     using Boxty.Data.Repositories;
-    using Boxty.Extensions;
+    using Boxty.Data.Seeding;
     using Boxty.Services;
     using Boxty.Services.Data;
     using Boxty.Services.Data.Interfaces;
@@ -73,6 +73,8 @@
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<IOrderItemService, OrderItemService>();
+            services.AddTransient<IReservationService, ReservationService>();
+            services.AddTransient<IDriverService, DriverService>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -93,7 +95,13 @@
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
                 var dbContext = serviceScope.ServiceProvider.GetRequiredService<BoxtyDbContext>();
-                dbContext.Database.Migrate();
+
+                if (env.IsDevelopment())
+                {
+                    dbContext.Database.Migrate();
+                }
+                //dbContext.Database.ExecuteSqlCommand("SET IDENTITY_INSERT Posts ON");
+                new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
             }
 
             if (env.IsDevelopment())
@@ -107,7 +115,6 @@
                 app.UseHsts();
             }
 
-            app.UseSeedRolesMiddleware();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
