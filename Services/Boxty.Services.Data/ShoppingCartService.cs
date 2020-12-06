@@ -21,7 +21,6 @@
         private readonly IUserService userService;
         private readonly IOrderService orderService;
         private readonly IProductService productService;
-        private readonly UserManager<BoxtyUser> userManager;
 
         public ShoppingCartService(IUserService userService, IOrderService orderService, IHttpContextAccessor httpContextAccessor, IProductService productService, UserManager<BoxtyUser> userManager)
         {
@@ -29,7 +28,6 @@
             this.userService = userService;
             this.orderService = orderService;
             this.productService = productService;
-            this.userManager = userManager;
         }
 
         public async Task<ShoppingCart> GetShoppingCart()
@@ -57,7 +55,7 @@
             else 
             {
                 cart.Items = cart.Items.Concat(new List<OrderItemOutputModel> { 
-                    new OrderItemOutputModel { Product = product, Amount = 1 } });
+                    new OrderItemOutputModel { ProductId = product.Id, Product = product, Amount = 1 } });
             }
 
             await SessionHelper.SetObjectAsJsonAsync(httpContext.Session, GlobalConstants.ShoppingCart, cart);
@@ -97,7 +95,7 @@
                 cart = await this.RemoveFromCart(model.ItemIndex);
                 shoppingCartItems = cart.Items.ToList();
 
-                shoppingCartItems.Add(new OrderItemOutputModel { Product = item.Product, Amount = 1, Comment = model.Comment,});
+                shoppingCartItems.Add(new OrderItemOutputModel { ProductId = item.Id, Product = item.Product, Amount = 1, Comment = model.Comment,});
 
                 cart.Items = shoppingCartItems;
                 await SessionHelper.SetObjectAsJsonAsync(httpContext.Session, GlobalConstants.ShoppingCart, cart);
@@ -117,6 +115,8 @@
                 Items = shoppingCartItems
             };
             await orderService.CreateOrder(order);
+
+            ClearCart();
         }
 
         public void ClearCart()

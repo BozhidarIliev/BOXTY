@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Boxty.Common\Boxty.Common.csproj" />
+    <ProjectReference Include="..\..\Common\Boxty.Common\Boxty.Common.csproj" />
     <ProjectReference Include="..\..\Data\Boxty.Data.Models\Boxty.Data.Models.csproj" />
     <ProjectReference Include="..\..\Web\Boxty.Web.ViewModels\Boxty.Web.ViewModels.csproj" />
     <ProjectReference Include="..\Boxty.Services.Mapping\Boxty.Services.Mapping.csproj" />

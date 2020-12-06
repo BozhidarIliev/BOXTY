@@ -3,13 +3,10 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using Boxty.Common;
     using Boxty.Data.Common.Repositories;
     using Boxty.Models;
     using Boxty.Services.Interfaces;
     using Boxty.Services.Mapping;
-    using Boxty.Web.ViewModels;
-    using Microsoft.EntityFrameworkCore;
 
     public class TableService : ITableService
     {

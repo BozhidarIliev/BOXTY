@@ -4,7 +4,6 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    using Boxty.Common;
     using Boxty.Data.Models;
     using Boxty.Models;
     using Boxty.Services.Data.Interfaces;
@@ -27,21 +26,22 @@
 
         [HttpGet]
         [Authorize(Roles ="kitchenStaff,manager,admin")]
-        public IEnumerable<Web.ViewModels.OrderItemOutputModel> GetKitchenOrderItems()
+        public IEnumerable<OrderItemOutputModel> GetKitchenOrderItems()
         {
-            return orderItemService.GetKitchenOrderItems<Web.ViewModels.OrderItemOutputModel>();
+            var items = orderItemService.GetKitchenOrderItems<OrderItemOutputModel>();
+            return items;
         }
 
         [HttpPost]
         [Route("MarkAsDone")]
-        public async Task MarkAsReady(int orderItemId)
+        public async Task MarkAsDone(int orderItemId)
         {
-            await orderItemService.MarkAsReady(orderItemId);
+            await orderItemService.MarkAsDone(orderItemId);
         }
 
         [HttpPost]
         [Route("MarkAsServed")]
-        public async Task MarkAsDone(int orderItemId)
+        public async Task MarkAsServed(int orderItemId)
         {
             await orderItemService.MarkAsDone(orderItemId);
         }

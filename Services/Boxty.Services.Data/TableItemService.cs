@@ -5,7 +5,6 @@ using Boxty.Services.Data.Interfaces;
 using Boxty.Services.Interfaces;
 using Boxty.Services.Mapping;
 using Boxty.Web.ViewModels;
-using Boxty.Web.ViewModels;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -41,7 +40,21 @@ namespace Boxty.Services.Data
             }
 
             var items = orderItemService.GetCurrentOrderItemsByOrderId<TableItemViewModel>(order.Id);
-            return items;
+
+            var tableItems = new List<TableItemViewModel>();
+            foreach (var item in items)
+            {
+                var currentItemIndex = tableItems.FindIndex(x => x.ProductId == item.ProductId && x.Comment == item.Comment && x.Status == item.Status);
+                if (currentItemIndex != -1)
+                {
+                    tableItems[currentItemIndex].Amount++;
+                }
+                else
+                {
+                    tableItems.Add(item);
+                }
+            }
+            return tableItems;
         }
 
         public async Task<IEnumerable<T>> GetPendingItems<T>(int tableId)

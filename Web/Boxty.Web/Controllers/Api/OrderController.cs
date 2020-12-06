@@ -4,10 +4,8 @@
     using System.Threading.Tasks;
     using Boxty.Common;
     using Boxty.Data.Models;
-    using Boxty.Models;
     using Boxty.Services.Data.Interfaces;
     using Boxty.Services.Interfaces;
-    using Boxty.Web.ViewModels;
     using Microsoft.AspNetCore.Mvc;
 
     [Route(GlobalConstants.DefaultApiRoute)]

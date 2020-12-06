@@ -5,7 +5,6 @@ using Boxty.Models;
 using Boxty.Services.Data.Interfaces;
 using Boxty.Services.Interfaces;
 using Boxty.Services.Mapping;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,12 +13,10 @@ namespace Boxty.Services.Data
 {
     public class OrderItemService : IOrderItemService
     {
-        private readonly IProductService productService;
         private readonly IDeletableEntityRepository<OrderItem> orderItemRepository;
 
-        public OrderItemService(IProductService productService, IDeletableEntityRepository<OrderItem> orderItemRepository)
+        public OrderItemService(IDeletableEntityRepository<OrderItem> orderItemRepository)
         {
-            this.productService = productService;
             this.orderItemRepository = orderItemRepository;
         }
 
@@ -47,7 +44,7 @@ namespace Boxty.Services.Data
 
         public IEnumerable<T> GetCurrentOrderItemsByOrderId<T>(int orderId)
         {
-            var items = orderItemRepository.All().Where(x => x.Id == orderId);
+            var items = orderItemRepository.All().Where(x => x.OrderId == orderId);
             
             return items.To<T>();
         }
@@ -59,8 +56,8 @@ namespace Boxty.Services.Data
             foreach (var item in items)
             {
                 item.OrderId = id;
-                item.Product = productService.GetProductById(item.Product.Id);
                 item.Status = GlobalConstants.Sent;
+                item.Product = null;
             }
 
             await orderItemRepository.AddRangeAsync(items);
@@ -77,6 +74,7 @@ namespace Boxty.Services.Data
 
         public async Task MarkAsDone(int orderItemId)
         {
+
             var orderItem = this.GetOrderItemById(orderItemId);
             orderItem.Status = GlobalConstants.Completed;
             orderItemRepository.Update(orderItem);
@@ -108,40 +106,13 @@ namespace Boxty.Services.Data
         public async Task UpdateOrderItem(int orderId, int tableId, IEnumerable<OrderItem> items)
         {
             var orderItems = orderItemRepository.All().Where(x => x.Id == orderId);
-            var itemsToAdd = new List<OrderItem>();
-            foreach (var item in items)
-            {
-                if (item.Comment != string.Empty)
-                {
-                    if (orderItems.Any(x => x.Comment == item.Comment))
-                    {
-                        orderItemRepository.All().FirstOrDefault(x => (x.Id == orderId) && (x.Comment == item.Comment)).Amount += item.Amount;
-                    }
-                    else
-                    {
-                        itemsToAdd.Add(new OrderItem { ProductId = item.ProductId, Amount = 1, Comment = item.Comment });
-                    }
-                    continue;
-                }
-                if (orderItems.Any(x => (x.ProductId == item.ProductId) && (x.Status == GlobalConstants.Sent)))
-                {
-                    var orderItem = orderItems.First(x => x.ProductId == item.ProductId);
-                    orderItem.Amount += item.Amount;
-                    orderItemRepository.Update(orderItem);
-                }
-                else
-                {
-                    itemsToAdd.Add(new OrderItem { ProductId = item.ProductId, Amount = item.Amount, Comment = item.Comment });
-                }
-            }
-            await orderItemRepository.SaveChangesAsync();
-            if (itemsToAdd.Count > 0)
+            if (items.Count() > 0)
             {
                 var order = new Order
                 {
                     Id = orderId,
                     Destination = tableId.ToString(),
-                    Items = itemsToAdd,
+                    Items = items,
                 };
                 await CreateOrderItem(order);
             }

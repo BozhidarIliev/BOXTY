@@ -1,7 +1,6 @@
 ﻿namespace Boxty.Web.Controllers
 {
     using System.Threading.Tasks;
-    using Boxty.Common;
     using Boxty.Services.Data.Interfaces;
     using Boxty.Web.ViewModels;
     using Microsoft.AspNetCore.Authorization;

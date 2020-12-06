@@ -3,15 +3,16 @@
     using Boxty.Data.Common.Models;
     using Boxty.Data.Models;
     using Boxty.Services.Mapping;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     public class OrderItem : BaseDeletableModel<int>, ICreatorInfo
     {
         public int OrderId { get; set; }
+
         public int ProductId { get; set; }
-
-        public virtual Product Product { get; set; }
-
-        public int Amount { get; set; }
+        
+        [ForeignKey("ProductId")]
+        public Product Product { get; set; }
 
         public decimal Subtotal { get; set; }
 

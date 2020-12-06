@@ -6,7 +6,6 @@
     using System.Threading.Tasks;
 
     using AutoMapper;
-    using Boxty.Common;
     using Boxty.Data;
     using Boxty.Data.Models;
     using Boxty.Models;

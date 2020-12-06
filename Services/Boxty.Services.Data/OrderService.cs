@@ -82,7 +82,7 @@
             return list.FirstOrDefault(x => x.Destination == destination);
         }
 
-        public async Task UpdateOrder(int tableId, IEnumerable<Models.OrderItem> items)
+        public async Task UpdateOrder(int tableId, IEnumerable<OrderItem> items)
         {
             var order = GetOrderByDestination(tableId.ToString());
             await orderItemService.UpdateOrderItem(order.Id, tableId, items);

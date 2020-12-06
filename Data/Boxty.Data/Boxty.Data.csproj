@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Boxty.Common\Boxty.Common.csproj" />
+    <ProjectReference Include="..\..\Common\Boxty.Common\Boxty.Common.csproj" />
     <ProjectReference Include="..\Boxty.Data.Common\Boxty.Data.Common.csproj" />
     <ProjectReference Include="..\Boxty.Data.Models\Boxty.Data.Models.csproj" />
   </ItemGroup>

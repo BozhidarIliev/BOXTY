@@ -1,13 +1,9 @@
 ﻿namespace Boxty.Services
 {
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
-    using Boxty.Common;
     using Boxty.Data.Models;
     using Boxty.Services.Interfaces;
-    using Boxty.Services.Mapping;
-    using Boxty.ViewModels.OutputModels;
     using Boxty.Web.ViewModels;
     using Microsoft.AspNetCore.Identity;
 

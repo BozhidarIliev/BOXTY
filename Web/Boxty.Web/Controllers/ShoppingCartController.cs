@@ -1,9 +1,7 @@
 ﻿namespace Boxty.Controllers
 {
-    using System;
     using System.Linq;
     using System.Threading.Tasks;
-    using Boxty.Common;
     using Boxty.Data.Models;
     using Boxty.Services;
     using Boxty.Services.Data.Interfaces;

@@ -23,8 +23,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boxty.Data", "Data\Boxty.Da
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boxty.Data.Common", "Data\Boxty.Data.Common\Boxty.Data.Common.csproj", "{D0D59508-CF8B-4656-A344-396C530BB9DF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boxty.Common", "Boxty.Common\Boxty.Common.csproj", "{A2288C46-0FBF-43B6-80B6-3072FD65BC32}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boxty.Web.Infrastructure", "Web\Boxty.Web.Infrastructure\Boxty.Web.Infrastructure.csproj", "{7A7A7986-1F5B-4EBD-9B17-8B41F8FABA58}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sandbox", "Tests\Sandbox\Sandbox.csproj", "{8AB6B92A-0837-4BDE-B950-10BE3FF2B6A8}"
@@ -35,14 +33,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boxty.Web.Tests", "Tests\Bo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boxty.Web.ViewModels", "Web\Boxty.Web.ViewModels\Boxty.Web.ViewModels.csproj", "{13B7AACB-9C85-4409-8D4B-95A67D0DFFF7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8B54308C-D0FC-4D10-B333-C7F53F29054E}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boxty.Services.Mapping", "Services\Boxty.Services.Mapping\Boxty.Services.Mapping.csproj", "{64E2BBC7-6039-491E-98F9-35EAD0A3A558}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boxty.Services.Data", "Services\Boxty.Services.Data\Boxty.Services.Data.csproj", "{5B73A9D5-9EAE-4A9D-8201-688D010FDC70}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{667ECBC6-9927-4EE6-BDA8-FB33B15F87EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boxty.Common", "Common\Boxty.Common\Boxty.Common.csproj", "{31BAF6A9-9373-4DD3-8A71-2783F00F013B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -74,10 +71,6 @@ Global
 		{D0D59508-CF8B-4656-A344-396C530BB9DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0D59508-CF8B-4656-A344-396C530BB9DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0D59508-CF8B-4656-A344-396C530BB9DF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A2288C46-0FBF-43B6-80B6-3072FD65BC32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A2288C46-0FBF-43B6-80B6-3072FD65BC32}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A2288C46-0FBF-43B6-80B6-3072FD65BC32}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A2288C46-0FBF-43B6-80B6-3072FD65BC32}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7A7A7986-1F5B-4EBD-9B17-8B41F8FABA58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7A7A7986-1F5B-4EBD-9B17-8B41F8FABA58}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A7A7986-1F5B-4EBD-9B17-8B41F8FABA58}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -106,6 +99,10 @@ Global
 		{5B73A9D5-9EAE-4A9D-8201-688D010FDC70}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B73A9D5-9EAE-4A9D-8201-688D010FDC70}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B73A9D5-9EAE-4A9D-8201-688D010FDC70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31BAF6A9-9373-4DD3-8A71-2783F00F013B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31BAF6A9-9373-4DD3-8A71-2783F00F013B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31BAF6A9-9373-4DD3-8A71-2783F00F013B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31BAF6A9-9373-4DD3-8A71-2783F00F013B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -124,6 +121,7 @@ Global
 		{13B7AACB-9C85-4409-8D4B-95A67D0DFFF7} = {E389DEB6-5F90-444B-A054-12A10D39C76F}
 		{64E2BBC7-6039-491E-98F9-35EAD0A3A558} = {516E002B-9E6E-4456-B7F6-EAA353966DE6}
 		{5B73A9D5-9EAE-4A9D-8201-688D010FDC70} = {516E002B-9E6E-4456-B7F6-EAA353966DE6}
+		{31BAF6A9-9373-4DD3-8A71-2783F00F013B} = {667ECBC6-9927-4EE6-BDA8-FB33B15F87EF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {384484BE-4680-4529-9CC2-AD37BA4D12D1}
