@@ -9,9 +9,7 @@
     {
         public int Id { get; set; }
 
-        public IEnumerable<OrderItemOutputModel> OrderItems { get; set; }
-
-        public string OrderModifiedOn { get; set; }
+        public List<OrderItemOutputModel> OrderItems { get; set; }
 
         public string Destination{ get; set; }
 

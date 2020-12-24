@@ -12,12 +12,16 @@
 
         Product GetProductById(int id);
 
+        public T GetProductById<T>(int id);
+
         IEnumerable<Product> GetProductsByCategory(string categoryName);
 
-        Task AddProduct(ProductCreateInputModel model);
+        Task AddProduct(ProductCreateInputModel model, string imagePath);
 
-        Task Update(ProductCreateInputModel model);
+        Task UpdateAsync(ProductEditInputModel model);
 
-        Task DeleteProduct(int id);
+        Task DeleteAsync(int id);
+
+        bool ProductExists(int id);
     }
 }

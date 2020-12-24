@@ -13,11 +13,12 @@
         public string LastName { get; set; }
 
         [Required]
-        [MaxLength(20)]
+        [StringLength(10, ErrorMessage = "The address should be longer.")]
+        [MinLength(20)]
         public string Address { get; set; }
 
         [Required]
-        [StringLength(10, ErrorMessage = "The phone number cannot exceed 10 numbers. ")]
+        [StringLength(10, ErrorMessage = "The phone number cannot exceed 10 numbers.")]
         [Phone]
         public string PhoneNumber { get; set; }
     }

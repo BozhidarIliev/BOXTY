@@ -1,4 +1,4 @@
-﻿@model Boxty.Data.Models.Product
+﻿@model Boxty.Web.ViewModels.ProductViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -10,7 +10,7 @@
 <div>
     <div class="col-md-4">
         <div class="card w-100">
-            <img class="card-img-top" src="@Model.ImageUrl" alt="Card image cap" style="height:250px">
+            <img class="card-img-top" src='@Model.ImageUrl' alt="Card image cap" style="height:250px">
         </div>
     </div>
 

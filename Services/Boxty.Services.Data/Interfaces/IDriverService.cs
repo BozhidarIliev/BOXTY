@@ -8,6 +8,6 @@ namespace Boxty.Services.Data.Interfaces
     public interface IDriverService
     {
 
-        IEnumerable<OrderDriverViewModel> GetCurrentOrderItems();
+        List<OrderDriverViewModel> GetCurrentOrderItems();
     }
 }

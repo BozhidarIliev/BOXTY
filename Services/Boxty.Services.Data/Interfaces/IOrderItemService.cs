@@ -19,8 +19,6 @@ namespace Boxty.Services.Data.Interfaces
 
         Task CreateOrderItem(Order order);
 
-        Task DeleteOrderItem(int orderItemId);
-
         OrderItem GetOrderItemById(int orderItemId);
         IEnumerable<OrderItem> GetAllCurrentOrderItemsByOrderId(int orderId);
 

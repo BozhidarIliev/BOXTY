@@ -95,7 +95,7 @@
                 cart = await this.RemoveFromCart(model.ItemIndex);
                 shoppingCartItems = cart.Items.ToList();
 
-                shoppingCartItems.Add(new OrderItemOutputModel { ProductId = item.Id, Product = item.Product, Amount = 1, Comment = model.Comment,});
+                shoppingCartItems.Add(new OrderItemOutputModel { ProductId = item.Product.Id, Product = item.Product, Amount = 1, Comment = model.Comment,});
 
                 cart.Items = shoppingCartItems;
                 await SessionHelper.SetObjectAsJsonAsync(httpContext.Session, GlobalConstants.ShoppingCart, cart);

@@ -13,12 +13,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.1" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.164" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\Boxty.Common\Boxty.Common.csproj" />
     <ProjectReference Include="..\..\Data\Boxty.Data.Models\Boxty.Data.Models.csproj" />
     <ProjectReference Include="..\..\Services\Boxty.Services.Mapping\Boxty.Services.Mapping.csproj" />
   </ItemGroup>

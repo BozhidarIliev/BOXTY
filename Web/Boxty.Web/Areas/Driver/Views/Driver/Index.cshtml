@@ -3,7 +3,6 @@
     ViewData["Title"] = "Driver Page";
     Layout = "_Layout";
 }
-
 <h1>Driver Page</h1>
 
 <table class="table">
@@ -14,32 +13,28 @@
 @section Scripts{
     <script>
 
+
         $(document).ready(function () {
             initOrderItems();
         });
 
-        function openAccordion() {
-            var acc = document.getElementsByClassName("accordion");
-            var i;
+        function openAccordion(orderId) {
+            var button = document.getElementById("b" + orderId);
+            var div = document.getElementById("d" + orderId);
 
-            for (i = 0; i < acc.length; i++) {
-                acc[i].addEventListener("click", function () {
-                    this.classList.toggle("active");
+            button.classList.toggle("active");
 
-                    var panel = this.nextElementSibling;
-                    if (panel.style.display === "block") {
-                        panel.style.display = "none";
-                    } else {
-                        panel.style.display = "block";
-                    }
-                });
+            var panel = div;
+            if (panel.style.display === "block") {
+                panel.style.display = "none";
+            } else {
+                panel.style.display = "block";
             }
         }
-
         function markAsDone(id) {
             $.ajax({
                 type: "POST",
-                url: "/api/Driver/MarkAsDone?orderItemId=" + id,
+                url: "/api/Driver/MarkAsDone?orderId=" + id,
                 contentType: "application/json; charset=utf-8",
                 headers: {
                     RequestVerificationToken:
@@ -67,19 +62,19 @@
                 success: function (data) {
                     $('.table > tr').slice(0).remove();
                     $.each(data, function (i, order) {
-                        var button = "<button class='accordion'>" + "OrderId: " + order.id + ", Destination: " + order.destination + "</button>" + "<div class='panel'>";
-                        $.each(order.items, function (j, orderItem) {
-                            var row =
-                                "<p>" + orderItem.product.name + ", Amount: " + orderItem.amount + "<p>";
-
-                        $('.table').append(row);
-                        })
-                        var btnComment = '<button onclick="markAsDone(' + order.id + ')" class="btn btn-success">Mark As Done</button>'
-                        $('.table').append(btnComment);
-                        $('.table').append("</div>");
-
+                        var button = "<button class='accordion' onclick='openAccordion("+order.id+")' id='b"+order.id+"'>" + "OrderId: " + order.id + ", Destination: " + order.destination + "</button>";
                         $('.table').append(button);
+                        $('.table').append("<div class='panel' id='d"+order.id+"'>");
+                        $.each(order.orderItems, function (j, orderItem) {
+                            $("#d" + order.id).append('<ul class="w3-ul">')
+                            var row = "<li>" + orderItem.product.name + ", Amount: " + orderItem.amount + "<li>";
 
+                            $("#d" + order.id ).append(row);
+                        })
+                        $("#d" + order.id).append("</ul>");
+                        $("#d" + order.id).append("</div>");
+                        var btnDone = '<button onclick="markAsDone(' + order.id + ')" class="btn btn-success">Mark As Done</button>'
+                        $("#d"+order.id).append(btnDone);
                     });
 
                 },

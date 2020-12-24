@@ -21,14 +21,24 @@ namespace Boxty.Services.Data
             this.orderItemService = orderItemService;
         }
 
-        public IOrderItemService OrderItemService { get; }
-
-        public IEnumerable<OrderDriverViewModel> GetCurrentOrderItems()
+        public List<OrderDriverViewModel> GetCurrentOrderItems()
         {
-            var orders = orderService.GetAllOrders().Where(x => x.Delivery == true).AsQueryable().To<OrderDriverViewModel>();
+            var orders = orderService.GetAllOrders().Where(x => x.Delivery == true).AsQueryable().To<OrderDriverViewModel>().ToList();
             foreach (var order in orders)
             {
-                order.OrderItems = orderItemService.GetCurrentOrderItemsByOrderId<OrderItemOutputModel>(order.Id);
+                order.OrderItems = orderItemService.GetCurrentOrderItemsByOrderId<OrderItemOutputModel>(order.Id).ToList();
+                foreach (var item in order.OrderItems)
+                {
+                    var currentItemIndex = order.OrderItems.FindIndex(x => x.ProductId == item.ProductId && x.Comment == item.Comment);
+                    if (currentItemIndex != -1)
+                    {
+                        order.OrderItems[currentItemIndex].Amount++;
+                    }
+                    else
+                    {
+                        order.OrderItems.Add(item);
+                    }
+                }
             }
 
             return orders;

@@ -58,7 +58,6 @@
         {
             var order = GetOrderById(orderId).Result;
             order.Status = GlobalConstants.OrderCompleted;
-            orderRepository.Delete(order);
             await orderItemService.DeleteOrderItemsByOrderId(orderId);
             await orderRepository.SaveChangesAsync();
         }

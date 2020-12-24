@@ -137,7 +137,7 @@
             document.getElementById("total").innerText = sum;
         }
 
-        function showCommentBox(index) {
+        function showTableItemCommentBox(index) {
             $("#myModal").modal();
             document.getElementById("itemIndexInput").value = index;
             document.getElementById("tableIdInput").value = document.getElementById("tableList").value;
@@ -349,7 +349,7 @@
                     $("[name=pendingItem]").remove();
                     $.each(data, function (i, item) {
                         var name = 'pendingItem';
-                        var btnComment = '<button onclick="deleteLine(\'' + i + '\')" class="btn btn-danger">DELETE</button>' + '<button type="button" onclick="showCommentBox(' + i + ')" class="btn btn-info">Comment</button>'
+                        var btnComment = '<button onclick="deleteLine(\'' + i + '\')" class="btn btn-danger">DELETE</button>' + '<button type="button" onclick="showTableItemCommentBox(' + i + ')" class="btn btn-info">Comment</button>'
                         var rows = "<tr name=\"" + name + "\">" +
                             "<td style='color:Red 'id='name'>" + item.productName + "</td>" +
                             "<td>" + item.comment + "</td>" +

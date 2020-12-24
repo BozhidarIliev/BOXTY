@@ -27,11 +27,9 @@
             return this.View(orderService.GetAllOrders());
         }
 
-        [Authorize(Roles = GlobalConstants.Admin)]
-        [HttpPost]
-        public IActionResult MarkAsDone(int orderId)
+        public IActionResult MarkAsDone(int id)
         {
-            this.orderService.MarkAsDone(orderId);
+            this.orderService.MarkAsDone(id);
             return this.RedirectToAction("Index");
         }
     }

@@ -48,7 +48,8 @@
 
         public const string KitchenStaffArea = "kitchenStaff";
 
-
         public const string DefaultApiRoute = "api/[controller]";
+
+        public const double MaxPriceValue = 9999.99;
     }
 }

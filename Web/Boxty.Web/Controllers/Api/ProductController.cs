@@ -48,7 +48,7 @@
         [HttpDelete("{id}")]
         public async Task DeleteProduct(int id)
         {
-            await productService.DeleteProduct(id);
+            await productService.DeleteAsync(id);
         }
 
         private bool ProductExists(int id)

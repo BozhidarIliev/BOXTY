@@ -77,7 +77,7 @@ namespace Boxty.Services.Data
 
             if (item == null)
             {
-                var product = productService.GetProductById(productId);
+                var product = productService.GetProductById<Product>(productId);
                 items.Add(new TableItemViewModel { ProductId = productId, ProductName = product.Name, ProductPrice = product.Price, Amount = 1 });
             }
             else

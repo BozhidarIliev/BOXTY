@@ -25,7 +25,7 @@
 
         [HttpGet]
         [Authorize(Roles = GlobalConstants.DriverControllerAuthorizeRoles)]
-        public IEnumerable<OrderDriverViewModel> GetCurrentOrderItems()
+        public List<OrderDriverViewModel> GetCurrentOrderItems()
         {
             return driverService.GetCurrentOrderItems();
         }

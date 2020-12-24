@@ -3,7 +3,6 @@
     <div class="row checkoutForm">
 
         <h2>Your shopping cart</h2>
-        <h4>Here are the products in your shopping cart.</h4>
         <table class="table table-bordered table-striped" id="shoppingCart">
             <thead>
                 <tr>
@@ -41,7 +40,7 @@
                                 <span asp-validation-for="@Model.Comment" class="text-danger"></span>
                             </div>
 
-                            <button onclick="addComment()" class="btn btn-success" data-dismiss="modal">Add</button>
+                            <button onclick="addShoppingCartComment()" class="btn btn-success" data-dismiss="modal">Add</button>
                         </form>
                     </div>
                 </div>
@@ -82,7 +81,7 @@
                             "<td>" + item.amount + "</td>" +
                             '<td>' + item.product.price + '</td>' +
                             '<td>' + item.subtotal + '</td>' +
-                            '<td><button type="button" onclick="deleteItem(' + i + ')" class="btn btn-danger">Remove</button> <button type="button" onclick="showCommentBox(' + i + ')" class="btn btn-info">Comment</button></td>' +
+                            '<td><button type="button" onclick="deleteShoppingCartItem(' + i + ')" class="btn btn-danger">Remove</button> <button type="button" onclick="showShoppingCartCommentBox(' + i + ')" class="btn btn-info">Comment</button></td>' +
                             "</tr>";
 
                         $('#shoppingCart').append(rows);
@@ -99,7 +98,7 @@
             });
         }
 
-        function deleteItem(index) {
+        function deleteShoppingCartItem(index) {
             $.ajax({
                 type: "DELETE",
                 url: "/api/ShoppingCart?index=" + index + "",
@@ -117,12 +116,12 @@
             })
         }
 
-        function showCommentBox(index) {
+        function showShoppingCartCommentBox(index) {
             $("#myModal").modal();
             document.getElementById("itemIndexInput").value = index;
         }
 
-        function addComment() {
+        function addShoppingCartComment() {
             var index = Number(document.getElementById("itemIndexInput").value);
             var comment = document.getElementById("commentInput").value;
 
