@@ -14,12 +14,9 @@
 
         public int NumberOfSeats { get; set; }
 
-        public virtual Table Table { get; set; }
-        public int TableId { get; set; }
-        public int NumberOfHours { get; set; }
-        public DateTime StartTime { get; set; }
+        public int Duration { get; set; }
 
-        public DateTime EndTime { get; set; }
+        public DateTime StartTime { get; set; }
 
         public bool Confirmed { get; set; }
     }

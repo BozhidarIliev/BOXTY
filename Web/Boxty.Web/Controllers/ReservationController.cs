@@ -1,5 +1,7 @@
 ﻿namespace Boxty.Web.Controllers
 {
+    using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using Boxty.Services.Data.Interfaces;
     using Boxty.Web.ViewModels;
@@ -7,7 +9,7 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
 
-    [Authorize(Roles="manager, admin")]
+    [Authorize(Roles="admin")]
     public class ReservationController : Controller
     {
         private readonly IReservationService reservationService;
@@ -36,61 +38,26 @@
         [AllowAnonymous]
         public IActionResult Create()
         {
-            return View();
+            var model = new ReservationCreateInputModel();
+            model.StartTime = DateTime.Now;
+            return this.View(model);
         }
 
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PersonName,PersonEmail,PersonNumber,NumberOfSeats,StartTime,NumberOfHours")] ReservationInputModel model)
+        public async Task<IActionResult> Create(ReservationCreateInputModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                await reservationService.AddReservation(model);
+                model.StartTime = DateTime.Now;
+
+                return this.View(model);
             }
 
-            return View(model);
-        }
+            await reservationService.AddReservation(model);
 
-        public IActionResult Edit(int id)
-        {
-            var reservation = reservationService.GetReservationById(id);
-
-            if (reservation == null)
-            {
-                return NotFound();
-            }
-
-            return View(reservation);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PersonName,PersonEmail,PersonNumber,NumberOfSeats,StartTime,NumberOfHours")] ReservationInputModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    model.Id = id;
-                    await reservationService.Update(model);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ReservationExists(model.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-
-                return RedirectToAction(nameof(Index));
-            }
-
-            return View(model);
+            return View("RequestSent");
         }
 
         public IActionResult Delete(int id)
@@ -104,6 +71,12 @@
             return View(reservation);
         }
 
+        public async Task<IActionResult> Confirm(int id)
+        {
+            await reservationService.ConfirmReservation(id);
+            return RedirectToAction(nameof(Index));
+        }
+
         [HttpPost]
         [ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -112,16 +85,6 @@
             await reservationService.RemoveReservation(id);
             return RedirectToAction(nameof(Index));
         }
-
-        [HttpPost]
-        [ActionName("Update")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ConfirmReservation(int id)
-        {
-            await reservationService.ConfirmReservation(id);
-            return RedirectToAction(nameof(Index));
-        }
-
 
         private bool ReservationExists(int id)
         {

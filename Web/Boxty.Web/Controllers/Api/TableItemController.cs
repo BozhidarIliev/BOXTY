@@ -81,7 +81,7 @@
         [Route("MarkAsServed")]
         public async Task MarkAsDone(int orderItemId)
         {
-            await orderItemService.MarkAsDone(orderItemId);
+            await orderItemService.MarkAsCompleted(orderItemId);
         }
 
     }

@@ -19,7 +19,7 @@
     {
         private readonly IOrderItemService orderItemService;
         private readonly IDeletableEntityRepository<Order> orderRepository;
-        private readonly IDeletableEntityRepository<Models.OrderItem> orderItemRepository;
+        private readonly IDeletableEntityRepository<OrderItem> orderItemRepository;
         private readonly IUserService userService;
         private readonly IProductService productService;
         private readonly IHttpContextAccessor httpContextAccessor;
@@ -33,52 +33,72 @@
             this.productService = productService;
             this.httpContextAccessor = httpContextAccessor;
         }
+
         public IEnumerable<Order> GetAllOrders()
         {
             return orderRepository.All();
         }
 
-
-        public IEnumerable<T> GetOrders<T>()
+        public IEnumerable<Order> GetAllOrdersWithDeleted()
         {
-            return orderRepository.All().To<T>();
-        }
-
-        [Authorize(Roles = "waiter, admin, manager")]
-        public async Task CreateOrder(Order order)
-        {
-            order.Status = GlobalConstants.Sent;
-            orderRepository.AddAsync(order).Wait();
-            await orderRepository.SaveChangesAsync();
-
-            await orderItemService.CreateOrderItem(order);
-        }
-
-        public async Task MarkAsDone(int orderId)
-        {
-            var order = GetOrderById(orderId).Result;
-            order.Status = GlobalConstants.OrderCompleted;
-            await orderItemService.DeleteOrderItemsByOrderId(orderId);
-            await orderRepository.SaveChangesAsync();
-        }
-
-        public async Task<Order> GetOrderById(int orderId)
-        {
-            return await orderRepository.GetByIdWithDeletedAsync(orderId);
-        }
-
-        public async Task DeleteOrderItem(int orderId)
-        {
-            var order = await this.GetOrderById(orderId);
-            await orderItemService.DeleteOrderItemsByOrderId(orderId);
-            orderRepository.Delete(order);
-            await orderItemRepository.SaveChangesAsync();
+            return orderRepository.AllWithDeleted();
         }
 
         public Order GetOrderByDestination(string destination)
         {
             var list = orderRepository.All();
-            return list.FirstOrDefault(x => x.Destination == destination);
+            return list.Where(x => x.Destination == destination).FirstOrDefault(x => x.Status != GlobalConstants.Completed);
+        }
+
+        public async Task CreateOrder(Order order)
+        {
+            if (order.Delivery == true)
+            {
+                order.Status = GlobalConstants.Sent;
+            }
+            else
+            {
+                order.Status = GlobalConstants.Open;
+            }
+            orderRepository.AddAsync(order).Wait();
+
+            await orderRepository.SaveChangesAsync();
+
+            await orderItemService.CreateOrderItem(order);
+        }
+
+        public async Task MarkAsCompleted(int orderId)
+        {
+            var order = GetOrderByIdAsync(orderId).Result;
+            if (order.Delivery == true)
+            {
+                order.Status = GlobalConstants.Delivered;
+            }
+            else
+            {
+                order.Status = GlobalConstants.Completed;
+            }
+
+
+            await orderItemService.MarkAsCompletedByOrderId(orderId);
+            await this.DeleteOrder(orderId);
+
+            await orderRepository.SaveChangesAsync();
+        }
+
+        public async Task<Order> GetOrderByIdAsync(int orderId)
+        {
+            return await orderRepository.GetByIdWithDeletedAsync(orderId);
+        }
+
+        public async Task DeleteOrder(int orderId)
+        {
+            var order = await this.GetOrderByIdAsync(orderId);
+
+            await orderItemService.DeleteOrderItemsByOrderId(orderId);
+            orderRepository.Delete(order);
+
+            await orderItemRepository.SaveChangesAsync();
         }
 
         public async Task UpdateOrder(int tableId, IEnumerable<OrderItem> items)

@@ -1,5 +1,6 @@
 ﻿namespace Boxty.Web.Controllers
 {
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -29,11 +30,6 @@
         public IActionResult Details(int id)
         {
             var category = categoryService.GetCategoryById(id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-
             return View(category);
         }
 
@@ -46,9 +42,19 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name")] Category category)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+            {
+                return this.View(category);
+            }
+
+            try
             {
                 await categoryService.CreateCategory(category.Name);
+            }
+            catch (Exception ex)
+            {
+                this.ModelState.AddModelError(string.Empty, ex.Message);
+                return this.View(category);
             }
 
             return RedirectToAction(nameof(Index));

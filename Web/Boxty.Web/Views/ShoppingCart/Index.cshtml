@@ -70,7 +70,6 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (data) {
-
                     $('#shoppingCart > tr').slice(0).remove();
 
                     $.each(data.items, function (i, item) {
@@ -85,8 +84,8 @@
                             "</tr>";
 
                         $('#shoppingCart').append(rows);
-                        $('#total').html(data.total);
                     });
+                    $('#total').html(data.total);
                 },
 
                 failure: function (data) {
@@ -100,11 +99,13 @@
 
         function deleteShoppingCartItem(index) {
             $.ajax({
-                type: "DELETE",
-                url: "/api/ShoppingCart?index=" + index + "",
-                contentType: "application/json; charset=utf-8",
+                type: "POST",
+                url: "/api/ShoppingCart/RemoveItem?index=" + index,
+                headers: {
+                    RequestVerificationToken:
+                        $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
                 success: function (data) {
-                    //toastr.success('Insert POS line success for item: ' + productName, 'Success');
                     initShoppingCart()
                 },
                 failure: function (xhr, status, error) {

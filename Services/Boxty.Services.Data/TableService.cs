@@ -39,15 +39,21 @@
             return tables.FirstOrDefault(x => x.Id == tableId);
         }
 
-        public async Task ChangeTableStatus(int tableId)
+        public async Task OpenTable(int tableId)
         {
-            var tables = tableRepository.All();
-            var table = tables.FirstOrDefault(x => x.Id == tableId);
+            var table = GetTableById(tableId); 
+            
             if (table.Available == true)
             {
                 table.Available = false;
             }
-            else
+            await tableRepository.SaveChangesAsync();
+        }
+        public async Task CloseTable(int tableId)
+        {
+            var table = GetTableById(tableId);
+
+            if (table.Available == false)
             {
                 table.Available = true;
             }

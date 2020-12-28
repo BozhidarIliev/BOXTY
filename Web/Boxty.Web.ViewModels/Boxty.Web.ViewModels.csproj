@@ -23,6 +23,7 @@
     <ProjectReference Include="..\..\Common\Boxty.Common\Boxty.Common.csproj" />
     <ProjectReference Include="..\..\Data\Boxty.Data.Models\Boxty.Data.Models.csproj" />
     <ProjectReference Include="..\..\Services\Boxty.Services.Mapping\Boxty.Services.Mapping.csproj" />
+    <ProjectReference Include="..\..\Services\Boxty.Services\Boxty.Services.csproj" />
   </ItemGroup>
 
 </Project>

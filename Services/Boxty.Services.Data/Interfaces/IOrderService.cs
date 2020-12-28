@@ -9,16 +9,19 @@
     public interface IOrderService
     {
         IEnumerable<Order> GetAllOrders();
-        IEnumerable<T> GetOrders<T>();
+
+        IEnumerable<Order> GetAllOrdersWithDeleted();
 
         Task CreateOrder(Order order);
 
-        Task MarkAsDone(int orderId);
+        Task MarkAsCompleted(int orderId);
 
-        Task<Order> GetOrderById(int orderId);
+        Task<Order> GetOrderByIdAsync(int orderId);
 
         Order GetOrderByDestination(string destination);
 
         Task UpdateOrder(int orderId, IEnumerable<Models.OrderItem> items);
+
+        Task DeleteOrder(int orderId);
     }
 }

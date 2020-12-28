@@ -22,7 +22,12 @@ namespace Boxty.Services.Data
         private readonly IHttpContextAccessor context;
         private readonly IProductService productService;
 
-        public TableItemService(IOrderItemService orderItemService, ITableService tableService, IOrderService orderService, IHttpContextAccessor context, IProductService productService)
+        public TableItemService(
+            IOrderItemService orderItemService, 
+            ITableService tableService, 
+            IOrderService orderService,
+            IHttpContextAccessor context, 
+            IProductService productService)
         {
             this.orderItemService = orderItemService;
             this.tableService = tableService;
@@ -77,7 +82,7 @@ namespace Boxty.Services.Data
 
             if (item == null)
             {
-                var product = productService.GetProductById<Product>(productId);
+                var product = productService.GetProductById(productId);
                 items.Add(new TableItemViewModel { ProductId = productId, ProductName = product.Name, ProductPrice = product.Price, Amount = 1 });
             }
             else
@@ -143,11 +148,12 @@ namespace Boxty.Services.Data
         public async Task SendOrderItems(int id)
         {
             var items = await GetPendingItems<OrderItem>(id);
+
             if (items != null)
             {
                 if (tableService.GetTableById(id).Available == true)
                 {
-                    await tableService.ChangeTableStatus(id);
+                    await tableService.OpenTable(id);
                     Order order = new Order
                     {
                         Status = GlobalConstants.Sent,

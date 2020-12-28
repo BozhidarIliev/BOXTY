@@ -55,7 +55,7 @@
             else 
             {
                 cart.Items = cart.Items.Concat(new List<OrderItemOutputModel> { 
-                    new OrderItemOutputModel { ProductId = product.Id, Product = product, Amount = 1 } });
+                    new OrderItemOutputModel { ProductId = product.Id, Product = product, Amount = 1, Comment = string.Empty } });
             }
 
             await SessionHelper.SetObjectAsJsonAsync(httpContext.Session, GlobalConstants.ShoppingCart, cart);

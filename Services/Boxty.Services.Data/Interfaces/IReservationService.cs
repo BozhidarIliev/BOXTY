@@ -13,9 +13,8 @@ namespace Boxty.Services.Data.Interfaces
     {
         IEnumerable<T> GetAllReservations<T>();
         Reservation GetReservationById(int id);
-        Task AddReservation(ReservationInputModel model);
-        Task Update(ReservationInputModel model);
-        Table CheckForAvailablity(ReservationInputModel model);
+        Task AddReservation(ReservationCreateInputModel model);
+        Task Update(ReservationCreateInputModel model);
         Task RemoveReservation(int id);
         Task ConfirmReservation(int id);
     }

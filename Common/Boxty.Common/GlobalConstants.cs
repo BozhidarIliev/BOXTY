@@ -30,13 +30,23 @@
 
         public const string Sent = "sent";
 
+        public const string Open = "open";
+
+        public const string Delivering = "delivering";
+
+        public const string Delivered = "delivered";
+
         public const string TableAvailable = "available";
 
         public const string TableUnavailable = "unavailable";
 
         public const string Ready = "ready";
 
-        public const string Completed = "completed";
+        public const string All = "all";
+
+        public const string Completed = "completed"; 
+        
+        public const string Deleted = "deleted";
 
         public const string OrderCompleted = "orderCompleted";
 
@@ -51,5 +61,7 @@
         public const string DefaultApiRoute = "api/[controller]";
 
         public const double MaxPriceValue = 9999.99;
+
+        public const int RestaurantDailyWorkingHours = 16;
     }
 }

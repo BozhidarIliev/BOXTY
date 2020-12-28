@@ -1,36 +1,59 @@
 ﻿namespace Boxty.Controllers
 {
+    using System;
+    using System.Linq;
+    using System.Threading.Tasks;
     using Boxty.Common;
-    using Boxty.Services;
+    using Boxty.Data.Models;
     using Boxty.Services.Data.Interfaces;
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
     public class OrderController : Controller
     {
         private readonly IOrderService orderService;
-        private readonly IShoppingCartService shoppingCartService;
-        private readonly IHttpContextAccessor httpContextAccessor;
-        private readonly IUserService userService;
 
-        public OrderController(IOrderService orderService, IShoppingCartService shoppingCartService, IHttpContextAccessor httpContextAccessor, IUserService userService)
+        public OrderController(IOrderService orderService)
         {
             this.orderService = orderService;
-            this.shoppingCartService = shoppingCartService;
-            this.httpContextAccessor = httpContextAccessor;
-            this.userService = userService;
         }
 
-        public IActionResult Index()
+
+        public IActionResult Index(string filter)
         {
-            return this.View(orderService.GetAllOrders());
+            var items = orderService.GetAllOrdersWithDeleted();
+            switch (filter)
+            {
+                case GlobalConstants.All:
+                    return this.View(items);
+                case GlobalConstants.Sent:
+                    return this.View(items.Where(x => x.Status == GlobalConstants.Sent));
+                case GlobalConstants.Open:
+                    return this.View(items.Where(x => x.Status == GlobalConstants.Open));
+                case GlobalConstants.Delivering:
+                    return this.View(items.Where(x => x.Status == GlobalConstants.Delivering));
+                case GlobalConstants.Delivered:
+                    return this.View(items.Where(x => x.Status == GlobalConstants.Delivered));
+                case GlobalConstants.Completed:
+                    return this.View(items.Where(x => x.Status == GlobalConstants.Completed));
+                case GlobalConstants.Deleted:
+                    return this.View(items.Where(x => x.IsDeleted == true));
+                default: return this.View(items);
+            }
         }
 
-        public IActionResult MarkAsDone(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            this.orderService.MarkAsDone(id);
-            return this.RedirectToAction("Index");
+            try
+            {
+                await orderService.DeleteOrder(id);
+            }
+            catch (Exception ex)
+            {
+                this.ModelState.AddModelError(string.Empty, ex.Message);
+                return RedirectToAction(nameof(Index));
+            }
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

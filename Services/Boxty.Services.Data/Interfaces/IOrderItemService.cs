@@ -13,9 +13,9 @@ namespace Boxty.Services.Data.Interfaces
 
         IEnumerable<T> GetKitchenOrderItems<T>();
 
-        Task MarkAsReady(int orderItemId);
+        Task MarkAsSentByOrderId(int orderItemId);
 
-        Task MarkAsDone(int orderItemId);
+        Task MarkAsCompleted(int orderItemId);
 
         Task CreateOrderItem(Order order);
 
@@ -27,5 +27,7 @@ namespace Boxty.Services.Data.Interfaces
         Task DeleteOrderItemsByOrderId(int orderId);
 
         Task UpdateOrderItem(int orderId,int tableId, IEnumerable<OrderItem> items);
+
+        Task MarkAsCompletedByOrderId(int orderId);
     }
 }

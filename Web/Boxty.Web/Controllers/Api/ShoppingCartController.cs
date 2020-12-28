@@ -28,8 +28,9 @@
             return new ShoppingCartViewModel { Items = cart.Items };
         }
 
-        [HttpDelete]
+        [HttpPost]
         [AllowAnonymous]
+        [Route("RemoveItem")]
         public void RemoveItem(int index)
         {
             shoppingCartService.RemoveFromCart(index);

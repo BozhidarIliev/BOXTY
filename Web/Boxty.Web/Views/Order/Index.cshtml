@@ -5,11 +5,18 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>View</h1>
+<a asp-action="Index" asp-route-filter="all">All</a> |
+<a asp-action="Index" asp-route-filter="sent">Sent</a> |
+<a asp-action="Index" asp-route-filter="open">Open</a> |
+<a asp-action="Index" asp-route-filter="completed">Completed</a> |
+<a asp-action="Index" asp-route-filter="deleted">Deleted</a>
 
 <table class="table">
     <thead>
         <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Status)
             </th>
@@ -45,6 +52,9 @@
         {
             <tr>
                 <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.Status)
                 </td>
                 <td>
@@ -72,7 +82,10 @@
                     @Html.DisplayFor(modelItem => item.ModifiedOn)
                 </td>
                 <td>
-                    <a asp-action="MarkAsDone" asp-route-id="@item.Id">Mark As Done</a>
+                    @if (item.IsDeleted != true)
+                    {
+                        <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Id">Delete</a>
+                    }
                 </td>
             </tr>
         }

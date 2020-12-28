@@ -64,31 +64,35 @@ namespace Boxty.Services.Data
             await orderItemRepository.SaveChangesAsync();
         }
 
-        public async Task MarkAsReady(int orderItemId)
+        public async Task MarkAsSentByOrderId(int orderId)
         {
-            var orderItem = this.GetOrderItemById(orderItemId);
-            orderItem.Status = GlobalConstants.Ready;
-            orderItemRepository.Update(orderItem);
+            foreach (var orderItem in this.GetAllCurrentOrderItemsByOrderId(orderId))
+            {
+                orderItem.Status = GlobalConstants.Sent;
+            }
+
             await orderItemRepository.SaveChangesAsync();
         }
 
-        public async Task MarkAsDone(int orderItemId)
+        public async Task MarkAsCompleted(int orderItemId)
         {
-
             var orderItem = this.GetOrderItemById(orderItemId);
             orderItem.Status = GlobalConstants.Completed;
             orderItemRepository.Update(orderItem);
             await orderItemRepository.SaveChangesAsync();
         }
 
-        public async Task MarkAsDoneByOrderId(int orderId)
+        public async Task MarkAsCompletedByOrderId(int orderId)
         {
             var orderItems = this.GetOrderItemsByOrderId(orderId);
             foreach (var item in orderItems)
             {
-                await MarkAsDone(item.OrderId);
+                var orderItem = this.GetOrderItemById(item.Id);
+                orderItem.Status = GlobalConstants.Completed;
+                orderItemRepository.Update(orderItem);
             }
-            await orderItemRepository.SaveChangesAsync();
+
+            await DeleteOrderItemsByOrderId(orderId);
         }
 
         public async Task DeleteOrderItemsByOrderId(int orderId)
@@ -96,7 +100,8 @@ namespace Boxty.Services.Data
             var items = this.GetOrderItemsByOrderId(orderId);
             foreach (var item in items)
             {
-                orderItemRepository.Delete(item);
+                var orderItem = GetOrderItemById(item.Id);
+                orderItemRepository.Delete(orderItem);
             }
             await orderItemRepository.SaveChangesAsync();
         }
@@ -108,7 +113,7 @@ namespace Boxty.Services.Data
 
         public IEnumerable<OrderItem> GetOrderItemsByOrderId(int orderId)
         {
-            return orderItemRepository.All().Where(x => (x.Id == orderId) && (x.IsDeleted == false));
+            return orderItemRepository.All().Where(x => (x.OrderId == orderId) && (x.IsDeleted == false));
         }
 
         public async Task UpdateOrderItem(int orderId, int tableId, IEnumerable<OrderItem> items)
@@ -124,6 +129,13 @@ namespace Boxty.Services.Data
                 };
                 await CreateOrderItem(order);
             }
+        }
+
+        public async Task DeleteOrderItem(int orderItemId)
+        {
+            var orderItem = GetOrderItemById(orderItemId);
+            orderItemRepository.Delete(orderItem);
+            await orderItemRepository.SaveChangesAsync();
         }
     }
 }

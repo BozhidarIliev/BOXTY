@@ -4,7 +4,7 @@
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using Boxty.Common;
     using Boxty.Data;
     using Boxty.Data.Models;
     using Boxty.Services.Interfaces;
@@ -35,6 +35,7 @@
             return View(productService.GetProducts<ProductViewModel>());
         }
 
+        [AllowAnonymous]
         public IActionResult Details(int id)
         {
             var item = productService.GetProductById<ProductViewModel>(id);
@@ -46,6 +47,7 @@
             return View(item);
         }
 
+        [Authorize(Roles = GlobalConstants.Admin)]
         public IActionResult Create()
         {
             var categories = categoryService.GetAllCategories<CategoryDropDownViewModel>();
@@ -57,6 +59,7 @@
         }
 
         [HttpPost]
+        [Authorize(Roles = GlobalConstants.Admin)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProductCreateInputModel model)
         {
@@ -83,6 +86,7 @@
         }
 
         [HttpGet]
+        [Authorize(Roles = GlobalConstants.Admin)]
         public IActionResult Edit(int id)
         {
             var product = productService.GetProductById<ProductEditInputModel>(id);
@@ -92,6 +96,7 @@
         }
 
         [HttpPost]
+        [Authorize(Roles = GlobalConstants.Admin)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(ProductEditInputModel input, int id)
         {
@@ -106,7 +111,9 @@
             return this.RedirectToAction(nameof(this.Details), new { input.Id });
         }
 
-        public IActionResult Delete(int id)
+
+        [Authorize(Roles = GlobalConstants.Admin)]
+        public async Task<IActionResult> Delete(int id)
         {
             await this.productService.DeleteAsync(id);
             return this.RedirectToAction(nameof(this.Index));
@@ -114,6 +121,7 @@
 
         [HttpPost]
         [ActionName("Delete")]
+        [Authorize(Roles = GlobalConstants.Admin)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

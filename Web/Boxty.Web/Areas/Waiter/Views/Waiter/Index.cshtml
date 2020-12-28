@@ -71,8 +71,8 @@
 </div>
 <label type="text">Total:</label>
 <label type="text" id="total"></label>
-<button onclick="sendItems()" class="btn btn-info">Send</button>
-<button onclick="endOrder()" class="btn btn-info">End Order</button>
+<button onclick="sendItems()" class="btn btn-success">Send</button>
+<button onclick="completeOrder()" class="btn btn-info">Complete Order</button>
 
 
 @section Scripts{
@@ -82,36 +82,14 @@
             initTablesList();
             loadCategories();
         });
-        function markAsServed(orderItemId) {
 
-            $.ajax({
-                type: "POST",
-                url: "/api/TableItem/MarkAsServed?orderItemId=" + orderItemId,
-                headers: {
-                    RequestVerificationToken:
-                        $('input:hidden[name="__RequestVerificationToken"]').val()
-                },
-                success: function (data) {
-                    initPosLine();
-                    toastr.success('Insert POS line success for item: ' + productName, 'Success');
-                },
-                failure: function (xhr, status, error) {
-
-                },
-                error: function (xhr, status, thrownError) {
-                    alert('Error ' + thrownError + " " + xhr.status);
-                }
-
-            })
-        }
-
-        function endOrder() {
+        function completeOrder() {
             var tableId = document.getElementById("tableList").value;
 
             $.ajax({
                 type: "POST",
-                url: "/api/Order/EndOrder?tableId=" + tableId,
-                headers: {
+                url: "/api/Order/CompleteOrder?tableId=" + tableId,
+                headers: { 
                     RequestVerificationToken:
                         $('input:hidden[name="__RequestVerificationToken"]').val()
                 },

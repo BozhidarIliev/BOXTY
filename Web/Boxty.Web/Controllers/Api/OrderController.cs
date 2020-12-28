@@ -15,12 +15,14 @@
         private readonly IOrderItemService orderItemService;
         private readonly IOrderService orderService;
         private readonly ITableService tableService;
+        private readonly ITableItemService tableItemService;
 
-        public OrderController(IOrderItemService orderItemService, IOrderService orderService, ITableService tableService)
+        public OrderController(IOrderItemService orderItemService, IOrderService orderService, ITableService tableService, ITableItemService tableItemService)
         {
             this.orderItemService = orderItemService;
             this.orderService = orderService;
             this.tableService = tableService;
+            this.tableItemService = tableItemService;
         }
 
         [HttpGet]
@@ -36,12 +38,12 @@
         }
 
         [HttpPost]
-        [Route("EndOrder")]
-        public async Task EndOrder(int tableId)
+        [Route("CompleteOrder")]
+        public async Task CompleteOrder(int tableId)
         {
             var order = orderService.GetOrderByDestination(tableId.ToString());
-            await orderService.MarkAsDone(order.Id);
-            await tableService.ChangeTableStatus(tableId);
+            await orderService.MarkAsCompleted(order.Id);
+            await tableService.CloseTable(tableId);
         }
     }
 }

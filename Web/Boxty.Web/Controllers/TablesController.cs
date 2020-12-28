@@ -69,9 +69,9 @@
         [HttpPost]
         [ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            this.tableService.DeleteTable(id);
+            await this.tableService.DeleteTable(id);
             return RedirectToAction(nameof(Index));
         }
 

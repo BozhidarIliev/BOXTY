@@ -36,14 +36,14 @@
         [Route("MarkAsDone")]
         public async Task MarkAsDone(int orderItemId)
         {
-            await orderItemService.MarkAsDone(orderItemId);
+            await orderItemService.MarkAsCompleted(orderItemId);
         }
 
         [HttpPost]
         [Route("MarkAsServed")]
         public async Task MarkAsServed(int orderItemId)
         {
-            await orderItemService.MarkAsDone(orderItemId);
+            await orderItemService.MarkAsCompleted(orderItemId);
         }
     }
 }

@@ -18,24 +18,11 @@
             initOrderItems();
         });
 
-        function openAccordion(orderId) {
-            var button = document.getElementById("b" + orderId);
-            var div = document.getElementById("d" + orderId);
-
-            button.classList.toggle("active");
-
-            var panel = div;
-            if (panel.style.display === "block") {
-                panel.style.display = "none";
-            } else {
-                panel.style.display = "block";
-            }
-        }
-        function markAsDone(id) {
+        
+        function markAsCompleted(id) {
             $.ajax({
                 type: "POST",
-                url: "/api/Driver/MarkAsDone?orderId=" + id,
-                contentType: "application/json; charset=utf-8",
+                url: "/api/Driver/MarkAsCompleted?orderId=" + id,
                 headers: {
                     RequestVerificationToken:
                         $('input:hidden[name="__RequestVerificationToken"]').val()
@@ -66,17 +53,15 @@
                         $('.table').append(button);
                         $('.table').append("<div class='panel' id='d"+order.id+"'>");
                         $.each(order.orderItems, function (j, orderItem) {
-                            $("#d" + order.id).append('<ul class="w3-ul">')
-                            var row = "<li>" + orderItem.product.name + ", Amount: " + orderItem.amount + "<li>";
+                            var row = "<li>Product: " + orderItem.product.name + ", Amount: " + orderItem.amount + "</li>";
 
                             $("#d" + order.id ).append(row);
                         })
-                        $("#d" + order.id).append("</ul>");
                         $("#d" + order.id).append("</div>");
-                        var btnDone = '<button onclick="markAsDone(' + order.id + ')" class="btn btn-success">Mark As Done</button>'
+                        var btnDone = '<button onclick="markAsCompleted(' + order.id + ')" class="btn btn-success">Mark As Done</button>'
                         $("#d"+order.id).append(btnDone);
                     });
-
+                    initOrderItems();
                 },
                 failure: function (data) {
                     alert(data.responseText);

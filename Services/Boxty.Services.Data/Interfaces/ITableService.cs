@@ -14,7 +14,9 @@
 
         Table GetTableById(int tableId);
 
-        Task ChangeTableStatus(int tableId);
+        Task OpenTable(int tableId);
+
+        Task CloseTable(int tableId);
 
         Task CreateTable(Table table);
 

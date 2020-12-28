@@ -14,7 +14,14 @@
 
         public string Status { get; set; }
 
-        public decimal Total => Items.Sum(x => x.Subtotal);
+        public decimal Total { set
+            {
+                if (Items.Count() > 0)
+                {
+                    Total = Items.Sum(x => x.Product.Price);
+                }
+            }
+        }
 
         public string Destination { get; set; }
 

@@ -1,11 +1,10 @@
-﻿using Boxty.Data.Models;
-using Boxty.Services.Mapping;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Boxty.Web.ViewModels
+﻿namespace Boxty.Web.ViewModels
 {
+    using System;
+
+    using Boxty.Data.Models;
+    using Boxty.Services.Mapping;
+
     public class ReservationViewModel : IMapFrom<Reservation>
     {
         public int Id { get; set; }
@@ -18,11 +17,11 @@ namespace Boxty.Web.ViewModels
 
         public int NumberOfSeats { get; set; }
 
-        public DateTime CreatedOn { get; set; }
-
         public DateTime StartTime { get; set; }
 
-        public int TableId { get; set; }
+        public int Duration { get;  set; }
+
+        public DateTime CreatedOn { get; set; }
 
         public bool Confirmed { get; set; }
     }
