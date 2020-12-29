@@ -27,7 +27,7 @@ namespace Boxty.Services.Data
 
         public IEnumerable<OrderItem> GetCurrentOrderItemsByOrderId(int orderId)
         {
-            var items = orderItemRepository.All().Where(x => x.Id == orderId);
+            var items = orderItemRepository.All().Where(x => x.OrderId == orderId);
 
             return items.To<OrderItem>();
         }

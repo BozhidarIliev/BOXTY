@@ -21,33 +21,39 @@ namespace Sandbox
     public class OrderItemServiceTests : BaseServiceTests
     {
         private IOrderItemService orderItemService => this.ServiceProvider.GetRequiredService<IOrderItemService>();
+        private IOrderService orderService => this.ServiceProvider.GetRequiredService<IOrderService>();
+        private IDriverService driverService => this.ServiceProvider.GetRequiredService<IDriverService>();
 
         public void CreateOrderItem()
         {
+
             var orderItem = new OrderItem
             {
-                Id = 1,
-                ProductId = 5,
-                Comment = "1",
-                CreatedOn = DateTime.UtcNow,
-                CreatedBy = "2",
-                OrderId = 1,
+                ProductId = 1,
+                Comment = string.Empty,
             };
 
-            var order = new Order
+            var orderItem2 = new OrderItem
+            {
+                ProductId = 1,
+                Comment = string.Empty,
+            };
+
+            var list = new List<OrderItem>();
+            list.Add(orderItem);
+            list.Add(orderItem2);
+
+            Order order = new Order
             {
                 Id = 1,
-                Items = new List<OrderItem>
-                {
-                    orderItem,
-                },
+                Delivery = true,
+                Items = list,
             };
 
+            orderService.CreateOrder(order);
 
-            orderItemService.CreateOrderItem(order);
-            orderItemService.MarkAsCompletedByOrderId(order.Id);
+            var result = driverService.GetCurrentOrderItems();
 
-            var actual = orderItemService.GetOrderItemById(orderItem.Id);
 
         }
     }

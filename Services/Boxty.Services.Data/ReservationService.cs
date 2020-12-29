@@ -67,6 +67,7 @@ namespace Boxty.Services.Data
                 Id = model.Id,
                 NumberOfSeats = model.NumberOfSeats,
                 Duration = model.Duration,
+                StartTime = model.StartTime,
                 PersonEmail = model.Email,
                 PersonName = model.Name,
                 PersonNumber = model.Number,
