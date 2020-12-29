@@ -6,15 +6,18 @@
     using Boxty.Common;
     using Boxty.Data.Models;
     using Boxty.Services.Data.Interfaces;
+    using Boxty.Services.Interfaces;
     using Microsoft.AspNetCore.Mvc;
 
     public class OrderController : Controller
     {
         private readonly IOrderService orderService;
+        private readonly ITableService tableService;
 
-        public OrderController(IOrderService orderService)
+        public OrderController(IOrderService orderService, ITableService tableService)
         {
             this.orderService = orderService;
+            this.tableService = tableService;
         }
 
 
@@ -46,6 +49,12 @@
             try
             {
                 await orderService.DeleteOrder(id);
+                var table = tableService.GetTableByOrderId(id);
+                if (table != null)
+                {
+                    tableService.MakeAvailable(table.Id);
+                }
+
             }
             catch (Exception ex)
             {

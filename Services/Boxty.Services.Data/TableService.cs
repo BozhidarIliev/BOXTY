@@ -5,16 +5,19 @@
     using System.Threading.Tasks;
     using Boxty.Data.Common.Repositories;
     using Boxty.Models;
+    using Boxty.Services.Data.Interfaces;
     using Boxty.Services.Interfaces;
     using Boxty.Services.Mapping;
 
     public class TableService : ITableService
     {
         private readonly IRepository<Table> tableRepository;
+        private readonly IOrderService orderService;
 
-        public TableService(IRepository<Table> tableRepositrory)
+        public TableService(IRepository<Table> tableRepositrory, IOrderService orderService)
         {
             this.tableRepository = tableRepositrory;
+            this.orderService = orderService;
         }
 
         public IEnumerable<Table> GetAllTables()
@@ -39,7 +42,17 @@
             return tables.FirstOrDefault(x => x.Id == tableId);
         }
 
-        public async Task OpenTable(int tableId)
+        public Table GetTableByOrderId(int orderId)
+        {
+            var table = GetTableByOrderId(orderId);
+            if (table != null)
+            {
+                return table;
+            }
+            return null;
+        }
+
+        public async Task MakeUnavailable(int tableId)
         {
             var table = GetTableById(tableId); 
             
@@ -49,7 +62,7 @@
             }
             await tableRepository.SaveChangesAsync();
         }
-        public async Task CloseTable(int tableId)
+        public async Task MakeAvailable(int tableId)
         {
             var table = GetTableById(tableId);
 

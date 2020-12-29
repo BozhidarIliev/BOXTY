@@ -153,7 +153,7 @@ namespace Boxty.Services.Data
             {
                 if (tableService.GetTableById(id).Available == true)
                 {
-                    await tableService.OpenTable(id);
+                    await tableService.MakeUnavailable(id);
                     Order order = new Order
                     {
                         Status = GlobalConstants.Sent,

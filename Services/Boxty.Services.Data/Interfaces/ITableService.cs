@@ -14,9 +14,11 @@
 
         Table GetTableById(int tableId);
 
-        Task OpenTable(int tableId);
+        Table GetTableByOrderId(int orderId);
 
-        Task CloseTable(int tableId);
+        Task MakeUnavailable(int tableId);
+
+        Task MakeAvailable(int tableId);
 
         Task CreateTable(Table table);
 

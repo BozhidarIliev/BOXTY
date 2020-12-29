@@ -12,65 +12,8 @@
 
 @section Scripts{
     <script>
-
-
         $(document).ready(function () {
-            initOrderItems();
+            initDriverOrderItems();
         });
-
-        
-        function markAsCompleted(id) {
-            $.ajax({
-                type: "POST",
-                url: "/api/Driver/MarkAsCompleted?orderId=" + id,
-                headers: {
-                    RequestVerificationToken:
-                        $('input:hidden[name="__RequestVerificationToken"]').val()
-                },
-                success: function (data) {
-                    initOrderItems();
-                },
-                failure: function (xhr, status, error) {
-
-                },
-                error: function (xhr, status, thrownError) {
-                    alert('Error ' + thrownError + " " + xhr.status);
-                }
-
-            })
-        }
-
-        function initOrderItems() {
-            $.ajax({
-                type: "GET",
-                url: "/api/Driver",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (data) {
-                    $('.table > tr').slice(0).remove();
-                    $.each(data, function (i, order) {
-                        var button = "<button class='accordion' onclick='openAccordion("+order.id+")' id='b"+order.id+"'>" + "OrderId: " + order.id + ", Destination: " + order.destination + "</button>";
-                        $('.table').append(button);
-                        $('.table').append("<div class='panel' id='d"+order.id+"'>");
-                        $.each(order.orderItems, function (j, orderItem) {
-                            var row = "<li>Product: " + orderItem.product.name + ", Amount: " + orderItem.amount + "</li>";
-
-                            $("#d" + order.id ).append(row);
-                        })
-                        $("#d" + order.id).append("</div>");
-                        var btnDone = '<button onclick="markAsCompleted(' + order.id + ')" class="btn btn-success">Mark As Done</button>'
-                        $("#d"+order.id).append(btnDone);
-                    });
-                    initOrderItems();
-                },
-                failure: function (data) {
-                    alert(data.responseText);
-                },
-                error: function (data) {
-                    alert(data.responseText);
-                }
-            });
-        }
-
     </script>
 }

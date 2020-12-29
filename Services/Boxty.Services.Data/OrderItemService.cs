@@ -20,22 +20,12 @@ namespace Boxty.Services.Data
             this.orderItemRepository = orderItemRepository;
         }
 
-        public IEnumerable<OrderItem> GetAllOrderItems()
-        {
-            return orderItemRepository.All();
-        }
-
         public IEnumerable<T> GetKitchenOrderItems<T>()
         {
             return orderItemRepository.All().Where(x => x.Status == GlobalConstants.Sent).To<T>();
         }
 
-        public IEnumerable<T> GetOrderItems<T>()
-        {
-            return orderItemRepository.All().To<T>();
-        }
-
-        public IEnumerable<OrderItem> GetAllCurrentOrderItemsByOrderId(int orderId)
+        public IEnumerable<OrderItem> GetCurrentOrderItemsByOrderId(int orderId)
         {
             var items = orderItemRepository.All().Where(x => x.Id == orderId);
 
@@ -66,7 +56,7 @@ namespace Boxty.Services.Data
 
         public async Task MarkAsSentByOrderId(int orderId)
         {
-            foreach (var orderItem in this.GetAllCurrentOrderItemsByOrderId(orderId))
+            foreach (var orderItem in this.GetCurrentOrderItemsByOrderId(orderId))
             {
                 orderItem.Status = GlobalConstants.Sent;
             }
@@ -108,7 +98,7 @@ namespace Boxty.Services.Data
 
         public OrderItem GetOrderItemById(int orderItemId)
         {
-            return this.orderItemRepository.All().FirstOrDefault(x => x.Id == orderItemId);
+            return this.orderItemRepository.AllWithDeleted().FirstOrDefault(x => x.Id == orderItemId);
         }
 
         public IEnumerable<OrderItem> GetOrderItemsByOrderId(int orderId)

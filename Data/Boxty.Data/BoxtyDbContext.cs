@@ -6,6 +6,7 @@
     using System.Security.Claims;
     using System.Threading;
     using System.Threading.Tasks;
+    using Boxty.Common;
     using Boxty.Data.Common.Models;
     using Boxty.Data.Models;
     using Boxty.Models;
@@ -115,7 +116,7 @@
                 var entity = (IAuditInfo)entry.Entity;
                 if (entry.State == EntityState.Added && entity.CreatedOn == default)
                 {
-                    entity.CreatedOn = DateTime.UtcNow;
+                    entity.CreatedOn = DateTime.Now;
                 }
                 else
                 {
@@ -135,7 +136,12 @@
             foreach (var entry in changedEntries)
             {
                 var entity = (ICreatorInfo)entry.Entity;
-                if (entry.State == EntityState.Added && entity.CreatedBy == default)
+                if (httpContextAccessor.HttpContext == null)
+                {
+                    entity.CreatedBy = GlobalConstants.Skipped;
+                    continue;
+                }
+                else if (entry.State == EntityState.Added)
                 {
                     entity.CreatedBy = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 }

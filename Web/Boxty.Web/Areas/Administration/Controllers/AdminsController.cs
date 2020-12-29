@@ -71,7 +71,7 @@
                 return View("NotFound");
             }
 
-            var model = adminService.GetUserRoles(role);
+            var model = await adminService.GetUserRoles(role);
 
             return View(model);
         }
@@ -94,7 +94,7 @@
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("ListRoles");
+                    return RedirectToAction("RolesList");
                 }
 
                 foreach (var error in result.Errors)
@@ -119,7 +119,7 @@
                 return View("NotFound");
             }
 
-            var model = adminService.EditUsersInRole(role);
+            var model = await adminService.EditUsersInRole(role);
 
             return View(model);
         }

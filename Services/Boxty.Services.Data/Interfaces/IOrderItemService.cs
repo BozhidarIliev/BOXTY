@@ -7,10 +7,6 @@ namespace Boxty.Services.Data.Interfaces
 {
     public interface IOrderItemService
     {
-        IEnumerable<OrderItem> GetAllOrderItems();
-
-        IEnumerable<T> GetOrderItems<T>();
-
         IEnumerable<T> GetKitchenOrderItems<T>();
 
         Task MarkAsSentByOrderId(int orderItemId);
@@ -20,7 +16,7 @@ namespace Boxty.Services.Data.Interfaces
         Task CreateOrderItem(Order order);
 
         OrderItem GetOrderItemById(int orderItemId);
-        IEnumerable<OrderItem> GetAllCurrentOrderItemsByOrderId(int orderId);
+        IEnumerable<OrderItem> GetCurrentOrderItemsByOrderId(int orderId);
 
         IEnumerable<T> GetCurrentOrderItemsByOrderId<T>(int orderId);
 

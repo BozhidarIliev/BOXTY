@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Boxty.Common;
     using Boxty.Services.Data.Interfaces;
     using Boxty.Web.ViewModels;
     using Microsoft.AspNetCore.Authorization;
@@ -44,6 +45,7 @@
         }
 
         [AllowAnonymous]
+        [Authorize(Roles = GlobalConstants.DefaultRole)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ReservationCreateInputModel model)
@@ -57,7 +59,12 @@
 
             await reservationService.AddReservation(model);
 
-            return View("RequestSent");
+            return RedirectToAction(nameof(RequestSent));
+        }
+
+        public IActionResult RequestSent()
+        {
+            return View();
         }
 
         public IActionResult Delete(int id)

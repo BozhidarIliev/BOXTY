@@ -1,21 +1,16 @@
 ﻿namespace Boxty.Controllers
 {
     using System;
-    using System.IO;
-    using System.Linq;
     using System.Threading.Tasks;
+
     using Boxty.Common;
-    using Boxty.Data;
-    using Boxty.Data.Models;
     using Boxty.Services.Interfaces;
     using Boxty.Web.ViewModels;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.Hosting.Internal;
 
-    [Authorize(Roles = "manager,admin")]
+    [Authorize(Roles = GlobalConstants.Admin)]
     public class ProductController : Controller
     {
         private readonly IProductService productService;
@@ -79,8 +74,6 @@
                 model.Categories = categoryService.GetAllCategories<CategoryDropDownViewModel>();
                 return this.View(model);
             }
-
-            this.TempData["Message"] = "Product added successfully.";
 
             return RedirectToAction(nameof(Index));
         }

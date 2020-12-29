@@ -1,12 +1,9 @@
-﻿using Boxty.Data.Models;
-using Boxty.Services.Mapping;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Boxty.Web.ViewModels
+﻿namespace Boxty.Web.ViewModels
 {
-    public class CategoryDropDownViewModel : IMapFrom<Category>
+    using Boxty.Data.Models;
+    using Boxty.Services.Mapping;
+
+    public class CategoryViewModel : IMapFrom<Category>
     {
         public int Id { get; set; }
 

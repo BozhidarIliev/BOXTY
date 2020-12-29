@@ -15,17 +15,14 @@
     [ApiController]
     public class OrderItemController : Controller
     {
-        private readonly IOrderService orderService;
         private readonly IOrderItemService orderItemService;
 
-        public OrderItemController(IOrderService orderService, IOrderItemService orderItemService)
+        public OrderItemController(IOrderItemService orderItemService)
         {
-            this.orderService = orderService;
             this.orderItemService = orderItemService;
         }
 
         [HttpGet]
-        [Authorize(Roles ="kitchenStaff,manager,admin")]
         public IEnumerable<OrderItemOutputModel> GetKitchenOrderItems()
         {
             var items = orderItemService.GetKitchenOrderItems<OrderItemOutputModel>();

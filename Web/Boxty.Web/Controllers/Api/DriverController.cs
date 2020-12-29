@@ -15,13 +15,11 @@
     public class DriverController : Controller
     {
         private readonly IOrderService orderService;
-        private readonly IOrderItemService orderItemService;
         private readonly IDriverService driverService;
 
-        public DriverController(IDriverService driverService, IOrderService orderService, IOrderItemService orderItemService)
+        public DriverController(IDriverService driverService, IOrderService orderService)
         {
             this.orderService = orderService;
-            this.orderItemService = orderItemService;
             this.driverService = driverService;
         }
 

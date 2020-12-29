@@ -2,6 +2,8 @@
 {
     public class GlobalConstants
     {
+        public const string SystemName = "Boxty";
+
         public const string Error = "Error";
 
         public const string ModelError = "LoginError";
@@ -63,5 +65,7 @@
         public const double MaxPriceValue = 9999.99;
 
         public const int RestaurantDailyWorkingHours = 16;
+
+        public const string Skipped = "skipped";
     }
 }

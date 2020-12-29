@@ -51,10 +51,12 @@
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+@if (User.IsInRole(Boxty.Common.GlobalConstants.Admin))
+{
+    <div>
+        <a asp-action="Index">List</a>
+    </div>
 }
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }

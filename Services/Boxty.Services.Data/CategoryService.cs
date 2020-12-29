@@ -19,14 +19,8 @@
             this.categoryRepository = categoryRepository;
         }
 
-        public IEnumerable<Category> GetCategories()
-        {
-            return categoryRepository.All();
-        }
-
         public IEnumerable<T> GetAllCategories<T>()
         {
-            
             return categoryRepository.All().To<T>();
         }
 

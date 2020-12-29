@@ -20,18 +20,12 @@
         private readonly IOrderItemService orderItemService;
         private readonly IDeletableEntityRepository<Order> orderRepository;
         private readonly IDeletableEntityRepository<OrderItem> orderItemRepository;
-        private readonly IUserService userService;
-        private readonly IProductService productService;
-        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public OrderService(IOrderItemService orderItemService, IDeletableEntityRepository<Order> orderRepository, IDeletableEntityRepository<Models.OrderItem> orderItemRepository, IUserService userService, IProductService productService, IHttpContextAccessor httpContextAccessor)
+        public OrderService(IOrderItemService orderItemService, IDeletableEntityRepository<Order> orderRepository, IDeletableEntityRepository<OrderItem> orderItemRepository)
         {
             this.orderItemService = orderItemService;
             this.orderRepository = orderRepository;
             this.orderItemRepository = orderItemRepository;
-            this.userService = userService;
-            this.productService = productService;
-            this.httpContextAccessor = httpContextAccessor;
         }
 
         public IEnumerable<Order> GetAllOrders()

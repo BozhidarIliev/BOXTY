@@ -15,14 +15,12 @@
         private readonly IOrderItemService orderItemService;
         private readonly IOrderService orderService;
         private readonly ITableService tableService;
-        private readonly ITableItemService tableItemService;
 
-        public OrderController(IOrderItemService orderItemService, IOrderService orderService, ITableService tableService, ITableItemService tableItemService)
+        public OrderController(IOrderItemService orderItemService, IOrderService orderService, ITableService tableService)
         {
             this.orderItemService = orderItemService;
             this.orderService = orderService;
             this.tableService = tableService;
-            this.tableItemService = tableItemService;
         }
 
         [HttpGet]
@@ -31,7 +29,7 @@
             var orders = orderService.GetAllOrders();
             foreach (var order in orders)
             {
-                order.Items = orderItemService.GetAllCurrentOrderItemsByOrderId(order.Id);
+                order.Items = orderItemService.GetCurrentOrderItemsByOrderId(order.Id);
             }
 
             return orders;
@@ -43,7 +41,7 @@
         {
             var order = orderService.GetOrderByDestination(tableId.ToString());
             await orderService.MarkAsCompleted(order.Id);
-            await tableService.CloseTable(tableId);
+            await tableService.MakeAvailable(tableId);
         }
     }
 }

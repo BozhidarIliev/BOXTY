@@ -6,8 +6,6 @@
 
     public interface ICategoryService
     {
-        IEnumerable<Category> GetCategories();
-
         IEnumerable<T> GetAllCategories<T>();
 
         Category GetCategoryById(int categoryId);
