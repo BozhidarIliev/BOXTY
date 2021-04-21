@@ -47,7 +47,9 @@
         public const string All = "all";
 
         public const string Completed = "completed"; 
-        
+
+        public const string Served = "served";
+
         public const string Deleted = "deleted";
 
         public const string OrderCompleted = "orderCompleted";

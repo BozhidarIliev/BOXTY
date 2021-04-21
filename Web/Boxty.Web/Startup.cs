@@ -59,6 +59,8 @@
 
             services.AddSingleton(this.Configuration);
 
+            services.AddAutoMapper(typeof(Startup));
+
             // Data repositories
             services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));

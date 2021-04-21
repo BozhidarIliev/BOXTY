@@ -64,6 +64,14 @@ namespace Boxty.Services.Data
             await orderItemRepository.SaveChangesAsync();
         }
 
+        public async Task MarkAsServed(int orderItemId)
+        {
+            var orderItem = this.GetOrderItemById(orderItemId);
+            orderItem.Status = GlobalConstants.Served;
+            orderItemRepository.Update(orderItem);
+            await orderItemRepository.SaveChangesAsync();
+        }
+
         public async Task MarkAsCompleted(int orderItemId)
         {
             var orderItem = this.GetOrderItemById(orderItemId);

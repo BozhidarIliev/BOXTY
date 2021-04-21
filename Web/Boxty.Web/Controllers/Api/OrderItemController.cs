@@ -40,7 +40,7 @@
         [Route("MarkAsServed")]
         public async Task MarkAsServed(int orderItemId)
         {
-            await orderItemService.MarkAsCompleted(orderItemId);
+            await orderItemService.MarkAsServed(orderItemId);
         }
     }
 }

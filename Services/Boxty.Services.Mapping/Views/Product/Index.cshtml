@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Boxty.Web.ViewModels.ProductViewModel>
+@inject Microsoft.AspNetCore.Identity.SignInManager<Boxty.Data.Models.BoxtyUser> SignInManager
+
+
+@{
+    ViewData["Title"] = "Index";
+}
+<h1>Menu</h1>
+    @if (SignInManager.IsSignedIn(User))
+    {
+        @if (User.IsInRole(Boxty.Common.GlobalConstants.Admin))
+        {
+            <a asp-action="Create">Create New</a>
+        }
+    }
+
+<div class="row mt-5 mb-5" style="overflow-y: auto;">
+    @foreach (var s in Model)
+    {
+        <div class="card col-md-6">
+            <img class="card-img-top" src="@s.ImageUrl" alt="@s.Name">
+            <div class="card-body">
+                <h5 class="card-title">@s.Name</h5>
+                <p class="card-text">@s.Price</p>
+                <a small class="text-muted card-link" id="@s.Name" asp-controller="Product" asp-action="Details" asp-route-id="@s.Id" as>Go to Meal</a>
+            </div>
+        </div>
+    }
+</div>
+<div class="mt-5">
+</div>

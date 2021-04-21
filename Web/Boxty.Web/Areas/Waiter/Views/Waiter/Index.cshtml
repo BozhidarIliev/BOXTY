@@ -30,6 +30,7 @@
                 <table class="table" id="posLine" style="width:100%">
                     <thead class="thead-dark" id='posLineRow'>
                         <tr>
+                            <th scope="col">Timestamp</th>
                             <th scope="col">Product</th>
                             <th scope="col">Comment</th>
                             <th scope="col">Price</th>
@@ -80,6 +81,19 @@
         $(document).ready(function () {
             initTablesList();
             loadCategories();
+        });
+
+        $(function () {
+            $("td[colspan=3]").find("tr").hide();
+            $("table").click(function (event) {
+                event.stopPropagation();
+                var $target = $(event.target);
+                if ($target.closest("td").attr("colspan") > 1) {
+                    $target.slideUp();
+                } else {
+                    $target.closest("tr").next().find("tr").slideToggle();
+                }
+            });
         });
     </script>
 }

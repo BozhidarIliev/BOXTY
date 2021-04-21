@@ -11,6 +11,8 @@ namespace Boxty.Services.Data.Interfaces
 
         Task MarkAsSentByOrderId(int orderItemId);
 
+        Task MarkAsServed(int orderItemId);
+
         Task MarkAsCompleted(int orderItemId);
 
         Task CreateOrderItem(Order order);

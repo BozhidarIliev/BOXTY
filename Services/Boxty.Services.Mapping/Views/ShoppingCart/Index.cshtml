@@ -1,0 +1,154 @@
+﻿@inject Microsoft.AspNetCore.Identity.SignInManager<Boxty.Data.Models.BoxtyUser> signInManager;
+@inject Boxty.Services.IUserService userService; 
+    <div class="row checkoutForm">
+
+        <h2>Your shopping cart</h2>
+        <table class="table table-bordered table-striped" id="shoppingCart">
+            <thead>
+                <tr>
+                    <th>Product Id</th>
+                    <th>Product</th>
+                    <th>Comment</th>
+                    <th>Amount</th>
+                    <th>Price</th>
+                    <th class="text-right">Subtotal</th>
+                    <th class="text-right">Actions</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <td colspan="4" class="text-right">Total:</td>
+                    <td class="text-right" id="total"></td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <div class="modal-body">
+                        <form id="commentForm">
+                            @model Boxty.Web.ViewModels.AddCommentViewModel
+                            <input type="hidden" id="itemIndexInput" value="">
+                            <div class="form-group">
+                                <p>Write your comment here</p> 
+                                <input id="commentInput" asp-for="@Model.Comment" class="form-control" />
+                                <span asp-validation-for="@Model.Comment" class="text-danger"></span>
+                            </div>
+
+                            <button onclick="addShoppingCartComment()" class="btn btn-success" data-dismiss="modal">Add</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-right">
+            <div class="btn-group ">
+                <a type="submit" class="btn btn-success" asp-controller="ShoppingCart" asp-action="Checkout">Checkout</a>
+            </div>
+        </div>
+
+    </div>
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            initShoppingCart();
+        });
+
+
+        function initShoppingCart() {
+            $.ajax({
+                type: "GET",
+                url: "/api/ShoppingCart",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    $('#shoppingCart > tr').slice(0).remove();
+
+                    $.each(data.items, function (i, item) {
+                        var rows = "<tr id=" + i +">" +
+                            "<td>" + item.product.id + "</td>" +
+                            "<td>" + item.product.name + "</td>" +
+                            "<td>" + item.comment + "</td>" +
+                            "<td>" + item.amount + "</td>" +
+                            '<td>' + item.product.price + '</td>' +
+                            '<td>' + item.subtotal + '</td>' +
+                            '<td><button type="button" onclick="deleteShoppingCartItem(' + i + ')" class="btn btn-danger">Remove</button> <button type="button" onclick="showShoppingCartCommentBox(' + i + ')" class="btn btn-info">Comment</button></td>' +
+                            "</tr>";
+
+                        $('#shoppingCart').append(rows);
+                    });
+                    $('#total').html(data.total);
+                },
+
+                failure: function (data) {
+                    alert(data.responseText);
+                },
+                error: function (data) {
+                    alert('Error ' + data.responsetext);
+                }
+            });
+        }
+
+        function deleteShoppingCartItem(index) {
+            $.ajax({
+                type: "POST",
+                url: "/api/ShoppingCart/RemoveItem?index=" + index,
+                headers: {
+                    RequestVerificationToken:
+                        $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+                success: function (data) {
+                    initShoppingCart()
+                },
+                failure: function (xhr, status, error) {
+                },
+                error: function (xhr, status, thrownError) {
+                    alert('Error ' + thrownError + " " + xhr.status);
+                }
+
+            })
+        }
+
+        function showShoppingCartCommentBox(index) {
+            $("#myModal").modal();
+            document.getElementById("itemIndexInput").value = index;
+        }
+
+        function addShoppingCartComment() {
+            var index = Number(document.getElementById("itemIndexInput").value);
+            var comment = document.getElementById("commentInput").value;
+
+            var data = { "ItemIndex": index, "Comment": comment };
+
+            $.ajax({
+                type: "POST",
+                url: "/api/ShoppingCart",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(data),
+                headers: {
+                    RequestVerificationToken:
+                        $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+                success: function (data) {
+                    initShoppingCart();
+                },
+
+                failure: function (data) {
+                    alert(data.responseText);
+                },
+                error: function (data) {
+                    alert('Error ' + data.responsetext);
+                }
+            });
+        }
+
+    </script>
+}

@@ -1,4 +1,5 @@
-﻿using Boxty.Common;
+﻿using AutoMapper;
+using Boxty.Common;
 using Boxty.Data.Models;
 using Boxty.Models;
 using Boxty.Services.Data.Interfaces;
@@ -6,10 +7,8 @@ using Boxty.Services.Interfaces;
 using Boxty.Services.Mapping;
 using Boxty.Web.ViewModels;
 using Microsoft.AspNetCore.Http;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Boxty.Services.Data
@@ -22,11 +21,12 @@ namespace Boxty.Services.Data
         private readonly IHttpContextAccessor context;
         private readonly IProductService productService;
 
+
         public TableItemService(
-            IOrderItemService orderItemService, 
-            ITableService tableService, 
+            IOrderItemService orderItemService,
+            ITableService tableService,
             IOrderService orderService,
-            IHttpContextAccessor context, 
+            IHttpContextAccessor context,
             IProductService productService)
         {
             this.orderItemService = orderItemService;
@@ -44,22 +44,9 @@ namespace Boxty.Services.Data
                 return null;
             }
 
-            var items = orderItemService.GetCurrentOrderItemsByOrderId<TableItemViewModel>(order.Id);
+            var items = orderItemService.GetCurrentOrderItemsByOrderId<TableItemViewModel>(order.Id).OrderBy(x => x.ModifiedOn);
 
-            var tableItems = new List<TableItemViewModel>();
-            foreach (var item in items)
-            {
-                var currentItemIndex = tableItems.FindIndex(x => x.ProductId == item.ProductId && x.Comment == item.Comment && x.Status == item.Status);
-                if (currentItemIndex != -1)
-                {
-                    tableItems[currentItemIndex].Amount++;
-                }
-                else
-                {
-                    tableItems.Add(item);
-                }
-            }
-            return tableItems;
+            return items;
         }
 
         public async Task<IEnumerable<T>> GetPendingItems<T>(int tableId)
@@ -71,27 +58,19 @@ namespace Boxty.Services.Data
                 await SessionHelper.SetObjectAsJsonAsync(context.HttpContext.Session, tableId.ToString(), items);
             }
 
-            return items.AsQueryable().To<T>();
+            return items.OrderBy(x => x.ModifiedOn).AsQueryable().To<T>();
         }
 
         public async Task AddPendingItem(int tableId, int productId)
         {
             var table = await GetPendingItems<TableItemViewModel>(tableId);
             var items = table.ToList();
-            var item = items.FirstOrDefault(x => (x.ProductId == productId) && (x.Comment == string.Empty));
 
-            if (item == null)
-            {
-                var product = productService.GetProductById(productId);
-                items.Add(new TableItemViewModel { ProductId = productId, ProductName = product.Name, ProductPrice = product.Price, Amount = 1 });
-            }
-            else
-            {
-                item.Amount++;
-            }
-            table = items;
+            var product = productService.GetProductById(productId);
+            items.Add(new TableItemViewModel { ProductId = productId, ProductName = product.Name, ProductPrice = product.Price });
+
+            table = items.OrderBy(x => x.ModifiedOn);
             await SessionHelper.SetObjectAsJsonAsync(context.HttpContext.Session, tableId.ToString(), table);
-
         }
 
         public async Task RemovePendingItem(int tableId, int itemIndex)
@@ -100,14 +79,7 @@ namespace Boxty.Services.Data
             var items = table.ToList();
             var item = items[itemIndex];
 
-            if (item.Amount > 1)
-            {
-                item.Amount--;
-            }
-            else
-            {
-                items.Remove(item);
-            }
+            items.Remove(item);
             table = items;
             await SessionHelper.SetObjectAsJsonAsync(context.HttpContext.Session, tableId.ToString(), table);
 
@@ -132,22 +104,20 @@ namespace Boxty.Services.Data
                 table = await GetPendingItems<TableItemViewModel>(model.TableId);
                 items = table.ToList();
 
-                item.Amount = 1;
                 item.Comment = model.Comment;
                 items.Add(item);
-                SessionHelper.SetObjectAsJson(context.HttpContext.Session, model.TableId.ToString(), items);
+                SessionHelper.SetObjectAsJson(context.HttpContext.Session, model.TableId.ToString(), items.OrderBy(x => x.ModifiedOn));
             }
             else if (commentedItem != null)
             {
-                commentedItem.Amount++;
-                SessionHelper.SetObjectAsJson(context.HttpContext.Session, model.TableId.ToString(), items);
+                SessionHelper.SetObjectAsJson(context.HttpContext.Session, model.TableId.ToString(), items.OrderBy(x => x.ModifiedOn));
                 await this.RemovePendingItem(model.TableId, model.ItemIndex);
             }
         }
 
         public async Task SendOrderItems(int id)
         {
-            var items = await GetPendingItems<OrderItem>(id);
+            var items = await GetPendingItems<OrderItem>(id);;
 
             if (items != null)
             {
